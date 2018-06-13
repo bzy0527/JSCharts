@@ -1,0 +1,149 @@
+﻿<?<?xml version="1.0" encoding="utf-8" ?>
+<screenpart BackgroundColor="Transparent" HorizonScrollbar="Hidden" Margin="0px" Padding="0px" Serializer="DBFX.Serializer.FormPartSerializer">
+  <xns>
+    <ns k="wc"  n="DBFX.Web.Controls" />
+    <ns k="lc"  n="DBFX.Web.LayoutControls" />
+    <ns k="dv"  n="DBFX.Design" />
+  </xns>
+  <controls>
+
+    <c T="wc:Panel"  Shadow="none" BorderWidth="0px" Margin="2px 0px 2px 0px" MinWidth="230px" >
+      <controls>
+
+        <c T="wc:Label" Text="漂浮位置:"  Margin="4px 2px 2px 16px"  Float="left"/>
+        <c T="wc:ComboBox"   Margin="2px 14px 2px 16px"    Display="block" DataBindings="{&quot;Path&quot;:&quot;Float&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}" >
+          <Items>
+            <Item Text="未设置" Value=""  ImageUrl="" />
+            <Item Text="靠左" Value="left"  ImageUrl="" />
+            <Item Text="靠右" Value="right"  ImageUrl="" />
+          </Items>
+        </c>
+        <c T="wc:BreakLine" Margin="2px"/>
+        <c T="wc:Label" Text="显示方式:"  Margin="4px 2px 2px 16px"  Float="left"/>
+        <c T="wc:ComboBox"   Margin="2px 14px 2px 16px"  Display="block"  Height="26px"  DataBindings="{&quot;Path&quot;:&quot;Display&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}" >
+          <Items>
+            <Item Text="未设置" Value=""  ImageUrl="" />
+            <Item Text="内联块" Value="inline-block"  ImageUrl="" />
+            <Item Text="区　块" Value="block"  ImageUrl="" />
+            <Item Text="弹性盒" Value="flexbox"  ImageUrl="" />
+          </Items>
+        </c>
+        <c T="wc:BreakLine" Margin="2px"/>
+        <c T="wc:Label" Text="定位方式:" Margin="4px 2px 2px 16px"  Float="left" />
+        <c T="wc:ComboBox" Margin="2px 14px 2px 16px"   Display="block"  Height="26px"  DataBindings="{&quot;Path&quot;:&quot;Position&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}" >
+          <Items>
+            <Item Text="未设置" Value=""  ImageUrl="" />
+            <Item Text="相对布局" Value="relative"  ImageUrl="" />
+            <Item Text="绝对布局" Value="absolute"  ImageUrl="" />
+            <Item Text="静态布局" Value="static"  ImageUrl="" />
+            <Item Text="固定布局" Value="fixed"  ImageUrl="" />
+          </Items>
+        </c>
+      </controls>
+    </c>
+    <c T="wc:BreakLine" BackgroundColor="lightgray"    Height="1px" Margin="8px 2px 0px 2px"/>
+    <c T="wc:Label" Text="层叠顺序:" Margin="4px 2px 2px 16px" Float="left"/>
+    <c T="wc:TextBox"  Display="block"  Margin="4px 14px 2px 16px" DataBindings="{&quot;Path&quot;:&quot;ZIndex&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}"/>
+    <c T="wc:BreakLine" BackgroundColor="lightgray"    Height="1px" Margin="8px 2px 0px 2px"/>
+    <c T="wc:Label" Text="停靠方式:" Margin="4px 2px 2px 16px" Float="left"/>
+    <c T="wc:ComboBox" Margin="2px 14px 2px 16px"   Display="block"  Height="26px"  DataBindings="{&quot;Path&quot;:&quot;Dock&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}" >
+      <Items>
+        <Item Text="未设置" Value=""  ImageUrl="" />
+        <Item Text="靠上" Value="top"  ImageUrl="" />
+        <Item Text="靠左" Value="left"  ImageUrl="" />
+        <Item Text="靠右" Value="right"  ImageUrl="" />
+        <Item Text="靠下" Value="bottom"  ImageUrl="" />
+        <Item Text="填充" Value="fill"  ImageUrl="" />
+      </Items>
+    </c>
+    <c T="wc:BreakLine" BackgroundColor="lightgray"    Height="1px" Margin="8px 2px 0px 2px"/>
+
+    <c T="wc:Label" Text="圆角弧度:" Margin="4px 2px 2px 16px" Float="left"/>
+    <c T="wc:TextBox"  Display="block"  Margin="4px 14px 2px 16px" DataBindings="{&quot;Path&quot;:&quot;BorderRadius&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}"/>
+    <c T="wc:BreakLine" BackgroundColor="lightgray"    Height="1px" Margin="8px 2px 0px 2px"/>
+
+    <c T="wc:Label" Text="透  明  度:" Margin="4px 2px 2px 16px" Float="left"/>
+    <c T="wc:TextBox"  Display="block"  Margin="4px 14px 2px 16px" DataBindings="{&quot;Path&quot;:&quot;Opacity&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}"/>
+    <c T="wc:BreakLine" BackgroundColor="lightgray"    Height="1px" Margin="8px 2px 0px 2px"/>
+
+    <c T="wc:Panel" Shadow="none" BorderWidth="0px" BorderColor="whitesmoke"  Margin="0px 0px 2px 0px" MinWidth="230px" >
+      <controls>
+        <c T="wc:Panel" Margin="0px 2px 2px 16px"  Shadow="none" BorderWidth="0px 0px 0px 1px"   HorizonScrollbar="Hidden" VerticalScrollbar="hidden">
+          <controls>
+            <c T="wc:Label" Text="左:" Margin="4px 2px 2px 16px" />
+            <c T="wc:TextBox" Width="64px" Margin="2px"  DataBindings="{&quot;Path&quot;:&quot;Left&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}" />
+            <c T="wc:Label" Text="上:" Margin="4px 2px 2px 6px"/>
+            <c T="wc:TextBox"  Width="64px" Margin="2px" DataBindings="{&quot;Path&quot;:&quot;Top&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}" />
+
+            <c T="wc:BreakLine" BackgroundColor="lightgray"  Height="1px" Margin="4px 2px 2px 2px" />
+
+            <c T="wc:Label" Text="右:" Margin="0px 2px 2px 16px"/>
+            <c T="wc:TextBox"  Width="64px" Margin="2px" DataBindings="{&quot;Path&quot;:&quot;Right&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}" />
+            <c T="wc:Label" Text="下:" Margin="0px 2px 2px 6px"/>
+            <c T="wc:TextBox"  Width="64px" Margin="2px" DataBindings="{&quot;Path&quot;:&quot;Bottom&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}" />
+
+            <c T="wc:BreakLine" BackgroundColor="lightgray"  BorderWidth="0px"    Height="1px" Margin="2px" />
+
+            <c T="wc:BreakLine" />
+            <c T="wc:Label" Text="高:" Margin="0px 2px 2px 16px"/>
+            <c T="wc:TextBox"  Width="64px" Margin="2px" DataBindings="{&quot;Path&quot;:&quot;Height&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}" />
+            <c T="wc:Label" Text="宽:" Margin="0px 2px 2px 6px"/>
+            <c T="wc:TextBox"  Width="64px" Margin="2px" DataBindings="{&quot;Path&quot;:&quot;Width&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}" />
+
+            <c T="wc:BreakLine" BackgroundColor="lightgray"  Height="1px" Margin="4px 2px 2px 2px" />
+
+            <c T="wc:BreakLine" />
+            <c T="wc:Label" Text="最大高宽:" Margin="8px 2px 0px 16px" Display="Block" />
+            <c T="wc:Label" Text="高:" Margin="0px 2px 2px 16px" />
+            <c T="wc:TextBox"  Width="64px" Margin="2px" DataBindings="{&quot;Path&quot;:&quot;MaxHeight&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}" />
+            <c T="wc:Label" Text="宽:" Margin="0px 2px 2px 6px"/>
+            <c T="wc:TextBox"  Width="64px" Margin="2px" DataBindings="{&quot;Path&quot;:&quot;MaxWidth&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}" />
+
+            <c T="wc:BreakLine" BackgroundColor="lightgray"  Height="1px" Margin="4px 2px 2px 2px" />
+            <c T="wc:Label" Text="最小高宽:" Margin="8px 2px 0px 16px" Display="Block"/>
+            <c T="wc:Label" Text="高:" Margin="0px 2px 2px 16px" />
+            <c T="wc:TextBox"  Width="64px" Margin="2px" DataBindings="{&quot;Path&quot;:&quot;MinHeight&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}" />
+            <c T="wc:Label" Text="宽:" Margin="0px 2px 2px 6px"/>
+            <c T="wc:TextBox"  Width="64px" Margin="2px" DataBindings="{&quot;Path&quot;:&quot;MinWidth&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}" />
+
+          </controls>
+        </c>
+
+
+        <c T="wc:BreakLine" BackgroundColor="lightgray"  Height="1px" Margin="4px 2px 2px 2px"/>
+        <c T="wc:Label" Text="外边界设置:" Margin="4px 2px 2px 16px" Float="left"/>
+        <c T="wc:TextBox"  Display="block"  Margin="4px 14px 2px 16px" DataBindings="{&quot;Path&quot;:&quot;Margin&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}"/>
+        <c T="wc:BreakLine" BackgroundColor="lightgray"  Height="1px" Margin="4px 2px 2px 2px" />
+        <c T="wc:Label" Text="内边界设置:" Margin="4px 2px 2px 16px" Float="left"/>
+        <c T="wc:TextBox"  Display="block"  Margin="4px 14px 2px 16px" DataBindings="{&quot;Path&quot;:&quot;Padding&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}"/>
+
+
+        <c T="wc:BreakLine" BackgroundColor="lightgray"  Height="1px" Margin="4px 2px 2px 2px" />
+        <c T="wc:Label" Text="水平对齐方式:" Margin="4px 2px 2px 16px"  Float="left"/>
+        <c T="wc:ComboBox" Margin="2px 14px 2px 16px"   Display="block"   Height="26px"   DataBindings="{&quot;Path&quot;:&quot;Align&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}" >
+          <Items>
+            <Item Text="未设置" Value=""  ImageUrl="" />
+            <Item Text="靠左对齐" Value="left"  ImageUrl="" />
+            <Item Text="居中对齐" Value="center"  ImageUrl="" />
+            <Item Text="靠右对齐" Value="right"  ImageUrl="" />
+            <Item Text="拉伸适应" Value="space-around"  ImageUrl="" />
+          </Items>
+        </c>
+
+        <c T="wc:BreakLine" />
+        <c T="wc:Label" Text="纵向对齐方式:" Margin="4px 2px 2px 16px"  Float="left"/>
+        <c T="wc:ComboBox" Margin="2px 14px 2px 16px"   Display="block"  Height="26px"   DataBindings="{&quot;Path&quot;:&quot;VAlign&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}" >
+          <Items>
+            <Item Text="未设置" Value=""  ImageUrl="" />
+            <Item Text="顶部对齐" Value="flex-start"  ImageUrl="" />
+            <Item Text="居中对齐" Value="center"  ImageUrl="" />
+            <Item Text="底边对齐" Value="flex-end"  ImageUrl="" />
+            <Item Text="拉伸适应" Value="space-around"  ImageUrl="" />
+          </Items>
+        </c>
+
+      </controls>
+
+    </c>
+  </controls>
+</screenpart>

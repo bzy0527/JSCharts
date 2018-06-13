@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<screenpart BackgroundColor="Transparent" HorizonScrollbar="Hidden" Margin="0px" Padding="0px" Serializer="DBFX.Serializer.FormPartSerializer">
+
+  <xns>
+    <ns k="wc"  n="DBFX.Web.Controls" />
+    <ns k="lc"  n="DBFX.Web.LayoutControls" />
+    <ns k="dv"  n="DBFX.Design" />
+  </xns>
+
+  <controls>
+
+    <c T="wc:Panel"  Shadow="none" BorderWidth="0px" Margin="2px 0px 2px 0px" MinWidth="230px" >
+    <controls>
+
+    <c T="wc:BreakLine" BackgroundColor="lightgray"  BorderWidth="0px"    Height="1px" Margin="2px" />
+    <c T="wc:BreakLine" />
+
+    <c T="wc:Label" Text="图表类型:" Margin="4px 2px 2px 16px" Float="left"/>
+    <c T="wc:ComboBox"  Display="block"  Margin="2px 14px 2px 16px" Height="26px"  DataBindings="{&quot;Path&quot;:&quot;ChartType&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}" >
+      <Items>
+        <Item Text="平面饼图" Value="pie"  ImageUrl="" />
+        <Item Text="立体饼图" Value="pie3D"  ImageUrl="" />
+        <Item Text="柱状图" Value="bar"  ImageUrl="" />
+        <Item Text="立方图" Value="bar3D"  ImageUrl="" />
+        <Item Text="多组柱状图" Value="multiBar"  ImageUrl="" />
+        <Item Text="多组立方图" Value="multiBar3D"  ImageUrl="" />
+        <Item Text="折线图" Value="line"  ImageUrl="" />
+        <Item Text="多组折线图" Value="multiLine"  ImageUrl="" />
+        <Item Text="波浪线" Value="wavy"  ImageUrl="" />
+        <Item Text="多组波浪线" Value="multiWavy"  ImageUrl="" />
+      </Items>
+    </c>
+
+    <c T="wc:BreakLine" />
+    <c T="wc:Label" Text="图表颜色系:" Margin="4px 2px 2px 16px" Float="left"/>
+    <c T="wc:ComboBox"  Display="block"  Margin="2px 14px 2px 16px" Height="26px"  DataBindings="{&quot;Path&quot;:&quot;ColorSerie&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}" >
+      <Items>
+           <Item Text="默认" Value="default"  ImageUrl="" />
+           <Item Text="午后" Value="afterMoon"  ImageUrl="" />
+           <Item Text="森林" Value="forest"  ImageUrl="" />
+           <Item Text="安静一天" Value="quietDay"  ImageUrl="" />
+           <Item Text="商务" Value="business"  ImageUrl="" />
+      </Items>
+    </c>
+
+
+    <c T="wc:BreakLine" BackgroundColor="lightgray"    Height="1px" Margin="8px 2px 0px 2px"/>
+
+    <c T="wc:Label" Text="图表标题显示:" Margin="4px 2px 2px 16px" Float="left"/>
+    <c T="wc:ComboBox"  Name = "cbxIsShowTitle" Display="block"  Margin="2px 14px 2px 16px" Height="26px"  DataBindings="{&quot;Path&quot;:&quot;IsShowTitle&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}" >
+      <Items>
+
+      </Items>
+    </c>
+
+    <c T="wc:BreakLine" />
+
+    <c T="wc:Label" Text="图表标题:" Margin="4px 2px 2px 16px" Float="left"/>
+    <c T="wc:TextBox" Display="block"  Height="26px" Margin="2px 14px 2px 16px" DataBindings="{&quot;Path&quot;:&quot;ChartTitle&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}" />
+
+    <c T="wc:BreakLine" />
+
+    <c T="wc:Label" Text="标题颜色:" Margin="4px 2px 2px 16px" Float="left"/>
+    <c T="wc:ColorPicker" Display="block" Height="26px" Margin="2px 14px 2px 16px" DataBindings="{&quot;Path&quot;:&quot;TitleColor&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}" />
+
+    <c T="wc:BreakLine" />
+
+    <c T="wc:Label" Text="标题大小:" Margin="4px 2px 2px 16px" Float="left"/>
+    <c T="wc:TextBox"  Display="block" Height="26px" Margin="2px 14px 2px 16px" DataBindings="{&quot;Path&quot;:&quot;TitleFontSize&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}" />
+
+    <c T="wc:BreakLine" />
+
+    <c T="wc:Label" Text="标题字体:" Margin="4px 2px 2px 16px" Float="left"/>
+    <c T="wc:ComboBox"  Display="block"  Margin="2px 14px 2px 16px" Height="26px"  DataBindings="{&quot;Path&quot;:&quot;TitleFontFamily&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}" >
+     <Items>
+          <Item Text="微软雅黑" Value="Microsoft Yahei"  ImageUrl="" />
+          <Item Text="宋体" Value="SimSun"  ImageUrl="" />
+          <Item Text="黑体" Value="SimHei"  ImageUrl="" />
+          <Item Text="楷体" Value="KaiTi"  ImageUrl="" />
+          <Item Text="仿宋" Value="FangSong"  ImageUrl="" />
+          <Item Text="苹方" Value="PingFang SC"  ImageUrl="" />
+          <Item Text="华文楷体" Value="STKaiti"  ImageUrl="" />
+          <Item Text="华文行楷" Value="STXingkai"  ImageUrl="" />
+          <Item Text="华文隶书" Value="STLiti"  ImageUrl="" />
+     </Items>
+    </c>
+
+    <c T="wc:BreakLine" BackgroundColor="lightgray"    Height="1px" Margin="8px 2px 0px 2px"/>
+    <c T="wc:Label" Text="是否显示内圆:" Margin="4px 2px 2px 16px" Float="left"/>
+    <c T="wc:ComboBox" Name = "cbxIsShowInsideC" Display="block"  Height="26px" Margin="2px 14px 2px 16px"  DataBindings="{&quot;Path&quot;:&quot;IsShowInsideC&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}" >
+     <Items>
+
+     </Items>
+    </c>
+
+    <c T="wc:BreakLine" />
+    <c T="wc:Label" Text="内圆半径:" Margin="4px 2px 2px 16px" Float="left"/>
+    <c T="wc:TextBox" Display="block"  Height="26px" Margin="2px 14px 2px 16px" DataBindings="{&quot;Path&quot;:&quot;InsideR&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}" />
+
+    <c T="wc:BreakLine" />
+    <c T="wc:Label" Text="内圆标题:" Margin="4px 2px 2px 16px" Float="left"/>
+    <c T="wc:TextBox"  Display="block"  Height="26px" Margin="2px 14px 2px 16px" DataBindings="{&quot;Path&quot;:&quot;InsideCTitle&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}" />
+
+    <c T="wc:BreakLine" />
+    <c T="wc:Label" Text="内圆数值:" Margin="4px 2px 2px 16px" Float="left"/>
+    <c T="wc:TextBox"  Display="block"  Height="26px" Margin="2px 14px 2px 16px" DataBindings="{&quot;Path&quot;:&quot;InsideCValue&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}"/>
+    <c T="wc:BreakLine" />
+    <c T="wc:Label" Text="内圆图片:" Margin="4px 2px 2px 16px" Float="left"/>
+    <c T="wc:TextBox"  Display="block"  Height="26px" Margin="2px 14px 2px 16px" DataBindings="{&quot;Path&quot;:&quot;InsideCImageURL&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}"/>
+
+      </controls>
+    </c>
+  </controls>
+</screenpart>
