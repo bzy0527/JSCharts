@@ -913,7 +913,7 @@ DBFX.Web.DBChart.Charts = function () {
             //单位标记数值
             var markText = document.createElementNS(c.SVG_NS,'text');
             gAxes.appendChild(markText);
-            markText.textContent = perValue_y*(10-2*k);
+            markText.textContent = perValue_y*10000*(10-2*k)/10000;
 
             c.setAttr(markText,{
                 'font-size':labelFontSize-2,
@@ -1144,7 +1144,7 @@ DBFX.Web.DBChart.Charts = function () {
                 //单位标记数值
                 var markText = document.createElementNS(c.SVG_NS,'text');
                 gAxes.appendChild(markText);
-                markText.textContent = perValue_y*(10-2*k);
+                markText.textContent = perValue_y*10000*(10-2*k)/10000;
 
                 c.setAttr(markText,{
                     'font-size':labelFontSize,
@@ -1571,7 +1571,7 @@ DBFX.Web.DBChart.Charts = function () {
             //单位标记数值
             var markText = document.createElementNS(c.SVG_NS,'text');
             gAxes.appendChild(markText);
-            markText.textContent = perValue_y*(10-2*k);
+            markText.textContent = perValue_y*10000*(10-2*k)/10000;
 
             c.setAttr(markText,{
                 'font-size':labelFontSize,
@@ -1836,7 +1836,7 @@ DBFX.Web.DBChart.Charts = function () {
             var markText = document.createElementNS(c.SVG_NS,'text');
             gAxes.appendChild(markText);
 
-            markText.textContent = perValue_y*(10-2*k);
+            markText.textContent = perValue_y*10000*(10-2*k)/10000;
             if(k==0){
                 //TODO:需要完善宽度过小时，文字重叠问题，解决办法？
                 // console.log((perValue_y*(10-2*k)).toString().length);
@@ -2668,9 +2668,24 @@ DBFX.Web.DBChart.Charts = function () {
         //最大数值的整数部分位数
         var n = Math.ceil(maxV).toString().length;
         var maxAxesV = Math.ceil(maxV/0.9/Math.pow(10,n-1))*Math.pow(10,n-1);
-
         //假设最大值占y方向上9份，则每份代表的数值
-        var perValue_y = maxAxesV/10;
+        var perValue_y = (maxAxesV/10).toFixed(2);
+
+        console.log("y轴上每份数值大小："+perValue_y);
+        if(maxV <=1 && maxV >=0){
+
+
+
+        }
+
+
+
+
+
+
+
+
+
 
         //绘制坐标轴
         var gAxes = document.createElementNS(c.SVG_NS,'g');
@@ -2699,7 +2714,7 @@ DBFX.Web.DBChart.Charts = function () {
             //单位标记数值
             var markText = document.createElementNS(c.SVG_NS,'text');
             gAxes.appendChild(markText);
-            markText.textContent = perValue_y*(10-2*k);
+            markText.textContent = perValue_y*10000*(10-2*k)/10000;
 
             c.setAttr(markText,{
                 'font-size':labelFontSize,
@@ -3067,12 +3082,21 @@ DBFX.Web.DBChart.Charts = function () {
         var n = Math.ceil(maxV).toString().length;
         var maxAxesV = Math.ceil(maxV/0.9/Math.pow(10,n-1))*Math.pow(10,n-1);
 
+
+
         //FIXME:最小数值的整数部分位数
         console.log('FIXME');
         var m = Math.ceil(minV).toString().length;
         var minAxesV = Math.floor(minV/1.01/Math.pow(10,m-1))*Math.pow(10,m-1);
 
-        var perValue_y = (maxAxesV-minAxesV)/10;
+        var perValue_y = ((maxAxesV-minAxesV)/10).toFixed(2);
+
+        console.log("y轴上每份数值大小："+perValue_y);
+        if(maxV <=1 && maxV >=0){
+
+
+
+        }
 
         //假设最大值占y方向上10份，则每份代表的数值
         // var perValue_y = maxAxesV/10;
@@ -3106,7 +3130,7 @@ DBFX.Web.DBChart.Charts = function () {
             var markText = document.createElementNS(c.SVG_NS,'text');
             gAxes.appendChild(markText);
 
-            markText.textContent = perValue_y*(10-2*k) + minAxesV;
+            markText.textContent = perValue_y*10000*(10-2*k)/10000 + minAxesV;
 
 
             c.setAttr(markText,{
