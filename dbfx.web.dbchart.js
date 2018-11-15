@@ -62,8 +62,19 @@ DBFX.Web.DBChart.Charts = function () {
     c.y_scale = 1;
     c.t_scale = 1;
 
+    /*==================================平台属性配置=======================================================*/
     c.SetHeight = function (v) {
-        c.chartH = parseInt(v);
+
+        if(v.indexOf("%") != -1 || v.indexOf("px") != -1){
+            c.VisualElement.style.height = v;
+        }else {
+            c.VisualElement.style.height = parseFloat(v)+'px';
+        }
+
+        var cssObj = window.getComputedStyle(c.VisualElement,null);
+        var h = cssObj.height;
+
+        c.chartH = parseFloat(h);
 
         c.x_scale = 800/c.chartW;
         c.y_scale = 500/c.chartH;
@@ -75,16 +86,28 @@ DBFX.Web.DBChart.Charts = function () {
             c.t_scale = c.y_scale;
         }
 
-        c.VisualElement.style.height = v;
-        c.svg.setAttribute("height",v);
-        // c.svg.setAttribute('viewBox','0,0,800,500');
 
+        c.svg.setAttribute("height",h);
+        // c.svg.setAttribute('viewBox','0,0,800,500');
         c.setCenter();
         c.createChart(c.chartType);
     }
 
     c.SetWidth = function (v) {
-        c.chartW = parseInt(v);
+
+        if(v.indexOf("%") != -1 || v.indexOf("px") != -1){
+            c.VisualElement.style.width = v;
+        }else {
+            c.VisualElement.style.width = parseFloat(v)+'px';
+        }
+
+
+        var cssObj = window.getComputedStyle(c.VisualElement,null);
+        var w = cssObj.width;
+
+        var rectObj = c.VisualElement.getBoundingClientRect();
+
+        c.chartW = parseFloat(w);
 
         c.x_scale = 800/c.chartW;
         c.y_scale = 500/c.chartH;
@@ -96,14 +119,16 @@ DBFX.Web.DBChart.Charts = function () {
             c.t_scale = c.y_scale;
         }
 
-        c.VisualElement.style.width = v;
-        c.svg.setAttribute("width",v);
+        // c.VisualElement.style.width = v;
+        c.svg.setAttribute("width",w);
+
         // c.svg.setAttribute('viewBox','0,0,800,500');
 
         c.setCenter();
         c.createChart(c.chartType);
     }
 
+    /*=======================================end===================================================*/
 
     c.svgrender = new DBFX.Web.DBChart.SVGRender(c);
     c.deg2rad = Math.PI *2 /360;
@@ -119,6 +144,7 @@ DBFX.Web.DBChart.Charts = function () {
         ],
         "labels": ["图例1","图例2","图例3","图例4"]
     };
+
     Object.defineProperty(c,"Configs",{
         get:function () {
             return c.configs;
@@ -292,12 +318,24 @@ DBFX.Web.DBChart.Charts = function () {
             return c.insideR;
         },
         set:function (v) {
+            if(v.indexOf("%") != -1){
+                v = c.chartH*v;
+            }else {
+                v = parseFloat(v);
+            }
+
             if(v<c.chartH*0.35){
                 c.insideR = v;
             }else {
                 c.insideR = 0;
             }
 
+            if(c.insideR == 0 || isNaN(c.insideR) || c.insideR == undefined){
+                c.isShowInsideC = false;
+            }else {
+                c.isShowInsideC = true;
+            }
+            c.createChart(c.chartType);
         }
     });
 
@@ -306,13 +344,19 @@ DBFX.Web.DBChart.Charts = function () {
      * 设置图表标题
      * @type {string}
      */
-    c.chartTitle = '图表标题';
+    c.chartTitle = '';
     Object.defineProperty(c,"ChartTitle",{
         get:function () {
             return c.chartTitle;
         },
         set:function (v) {
-            c.chartTitle = v;
+
+            if(v=='' || v==undefined){
+                c.IsShowTitle = false;
+            }else {
+                c.IsShowTitle = true;
+                c.chartTitle = v;
+            }
             c.createChart(c.chartType);
         }
     });
@@ -337,7 +381,7 @@ DBFX.Web.DBChart.Charts = function () {
      * 设置标题字体大小
      * @type {number}
      */
-    c.titleFontSize = 16;
+    c.titleFontSize = 14;
     Object.defineProperty(c,"TitleFontSize",{
         get:function () {
             return c.titleFontSize;
@@ -366,7 +410,7 @@ DBFX.Web.DBChart.Charts = function () {
 
 
     /**
-     * 是否显示图表标题
+     * TODO:是否显示图表标题(设计器中去除，通过判断标题内容有无)
      * @type {boolean}
      */
     c.isShowTitle = false;
@@ -418,7 +462,7 @@ DBFX.Web.DBChart.Charts = function () {
         }
     });
 
-    c.insideCValue = '99.99';
+    c.insideCValue = 'value';
     Object.defineProperty(c,"InsideCValue",{
         get:function () {
             return c.insideCValue;
@@ -778,7 +822,7 @@ DBFX.Web.DBChart.Charts = function () {
      */
     c.setTitle = function () {
 
-        var title = c.chartTitle || "图表标题";
+        var title = c.chartTitle || "";
         var titleColor = c.titleColor || '#434348';
         //设置标题字体大小
         var fontsize = c.titleFontSize,
@@ -1974,6 +2018,8 @@ DBFX.Web.DBChart.Charts = function () {
     //绘制平面饼图
 
     c.drawPie = function (datas) {
+        c.chartH = c.chartH*1;
+        c.chartW = c.chartW*1;
 
         var values = datas.datas[0].values;
         var colors = c.colorSeries;
@@ -1988,12 +2034,17 @@ DBFX.Web.DBChart.Charts = function () {
             labelFontSize = 9;
         }
 
+        //展示的图例数量
+        var len = values.length;
+        //颜色系中颜色值数量
+        var colorsLen = colors.length;
 
         //如果展示的图例数量超过了给定颜色系的个数 那么就要增加颜色系
-        if(colors ==  undefined || colors.length<len){
-            var addLength = len-colors.length;
+        if(colors ==  undefined || colorsLen<len){
+            console.log("增加颜色系");
+            var addLength = len-colorsLen;
             for (var addL=0;addL<addLength;addL++){
-                var newColor = c.svgrender.lightenDarkenColor(c.colorSeries[addL%10],Math.ceil((addL+1)/10)*10);
+                var newColor = c.svgrender.lightenDarkenColor(c.colorSeries[addL%colorsLen],30);//Math.ceil((addL+1)/10)*10
                 colors.push(newColor);
             }
         }
@@ -2005,7 +2056,7 @@ DBFX.Web.DBChart.Charts = function () {
 
         labels = datas.labels ? datas.labels : labels;
 
-        var len = values.length;
+
         var tcount = 0;
         var arcs = [];
         //保存展示数据中最小的值
@@ -2235,6 +2286,9 @@ DBFX.Web.DBChart.Charts = function () {
 
 
             group.appendChild(arcPathG);
+
+            //FIXME:全局变量保存  后期需要使用显示后的高度
+            c.arcPathG = arcPathG;
             // group.appendChild(textPath);
 
             var pathStr = c.drawSector(c.pieCenterX,c.pieCenterY,arcPath.r,arcPath.startA,arcPath.endA,arcPath.insideR);
@@ -2251,7 +2305,7 @@ DBFX.Web.DBChart.Charts = function () {
         }
 
 
-        //如果有内圆 设置初始旋转角度 配置内圆标题、数值、图片
+        //FIXME:如果有内圆 设置初始旋转角度 配置内圆标题、数值、图片
         if(c.insideR>0){
 
             //设置初始旋转角度，让第一个扇形旋转到正下方
@@ -2343,8 +2397,10 @@ DBFX.Web.DBChart.Charts = function () {
                     maxTextC = labels[l].length;
                 }
             }
+
+            maxTextC = 8;
             //每组图例占据的宽度
-            var perW = (maxTextC+3)*labelFontSize;
+            var perW = (maxTextC+1)*labelFontSize;
 
             //图例所在区域的总高度
             var labelsH = c.chartH*0.7;
@@ -2367,7 +2423,8 @@ DBFX.Web.DBChart.Charts = function () {
 
 
             //图例所在区域的总宽度
-            var labelsW = c.chartW-(c.pieCenterX + c.pieR*1.05);
+            // var labelsW = c.chartW-(c.pieCenterX + c.pieR*1.05);
+            var labelsW = c.chartW-c.chartH;
 
             //每列能放的图例数量
             var perLineCount = Math.floor(labelsH/perH);
@@ -2375,11 +2432,12 @@ DBFX.Web.DBChart.Charts = function () {
 
             //总共需要多少列
             var rowsCount = Math.ceil(len/perLineCount);
-            console.log(rowsCount);
 
             if(rowsCount == 1){//只需要一列显示
                 //图例x开始位置
-                var startP= c.pieCenterX + c.pieR*1.3;
+                // var startP= c.pieCenterX + c.pieR*1.3;
+                //20180808
+                var startP= c.chartH;
 
                 for(var m=0;m<len;m++){
                     var cir = document.createElementNS(c.SVG_NS,'circle');
@@ -2394,7 +2452,13 @@ DBFX.Web.DBChart.Charts = function () {
                     });
                     var keyText = document.createElementNS(c.SVG_NS,'text');
                     cirG.appendChild(keyText);
-                    keyText.textContent = labels[m];
+                    // keyText.textContent = labels[m];
+
+                    if(labels[m].length>maxTextC){
+                        keyText.textContent = labels[m].substring(0,maxTextC-3)+"...";
+                    }else {
+                        keyText.textContent = labels[m];
+                    }
 
                     c.setAttr(keyText,{
                         'font-size':labelFontSize,
@@ -2440,7 +2504,13 @@ DBFX.Web.DBChart.Charts = function () {
                         var keyText = document.createElementNS(c.SVG_NS,'text');
                         cirG.appendChild(keyText);
 
-                        keyText.textContent = labels[totalC];
+                        // keyText.textContent = labels[totalC];
+
+                        if(labels[totalC].length>maxTextC){
+                            keyText.textContent = labels[totalC].substring(0,maxTextC-3)+"...";
+                        }else {
+                            keyText.textContent = labels[totalC];
+                        }
 
                         c.setAttr(keyText,{
                             'font-size':labelFontSize*0.9,
@@ -2466,7 +2536,7 @@ DBFX.Web.DBChart.Charts = function () {
             var cirG = document.createElementNS(c.SVG_NS,'g');
             c.svg.appendChild(cirG);
 
-            //设置图例文字最大的长度:多少个字符
+            //设置图例文字最大的长度:多少个字符;20180808废弃，限定显示字符数8个 否则字符多的时候会超过图表范围
             var maxTextC = 0;
             for(var l=0;l<labels.length;l++){
                 if(maxTextC < labels[l].length){
@@ -2474,8 +2544,10 @@ DBFX.Web.DBChart.Charts = function () {
                 }
             }
 
+            maxTextC = 10;
+
             //每组图例占据的宽度
-            var perW = (maxTextC+3)*labelFontSize;
+            var perW = (maxTextC+1)*labelFontSize;
 
             //图例所在区域的总宽度
             var labelsW = c.chartW*0.9;
@@ -2503,7 +2575,13 @@ DBFX.Web.DBChart.Charts = function () {
                     });
                     var keyText = document.createElementNS(c.SVG_NS,'text');
                     cirG.appendChild(keyText);
-                    keyText.textContent = labels[m];
+                    // keyText.textContent = labels[m];
+
+                    if(labels[m].length>maxTextC){
+                        keyText.textContent = labels[m].substring(0,maxTextC-3)+"...";
+                    }else {
+                        keyText.textContent = labels[m];
+                    }
 
                     c.setAttr(keyText,{
                         'font-size':labelFontSize,
@@ -2518,9 +2596,14 @@ DBFX.Web.DBChart.Charts = function () {
                 }
             }else { //需要多行显示
 
+                //FIXME:对于svg中的g，此方法不能获取实际位置、大小数据
+                var styleObj = c.arcPathG.getBoundingClientRect();
+
+                //图例占用的高度
+                var h = c.chartH - (c.pieCenterY + c.pieR*1.3);
                 //图例开始位置
                 var startP= c.chartW*0.05;
-                var perLineH = (c.chartH-c.chartW)/rowsCount;//每行图例所占高度
+                var perLineH = h/rowsCount;//每行图例所占高度
 
                 //最后一行显示的数量
                 var lastLineC = len - perLineCount*(rowsCount-1);
@@ -2540,7 +2623,7 @@ DBFX.Web.DBChart.Charts = function () {
 
                         c.setAttr(cir,{
                             'cx':startP+perW*pc,
-                            'cy':c.chartW + rc*perLineH,
+                            'cy':c.chartH-h + rc*perLineH,
                             'r':labelFontSize*0.45,
                             'stroke':colors[totalC],
                             'fill':colors[totalC]
@@ -2548,14 +2631,19 @@ DBFX.Web.DBChart.Charts = function () {
                         var keyText = document.createElementNS(c.SVG_NS,'text');
                         cirG.appendChild(keyText);
 
-                        keyText.textContent = labels[totalC];
+                        if(labels[totalC].length>maxTextC){
+                            keyText.textContent = labels[totalC].substring(0,maxTextC-3)+"...";
+                        }else {
+                            keyText.textContent = labels[totalC];
+                        }
+
 
                         c.setAttr(keyText,{
                             'font-size':labelFontSize*0.9,
                             'font-family':c.titleFontFamily,
                             'fill':c.titleColor,
                             "x":startP+perW*pc+labelFontSize*0.8,
-                            "y":c.chartW + rc*perLineH,
+                            "y":c.chartH-h + rc*perLineH,
                             "text-anchor":"left",
                             "dominant-baseline": "middle",
                             "height":c.titleFontSize*1.2
@@ -2567,8 +2655,6 @@ DBFX.Web.DBChart.Charts = function () {
             }
 
         }
-
-
 
 
         // //绘制图例
@@ -3598,7 +3684,8 @@ DBFX.Web.DBChart.Charts = function () {
 
             peakX = endPiont_x-transDis;
             peakY = endPiont_y;
-            labelX = endPiont_x - c.titleFontSize*5;
+            labelX = endPiont_x - c.titleFontSize*2;
+
             if(labelX<30 || peakY > c.chartH-c.titleFontSize*15){
                 labelX = endPiont_x;
 
@@ -3625,29 +3712,25 @@ DBFX.Web.DBChart.Charts = function () {
                 };
     }
 
-    //TODO:配置图表中心点和饼图半径
+    //FIXME:配置图表中心点和饼图半径
     c.setCenter = function () {
-        //短边长
+        //短边边长
         var r = 0;
-        if(c.chartW<c.chartH){//图表高度大于宽度时
+        if(c.chartW*1.2<c.chartH){//图表高度大于宽度时
             r = c.chartW;
             var marginL = c.chartH-c.chartW;
 
+            //饼图圆心点坐标
+            c.pieCenterX = c.chartW*0.5;
+            c.pieCenterY = c.chartW*0.5;
             //是否显示标题
             if(c.isShowTitle){
-
                 //是否显示图例 图例显示在下方
                 if(c.isShowCutline){
-                    //饼图圆心点坐标
-                    c.pieCenterX = c.chartW*0.5;
-                    c.pieCenterY = c.chartW*0.5;
                     //饼图半径
                     c.pieR = r*0.32;
                     c.cutlinePos = "down";
                 }else {
-                    //饼图圆心点坐标
-                    c.pieCenterX = c.chartW*0.5;
-                    c.pieCenterY = c.chartW*0.5;
                     //饼图半径
                     c.pieR = r*0.35;
                 }
@@ -3655,59 +3738,86 @@ DBFX.Web.DBChart.Charts = function () {
             }else {
                 //是否显示图例 图例显示在下方
                 if(c.isShowCutline){
-                    //饼图圆心点坐标
-                    c.pieCenterX = c.chartW*0.5;
-                    c.pieCenterY = c.chartW*0.5;
                     //饼图半径
                     c.pieR = r*0.33;
                     c.cutlinePos = "down";
                 }else {
-                    //饼图圆心点坐标
-                    c.pieCenterX = c.chartW*0.5;
-                    c.pieCenterY = c.chartW*0.5;
+
                     //饼图半径
                     c.pieR = r*0.37;
                 }
             }
 
-        }else {//图表高度小于宽度时
+        }else if(c.chartW > c.chartH*1.2){//图表高度小于宽度时
             r = c.chartH;
 
+            //饼图圆心点坐标
+            c.pieCenterX = c.chartH*0.5;
+            c.pieCenterY = c.chartH*0.5;
+
             //是否显示标题
             if(c.isShowTitle){
-
                 //是否显示图例 图例显示在右方
                 if(c.isShowCutline){
-                    //饼图圆心点坐标
-                    c.pieCenterX = c.chartH*0.5;
-                    c.pieCenterY = c.chartH*0.5;
                     //饼图半径
                     c.pieR = r*0.32;
                     c.cutlinePos = "right";
                 }else {
-                    //饼图圆心点坐标
-                    c.pieCenterX = c.chartH*0.5;
-                    c.pieCenterY = c.chartH*0.5;
                     //饼图半径
                     c.pieR = r*0.35;
                 }
             }else {
                 //是否显示图例 图例显示在右方
                 if(c.isShowCutline){
-                    //饼图圆心点坐标
-                    c.pieCenterX = c.chartH*0.5;
-                    c.pieCenterY = c.chartH*0.5;
                     //饼图半径
                     c.pieR = r*0.33;
                     c.cutlinePos = "right";
                 }else {
+                    //饼图半径
+                    c.pieR = r*0.37;
+                }
+            }
+        }else {//FIXME:宽高接近时
+            r = c.chartW>c.chartH?c.chartH:c.chartW;
+            var marginL = c.chartH-c.chartW >0?c.chartH-c.chartW:c.chartW-c.chartH;
+
+            //是否显示标题
+            if(c.isShowTitle){
+
+                //是否显示图例 图例显示在下方
+                if(c.isShowCutline){
                     //饼图圆心点坐标
-                    c.pieCenterX = c.chartH*0.5;
+                    c.pieCenterX = c.chartW*0.5;
+                    c.pieCenterY = c.chartH*0.4;
+                    //饼图半径
+                    c.pieR = r*0.31;
+                    c.cutlinePos = "down";
+                }else {
+                    //饼图圆心点坐标
+                    c.pieCenterX = c.chartW*0.5;
+                    c.pieCenterY = c.chartH*0.5;
+                    //饼图半径
+                    c.pieR = r*0.35;
+                }
+
+            }else {
+                //是否显示图例 图例显示在下方
+                if(c.isShowCutline){
+                    //饼图圆心点坐标
+                    c.pieCenterX = c.chartW*0.5;
+                    c.pieCenterY = c.chartH*0.4;
+                    //饼图半径
+                    c.pieR = r*0.31;
+                    c.cutlinePos = "down";
+                }else {
+                    //饼图圆心点坐标
+                    c.pieCenterX = c.chartW*0.5;
                     c.pieCenterY = c.chartH*0.5;
                     //饼图半径
                     c.pieR = r*0.37;
                 }
             }
+
         }
 
         c.pieTransDis = c.pieR*0.1;
@@ -4085,6 +4195,8 @@ DBFX.Web.DBChart.Charts = function () {
         c.VisualElement.style.width = c.chartW+'px';
         c.VisualElement.style.height = c.chartH+'px';
         // c.svg.setAttribute('viewBox','0,0,400,250');
+        //TODO:测试用外边框
+        // c.VisualElement.style.border = "1px solid red";
 
         c.setCenter();
 
@@ -4130,7 +4242,7 @@ DBFX.Serializer.ChartsSerializer = function () {
         DBFX.Serializer.DeSerialProperty("TitleColor", c, xe);
         DBFX.Serializer.DeSerialProperty("TitleFontSize", c, xe);
         DBFX.Serializer.DeSerialProperty("TitleFontFamily", c, xe);
-        DBFX.Serializer.DeSerialProperty("IsShowTitle", c, xe);
+        // DBFX.Serializer.DeSerialProperty("IsShowTitle", c, xe);
         DBFX.Serializer.DeSerialProperty("Option3d", c, xe);
         DBFX.Serializer.DeSerialProperty("ColorSerie", c, xe);
     }
@@ -4146,7 +4258,7 @@ DBFX.Serializer.ChartsSerializer = function () {
         DBFX.Serializer.SerialProperty("TitleColor", c.TitleColor, xe);
         DBFX.Serializer.SerialProperty("TitleFontSize", c.TitleFontSize, xe);
         DBFX.Serializer.SerialProperty("TitleFontFamily", c.TitleFontFamily, xe);
-        DBFX.Serializer.SerialProperty("IsShowTitle", c.IsShowTitle, xe);
+        // DBFX.Serializer.SerialProperty("IsShowTitle", c.IsShowTitle, xe);
         DBFX.Serializer.SerialProperty("Option3d", c.Option3d, xe);
         DBFX.Serializer.SerialProperty("ColorSerie", c.ColorSerie, xe);
     }
@@ -4162,12 +4274,12 @@ DBFX.Design.ControlDesigners.ChartsDesigner = function () {
             od.DataContext = obdc.dataContext;
 
             //是否显示标题设计器设置项
-            od.FormContext.Form.FormControls.cbxIsShowTitle.ItemSource =    [{Text:"显示",Value:true,ImageUrl:""},
-                                                            {Text:"不显示",Value:false,ImageUrl:""}];
+            // od.FormContext.Form.FormControls.cbxIsShowTitle.ItemSource =    [{Text:"显示",Value:true,ImageUrl:""},
+            //                                                 {Text:"不显示",Value:false,ImageUrl:""}];
 
             //是否显示内圆设计器设置项
-            od.FormContext.Form.FormControls.cbxIsShowInsideC.ItemSource =  [{Text:"显示",Value:true,ImageUrl:""},
-                                                            {Text:"不显示",Value:false,ImageUrl:""}];
+            // od.FormContext.Form.FormControls.cbxIsShowInsideC.ItemSource =  [{Text:"显示",Value:true,ImageUrl:""},
+            //                                                 {Text:"不显示",Value:false,ImageUrl:""}];
         }, obdc);
 
     }

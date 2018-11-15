@@ -43,16 +43,6 @@
       </Items>
     </c>
 
-
-    <c T="wc:BreakLine" BackgroundColor="lightgray"    Height="1px" Margin="8px 2px 0px 2px"/>
-
-    <c T="wc:Label" Text="图表标题显示:" Margin="4px 2px 2px 16px" Float="left"/>
-    <c T="wc:ComboBox"  Name = "cbxIsShowTitle" Display="block"  Margin="2px 14px 2px 16px" Height="26px"  DataBindings="{&quot;Path&quot;:&quot;IsShowTitle&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}" >
-      <Items>
-
-      </Items>
-    </c>
-
     <c T="wc:BreakLine" />
 
     <c T="wc:Label" Text="图表标题:" Margin="4px 2px 2px 16px" Float="left"/>
@@ -85,13 +75,6 @@
      </Items>
     </c>
 
-    <c T="wc:BreakLine" BackgroundColor="lightgray"    Height="1px" Margin="8px 2px 0px 2px"/>
-    <c T="wc:Label" Text="是否显示内圆:" Margin="4px 2px 2px 16px" Float="left"/>
-    <c T="wc:ComboBox" Name = "cbxIsShowInsideC" Display="block"  Height="26px" Margin="2px 14px 2px 16px"  DataBindings="{&quot;Path&quot;:&quot;IsShowInsideC&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}" >
-     <Items>
-
-     </Items>
-    </c>
 
     <c T="wc:BreakLine" />
     <c T="wc:Label" Text="内圆半径:" Margin="4px 2px 2px 16px" Float="left"/>
