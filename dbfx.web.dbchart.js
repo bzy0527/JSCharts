@@ -901,6 +901,13 @@ DBFX.Web.DBChart.Charts = function () {
 
         labels = datas.labels ? datas.labels : labels;
 
+        //20190515 labels数量不足时 补充label个数 避免下面数组溢出报错
+        if(labels.length < len){
+            for (var u = 0;u<len-labels.length;u++){
+                labels.push("");
+            }
+        }
+
         //遍历所有数据找出最大值 均分坐标系
 
         //新建数组，保存所有数据
@@ -1137,6 +1144,13 @@ DBFX.Web.DBChart.Charts = function () {
 
         labels = datas.labels ? datas.labels : labels;
 
+        //20190515 labels数量不足时 补充label个数 避免下面数组溢出报错
+        if(labels.length < len){
+            for (var u = 0;u<len-labels.length;u++){
+                labels.push("");
+            }
+        }
+
         //所有数据总和
         var totalCount = 0;
         var vArr = [];
@@ -1335,6 +1349,13 @@ DBFX.Web.DBChart.Charts = function () {
         }
 
         labels = datas.labels ? datas.labels : labels;
+
+        //20190515 labels数量不足时 补充label个数 避免下面数组溢出报错
+        if(labels.length < len){
+            for (var u = 0;u<len-labels.length;u++){
+                labels.push("");
+            }
+        }
 
         var len = values.length;
         var tcount = 0;
@@ -1561,6 +1582,13 @@ DBFX.Web.DBChart.Charts = function () {
         }
 
         labels = datas.labels ? datas.labels : labels;
+
+        //20190515 labels数量不足时 补充label个数 避免下面数组溢出报错
+        if(labels.length < len){
+            for (var u = 0;u<len-labels.length;u++){
+                labels.push("");
+            }
+        }
 
         //所有数据总和
         var totalCount = 0;
@@ -1818,6 +1846,13 @@ DBFX.Web.DBChart.Charts = function () {
 
         labels = datas.labels ? datas.labels : labels;
 
+        //20190515 labels数量不足时 补充label个数 避免下面数组溢出报错
+        if(labels.length < len){
+            for (var u = 0;u<len-labels.length;u++){
+                labels.push("");
+            }
+        }
+
         //遍历所有数据找出最大值 均分坐标系
 
         //新建数组，保存所有数据
@@ -2055,6 +2090,13 @@ DBFX.Web.DBChart.Charts = function () {
         }
 
         labels = datas.labels ? datas.labels : labels;
+
+        //20190515 labels数量不足时 补充label个数 避免下面数组溢出报错
+        if(labels.length < len){
+            for (var u = 0;u<len-labels.length;u++){
+                labels.push("");
+            }
+        }
 
 
         var tcount = 0;
@@ -2724,6 +2766,13 @@ DBFX.Web.DBChart.Charts = function () {
         }
 
         labels = datas.labels ? datas.labels : labels;
+
+        //20190515 labels数量不足时 补充label个数 避免下面数组溢出报错
+        if(labels.length < len){
+            for (var u = 0;u<len-labels.length;u++){
+                labels.push("");
+            }
+        }
 
         //所有数据总和
         var totalCount = 0;
@@ -3705,11 +3754,12 @@ DBFX.Web.DBChart.Charts = function () {
 
 
         // return 'M'+startPiont_x+' '+startPiont_y+'L'+endPiont_x+' '+endPiont_y;
-        return {path:pathArr.join(' '),
-                labelX:labelX,
-                labelY:endPiont_y,
-                rotateA:rotateA
-                };
+        return {
+            path:pathArr.join(' '),
+            labelX:labelX,
+            labelY:endPiont_y,
+            rotateA:rotateA
+        };
     }
 
     //FIXME:配置图表中心点和饼图半径
@@ -4233,8 +4283,8 @@ DBFX.Serializer.ChartsSerializer = function () {
 
     //反系列化
     this.DeSerialize = function (c, xe, ns) {
-        DBFX.Serializer.DeSerialProperty("chartW", c, xe);
-        DBFX.Serializer.DeSerialProperty("chartH", c, xe);
+        // DBFX.Serializer.DeSerialProperty("chartW", c, xe);
+        // DBFX.Serializer.DeSerialProperty("chartH", c, xe);
         // DBFX.Serializer.DeSerialProperty("Configs", c, xe);
         DBFX.Serializer.DeSerialProperty("ChartType", c, xe);
         DBFX.Serializer.DeSerialProperty("InsideR", c, xe);
@@ -4247,10 +4297,10 @@ DBFX.Serializer.ChartsSerializer = function () {
         DBFX.Serializer.DeSerialProperty("ColorSerie", c, xe);
     }
 
-    //系列化
+    //系列化 开发平台保存设置时调用
     this.Serialize = function (c, xe, ns) {
-        DBFX.Serializer.SerialProperty("chartW", c.chartW, xe);
-        DBFX.Serializer.SerialProperty("chartH", c.chartH, xe);
+        // DBFX.Serializer.SerialProperty("chartW", c.chartW, xe);
+        // DBFX.Serializer.SerialProperty("chartH", c.chartH, xe);
         // DBFX.Serializer.SerialProperty("Configs", c.Configs, xe);
         DBFX.Serializer.SerialProperty("ChartType", c.ChartType, xe);
         DBFX.Serializer.SerialProperty("InsideR", c.InsideR, xe);
