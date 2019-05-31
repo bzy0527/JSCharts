@@ -215,7 +215,7 @@ DBFX.Web.DBChart.Charts = function () {
     c.clickedDataContext = new Object();
 
     //保存所有的图表类型
-    c.chartTypes = ['pie','pie3D','bar','bar3D','multiBar','multiBar3D','line','multiLine','wavy','multiWavy'];
+    c.chartTypes = ['pie','pie3D','bar','bar3D','multiBar','multiBar3D','line','multiLine','wavy','multiWavy','instrumentPanel'];
 
     //配色系列
     //1.默认
@@ -581,6 +581,10 @@ DBFX.Web.DBChart.Charts = function () {
             case 'multiWavy':
             case 'multiLine': //绘制多折线图
                 c.drawMultiLineGraph(c.configs);
+                break;
+
+            case "instrumentPanel":
+                c.drawInstrumentPanel(c.configs);
                 break;
             default:
                 break;
@@ -3112,6 +3116,116 @@ DBFX.Web.DBChart.Charts = function () {
 
     }
 
+
+    /************************** 绘制热力图 *****************************/
+
+    //TODO:绘制热力图
+    c.LoadMap = function () {
+        // delete window[c.CbName];
+        c.aMap = new AMap.Map("container",{
+            resizeEnable: true,
+            center: [116.418261, 39.921984],
+            zoom: 11
+        });
+
+        c.heatmap = {};
+        c.aMap.plugin(["AMap.Heatmap"], function () {
+            //初始化heatmap对象
+            c.heatmap = new AMap.Heatmap(c.aMap, {
+                radius: 25, //给定半径
+                opacity: [0, 0.8],
+                gradient:{
+                    0.5: 'blue',
+                    0.65: 'rgb(117,211,248)',
+                    0.7: 'rgb(0, 255, 0)',
+                    0.9: '#ffea00',
+                    1.0: 'red'
+                }
+
+            });
+
+            //设置数据集：该数据为北京部分“公园”数据
+            c.heatmap.setDataSet({
+                data: [{
+                    "lng": 116.191031,
+                    "lat": 39.988585,
+                    "count": 10
+                }, {
+                    "lng": 116.389275,
+                    "lat": 39.925818,
+                    "count": 11
+                }, {
+                    "lng": 116.287444,
+                    "lat": 39.810742,
+                    "count": 12
+                }, {
+                    "lng": 116.481707,
+                    "lat": 39.940089,
+                    "count": 13
+                }, {
+                    "lng": 116.410588,
+                    "lat": 39.880172,
+                    "count": 14
+                }, {
+                    "lng": 116.394816,
+                    "lat": 39.91181,
+                    "count": 15
+                }, {
+                    "lng": 116.416002,
+                    "lat": 39.952917,
+                    "count": 16
+                }, {
+                    "lng": 116.39671,
+                    "lat": 39.924903,
+                    "count": 17
+                }, {
+                    "lng": 116.180816,
+                    "lat": 39.957553,
+                    "count": 18
+                }, {
+                    "lng": 116.382035,
+                    "lat": 39.874114,
+                    "count": 19
+                }, {
+                    "lng": 116.316648,
+                    "lat": 39.914529,
+                    "count": 20
+                }, {
+                    "lng": 116.395803,
+                    "lat": 39.908556,
+                    "count": 21
+                }],
+                max: 20
+            });
+
+            c.heatmap.show();
+        });
+    }
+
+    c.drawHeatMap = function () {
+        var container = document.createElement("div");
+        container.setAttribute("id","container");
+        c.VisualElement.innerHTML = "";
+        c.VisualElement.appendChild(container);
+
+        container.style.width = "100%";
+        container.style.height = "100%";
+
+        var random = parseInt(Math.random()*100,10);
+        c.CbName="MapCallback"+random;
+        window[c.CbName] = c.LoadMap;
+
+        //TODO:动态插入script  异步加载地图 callback=map.LoadMap!!
+        var mapJS = document.createElement("SCRIPT");
+        document.body.appendChild(mapJS);
+        mapJS.charset = "utf-8";
+        mapJS.src = "https://webapi.amap.com/maps?v=1.4.11&key=501c9ef49f34ed644919c827c3d98b98&callback="+c.CbName;
+        mapJS.type = 'text/javascript';
+
+
+    }
+
+
     //处理单个折线图鼠标移动事件
     c.showVLine = false;
     c.vLineFlag = -1;
@@ -3603,6 +3717,7 @@ DBFX.Web.DBChart.Charts = function () {
     }
 
 
+
     //TODO:导出图片
     c.convertToPic = function () {
         var svgXml = c.VisualElement.innerHTML;
@@ -3640,9 +3755,10 @@ DBFX.Web.DBChart.Charts = function () {
      * @param startAngle    起始角度
      * @param endAngle      终止角度
      * @param insideR       内圆半径
+     * @param mode          绘制方向 0-逆时针（默认）  1-顺时针
      * @returns {string}    返回扇形区域路径
      */
-    c.drawSector = function (cx,cy,outsideR,startAngle,endAngle,insideR) {
+    c.drawSector = function (cx,cy,outsideR,startAngle,endAngle,insideR,mode) {
 
 
         if(Math.round((endAngle-startAngle)/Math.PI/2*10000)==10000){
@@ -3670,8 +3786,14 @@ DBFX.Web.DBChart.Charts = function () {
                 x4 = cx + outsideR * Math.cos(-endAngle),        //外环结束X点
                 y4 = cy + outsideR * Math.sin(-endAngle);        //外环结束Y点
 
-            paths.push('M',x1,y1,'L',x3,y3,'A',outsideR,outsideR,0,+(endAngle-startAngle>Math.PI),0,x4,y4,'L',
-                x2,y2,'A',insideR,insideR,0,+(Math.abs(startAngle-endAngle)>Math.PI),1,x1,y1);
+            if(mode){
+                paths.push('M',x1,y1,'L',x3,y3,'A',outsideR,outsideR,0,+(endAngle-startAngle>Math.PI),1,x4,y4,'L',
+                    x2,y2,'A',insideR,insideR,0,+(Math.abs(startAngle-endAngle)>Math.PI),0,x1,y1);
+            }else {
+                paths.push('M',x1,y1,'L',x3,y3,'A',outsideR,outsideR,0,+(endAngle-startAngle>Math.PI),0,x4,y4,'L',
+                    x2,y2,'A',insideR,insideR,0,+(Math.abs(startAngle-endAngle)>Math.PI),1,x1,y1);
+            }
+
         }
 
 
@@ -5205,3 +5327,429 @@ DBFX.Web.DBChart.SVGRender = function (C) {
 
     return render;
 };
+
+
+/************************** 绘制仪表盘图表 *****************************/
+DBFX.Web.DBChart.InstrumentPanel = function () {
+    var ip = new DBFX.Web.DBChart.Charts();
+
+    ip.ClassDescriptor.Designers.splice(1, 0, "DBFX.Design.ControlDesigners.InstrumentPanelDesigner");
+    ip.ClassDescriptor.Serializer = "DBFX.Serializer.InstrumentPanelSerializer";
+
+    // TODO:图表边界！！测试时打开注释
+    ip.VisualElement.style.borderColor = 'aqua';
+    ip.VisualElement.style.borderStyle = 'solid';
+    ip.VisualElement.style.borderWidth = '1px';
+
+    ip.OnCreateHandle();
+    ip.OnCreateHandle = function () {
+        ip.drawInstrumentPanel();
+    }
+
+    /*==================================平台属性配置=======================================================*/
+    ip.SetHeight = function (v) {
+
+        if(v.indexOf("%") != -1 || v.indexOf("px") != -1){
+            ip.VisualElement.style.height = v;
+        }else {
+            ip.VisualElement.style.height = parseFloat(v)+'px';
+        }
+        var cssObj = window.getComputedStyle(ip.VisualElement,null);
+        var h = cssObj.height;
+        ip.chartH = parseFloat(h);
+        ip.svg.setAttribute("height",h);
+        ip.drawInstrumentPanel();
+    }
+
+    ip.SetWidth = function (v) {
+
+        if(v.indexOf("%") != -1 || v.indexOf("px") != -1){
+            ip.VisualElement.style.width = v;
+        }else {
+            ip.VisualElement.style.width = parseFloat(v)+'px';
+        }
+
+        var cssObj = window.getComputedStyle(ip.VisualElement,null);
+        var w = cssObj.width;
+        ip.chartW = parseFloat(w);
+        ip.svg.setAttribute("width",w);
+        ip.drawInstrumentPanel();
+
+    }
+
+    /************************** 仪表盘图属性设置 *****************************/
+    //弧线宽度
+    ip.arcWidth = 10;
+    Object.defineProperty(ip,"ArcWidth",{
+        get:function () {
+            return ip.arcWidth;
+        },
+        set:function (v) {
+            ip.arcWidth = isNaN(v*1) ? 10 : v*1;
+        }
+    });
+
+
+    //扇形区数量
+    ip.sectionCount = 4;
+    Object.defineProperty(ip,"SectionCount",{
+        get:function () {
+            return ip.sectionCount;
+        },
+        set:function (v) {
+            ip.sectionCount = isNaN(v*1) ? 4 : v*1;
+        }
+    });
+
+    //仪表盘占总弧度
+    ip.totalAngle = Math.PI*4/3;
+    Object.defineProperty(ip,"TotalAngle",{
+        get:function () {
+            return ip.totalAngle;
+        },
+        set:function (v) {
+            ip.totalAngle = v*1*Math.PI*2;
+        }
+    });
+
+    //
+    ip.title = "标题";
+    Object.defineProperty(ip,"Title",{
+        get:function () {
+            return ip.title;
+        },
+        set:function (v) {
+            ip.title = v;
+        }
+    });
+
+    ip.subTitle = "副标题";
+    Object.defineProperty(ip,"SubTitle",{
+        get:function () {
+            return ip.subTitle;
+        },
+        set:function (v) {
+            ip.subTitle = v;
+        }
+    });
+
+    ip.tColor = "#666";
+    Object.defineProperty(ip,"TColor",{
+        get:function () {
+            return ip.tColor;
+        },
+        set:function (v) {
+            ip.tColor = v;
+        }
+    });
+
+    //TODO:显示模式  数值：number ; 百分比：ratio
+    ip.numMode = "ratio";
+    Object.defineProperty(ip,"NumMode",{
+        get:function () {
+            return ip.numMode;
+        },
+        set:function (v) {
+            ip.numMode = v;
+        }
+    });
+
+    //显示范围 最大值
+    ip.maxValue = 1;
+    Object.defineProperty(ip,"MaxValue",{
+        get:function () {
+            return ip.maxValue;
+        },
+        set:function (v) {
+            ip.maxValue = isNaN(v*1) ? 1 : v*1;
+        }
+    });
+
+    //显示范围 最小值
+    ip.minValue = 0;
+    Object.defineProperty(ip,"MinValue",{
+        get:function () {
+            return ip.minValue;
+        },
+        set:function (v) {
+            ip.minValue = isNaN(v*1) ? 0 : v*1;
+        }
+    });
+
+
+    /************************** 绘制仪表盘图 *****************************/
+    ip.drawInstrumentPanel = function (datas) {
+
+        //!!!清空svg下所有子元素后再绘制，防止图表重叠绘制
+        if(ip.svg.childNodes.length){
+            ip.svg.textContent = '';
+        }
+
+        var w = ip.chartW,
+            h = ip.chartH;
+
+        //仪表盘中心
+        var center_x = w*0.5;
+        var center_y = h*0.5;
+
+        w = w > h ? h : w;
+
+        //TODO:颜色系
+        var colors = ["green","orange","red","blue"];
+
+        //外圆半径
+        var out_r = w*0.4;
+
+        //内圆半径
+        var inner_r = out_r - ip.arcWidth;
+
+        //TODO:定义指针的宽度 指针圆点的半径 指针的长度 圆弧的宽度
+
+
+        //扇区数量
+        var sectionC = ip.sectionCount;
+
+        //定义仪表盘占得总弧度 仪表盘是个对称圆弧！
+        var totalA = ip.totalAngle;
+        var aveA = totalA*0.5;
+
+        //计算起止弧度值
+        var starA = Math.PI*0.5+aveA;
+        var endA = Math.PI*2.5-aveA;
+
+
+        //每个扇区的角度
+        var sectionA = totalA/sectionC;
+
+        //创建饼状图分组
+        var group = document.createElementNS(ip.SVG_NS,'g');
+        ip.svg.appendChild(group);
+
+        var sA = starA;
+
+        //创建扇形区
+        for (var j=0;j<sectionC;j++){
+
+            //扇形区域路径
+            var  arcPath = document.createElementNS(ip.SVG_NS,'path');
+            //扇形区域的起始角度和终止角度
+            arcPath.startA = sA;
+            arcPath.endA = sA - sectionA;
+
+            var arcPathG = document.createElementNS(ip.SVG_NS,'g');
+            arcPathG.appendChild(arcPath);
+            group.appendChild(arcPathG);
+
+            var pathStr = ip.drawSector(center_x,center_y,out_r,arcPath.startA,arcPath.endA,inner_r,1);
+
+            arcPath.setAttribute('d',pathStr);
+            arcPath.setAttribute('fill',colors[j]);
+            sA -= sectionA;
+        }
+
+
+        //刻度文字的对齐方式
+        var text_anchor = "middle";
+
+
+        var aveNum = (ip.maxValue*1 - ip.minValue*1)/sectionC;
+
+        //绘制刻度数字
+        for(var f = 0;f<=sectionC;f++){
+            var p_a = starA - totalA/sectionC*f;
+            //计算刻度数字的坐标点值
+            var p_x = center_x + inner_r * Math.cos(-p_a);
+            var p_y = center_y + inner_r * Math.sin(-p_a);
+
+            var p1_x = center_x + (inner_r - 8) * Math.cos(-p_a);
+            var p1_y = center_y + (inner_r - 8) * Math.sin(-p_a);
+
+            var p2_x = center_x + (inner_r - 12) * Math.cos(-p_a);
+            var p2_y = center_y + (inner_r - 19) * Math.sin(-p_a);
+
+            if(p_a>Math.PI*0.5 && p_a < Math.PI*1.5){
+                text_anchor = "start";
+            }else if(p_a == Math.PI*0.5 || p_a == Math.PI*1.5){
+                text_anchor = "middle";
+            }else {
+                text_anchor = "end";
+            }
+
+            //刻度文字
+            var limbT = document.createElementNS(ip.SVG_NS,'text');
+            group.appendChild(limbT);
+            limbT.textContent = (ip.minValue + aveNum*f).toFixed(2)*100 +"%";
+            ip.setAttr(limbT,{
+                'font-size':"12",
+                'fill':"#777777",
+                "x":p2_x,
+                "y":p2_y,
+                "text-anchor":text_anchor
+            });
+
+
+
+            //刻度线
+            var limbP = document.createElementNS(ip.SVG_NS,'path');
+            var pStr = "M"+" "+p_x+" "+p_y+"L"+" "+p1_x+" "+p1_y;
+
+            group.appendChild(limbP);
+            ip.setAttr(limbP,{
+                'd':pStr,
+                'stroke':"#2c2f30",
+                'stroke-width':"2"
+            });
+
+
+        }
+
+        //绘制标题文字
+        var tElement = document.createElementNS(ip.SVG_NS,'text');
+        group.appendChild(tElement);
+
+        tElement.textContent = ip.title;
+        ip.setAttr(tElement,{
+            'font-size':"20",
+            'fill':ip.tColor,
+            "x":center_x,
+            "y":center_y+h*0.11,
+            "text-anchor":"middle"
+        });
+
+        //绘制副标题文字
+        var subTElement = document.createElementNS(ip.SVG_NS,'text');
+        group.appendChild(subTElement);
+
+        subTElement.textContent = ip.subTitle;
+        ip.setAttr(subTElement,{
+            'font-size':"16",
+            'fill':ip.tColor,
+            "x":center_x,
+            "y":center_y+h*0.21,
+            "text-anchor":"middle"
+        });
+
+
+        //绘制指针
+        //指针短边长
+        var disS = 10;
+        //指针长边长
+        var disL = inner_r*0.7;
+
+        var paths = [];
+        paths.push("M",center_x+disS,center_y,"L",center_x,center_y-disS*0.6,"L",center_x-disL,center_y,"L",center_x,center_y+disS*0.6,"C");
+        var pathsStr = paths.join(' ');
+        var line = document.createElementNS(ip.SVG_NS,'path');
+        group.appendChild(line);
+        ip.setAttr(line,{
+            'd':pathsStr,
+            'fill':"#6786ff"
+        });
+
+        //绘制指针圆心
+        var cir = document.createElementNS(ip.SVG_NS,'circle');
+        group.appendChild(cir);
+
+        ip.setAttr(cir,{
+            'cx':center_x,
+            'cy':center_y,
+            'r':disS*0.5,
+            'stroke':"#ffffff",
+            'fill':"#ffffff"
+        });
+
+
+        //指针指向起始角度
+        var originalA = starA > Math.PI ? -(starA-Math.PI): (Math.PI - starA);
+        line.setAttribute('transform',"rotate("+originalA*180/Math.PI+" "+center_x+" "+center_y+")");
+
+        //FIXME:指针偏移的角度 角度数值0-360 根据当前数值所占的比例进行计算
+        var ratio = 0.5;
+        var rotateTotalA = (ratio*totalA+originalA)*180/Math.PI;
+
+        //FIXME:角度的增量需要根据实际情况计算  控制动画的快慢
+        var stepA = 2;
+        var stepV = ratio/((rotateTotalA-originalA*180/Math.PI)/stepA);
+
+        //起始角度
+        var rotateA = originalA*180/Math.PI;
+
+        var startNum = ip.minValue*1;
+
+
+        function rotateStep() {
+            rotateA += stepA;
+            startNum += stepV;
+
+            if(startNum < ratio){
+                subTElement.textContent = Math.round(startNum*100)+"%";
+
+            }else {
+                subTElement.textContent = Math.round(ratio*100)+"%";
+            }
+            if(rotateA < rotateTotalA){
+                line.setAttribute('transform',"rotate("+rotateA+" "+center_x+" "+center_y+")");
+                requestAnimationFrame(rotateStep);
+            }else {
+                line.setAttribute('transform',"rotate("+rotateTotalA+" "+center_x+" "+center_y+")");
+            }
+        }
+
+        requestAnimationFrame(rotateStep);
+
+    }
+
+    ip.OnCreateHandle();
+    return ip;
+}
+
+DBFX.Serializer.InstrumentPanelSerializer = function () {
+    //反系列化
+    this.DeSerialize = function (c, xe, ns) {
+
+        DBFX.Serializer.DeSerialProperty("ArcWidth", c, xe);
+        DBFX.Serializer.DeSerialProperty("SectionCount", c, xe);
+        DBFX.Serializer.DeSerialProperty("Title", c, xe);
+        DBFX.Serializer.DeSerialProperty("SubTitle", c, xe);
+        DBFX.Serializer.DeSerialProperty("NumMode", c, xe);
+        DBFX.Serializer.DeSerialProperty("MaxValue", c, xe);
+        DBFX.Serializer.DeSerialProperty("MinValue", c, xe);
+        DBFX.Serializer.DeSerialProperty("ColorSerie", c, xe);
+
+    }
+
+    //系列化 开发平台保存设置时调用
+    this.Serialize = function (c, xe, ns) {
+
+        DBFX.Serializer.SerialProperty("ArcWidth", c.ArcWidth, xe);
+        DBFX.Serializer.SerialProperty("SectionCount", c.SectionCount, xe);
+        DBFX.Serializer.SerialProperty("Title", c.Title, xe);
+        DBFX.Serializer.SerialProperty("SubTitle", c.SubTitle, xe);
+        DBFX.Serializer.SerialProperty("NumMode", c.NumMode, xe);
+        DBFX.Serializer.SerialProperty("MaxValue", c.MaxValue, xe);
+        DBFX.Serializer.SerialProperty("MinValue", c.MinValue, xe);
+        DBFX.Serializer.SerialProperty("ColorSerie", c.ColorSerie, xe);
+
+    }
+}
+
+DBFX.Design.ControlDesigners.InstrumentPanelDesigner = function () {
+    var obdc = new DBFX.Web.Controls.GroupPanel();
+    obdc.OnCreateHandle();
+    obdc.OnCreateHandle = function () {
+
+        DBFX.Resources.LoadResource("design/DesignerTemplates/FormDesignerTemplates/InstrumentPanelDesigner.scrp", function (od) {
+
+            od.DataContext = obdc.dataContext;
+
+      }, obdc);
+
+    }
+
+    obdc.HorizonScrollbar = "hidden";
+    obdc.OnCreateHandle();
+    obdc.Class = "VDE_Design_ObjectGeneralDesigner";
+    obdc.Text = "仪表盘图表设置";
+    return obdc;
+
+}

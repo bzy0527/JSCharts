@@ -11,7 +11,7 @@
 <body style="width: 800px;height: 800px;border: 1px solid blue">
 
 <!--<div style="border-style: solid;border-color: aqua;border-width: 1px">-->
-<div id="div"></div>
+<div id="div01"></div>
 
 </div>
     <script>
@@ -41,7 +41,9 @@
             // };
             // console.log(navigator.appVersion);
             var chart = DBFX.Web.DBChart.Charts();
-            document.body.appendChild(chart.VisualElement);
+            var d = document.getElementById("div01");
+
+            d.appendChild(chart.VisualElement);
 
 
             // chart.Values = [6,7,3,9,10];
@@ -54,29 +56,30 @@
             // chart.Configs = {"datas":[{"date":"2018-05-3 13:20:24","values":[{"value":24.9}]},{"date":"2018-05-3 13:25:24","values":[{"value":24.9}]},{"date":"2018-05-3 13:30:24","values":[{"value":24.9}]},{"date":"2018-05-3 13:35:24","values":[{"value":24.9}]},{"date":"2018-05-3 13:40:24","values":[{"value":24.9}]},{"date":"2018-05-3 13:45:24","values":[{"value":24.9}]},{"date":"2018-05-3 13:50:24","values":[{"value":24.9}]},{"date":"2018-05-3 13:55:24","values":[{"value":24.9}]},{"date":"2018-05-3 14:00:24","values":[{"value":24.9}]},{"date":"2018-05-3 14:05:24","values":[{"value":24.9}]},{"date":"2018-05-3 14:10:24","values":[{"value":24.9}]},{"date":"2018-05-3 14:15:24","values":[{"value":24.9}]}],"labels":["70002","70002","70002","70002","70002","70002","70002","70002","70002","70002","70002","70002"]};
             // console.log(chart.configs);
 
-            chart.Configs ={"datas":[{"date":"14:35","values":[{"value":24.9,"key":"70001"},{"value":25.1,"key":"70002"},{"value":26.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"}]},
-                                    {"date":"14:40","values":[{"value":24.8,"key":"70001"},{"value":25.1,"key":"70002"},{"value":24.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"}]},
-                                    {"date":"14:45","values":[{"value":24.6,"key":"70001"},{"value":25.1,"key":"70002"},{"value":27.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"}]},
-                                    {"date":"14:50","values":[{"value":24.6,"key":"70001"},{"value":25,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"}]},
-                                    {"date":"14:55","values":[{"value":24.7,"key":"70001"},{"value":25,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"}]},
-                                    {"date":"15:0","values":[{"value":24.7,"key":"70001"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":28.1,"key":"70002"},{"value":29.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"}]},
-                                    {"date":"15:5","values":[{"value":24.7,"key":"70001"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":24.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"}]},
-                                    {"date":"15:10","values":[{"value":24.7,"key":"70001"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"}]},
-                                    {"date":"15:15","values":[{"value":24.8,"key":"70001"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"}]},
-                                    {"date":"15:20","values":[{"value":24.6,"key":"70001"},{"value":25.2,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"}]}],
-                            "labels":["70001","70002","70003","70004","70005","70006","70007","70008","70009","70010","70011","70012"]};
+            // chart.Configs ={"datas":[{"date":"14:35","values":[{"value":24.9,"key":"70001"},{"value":25.1,"key":"70002"},{"value":26.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"}]},
+            //                         {"date":"14:40","values":[{"value":24.8,"key":"70001"},{"value":25.1,"key":"70002"},{"value":24.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"}]},
+            //                         {"date":"14:45","values":[{"value":24.6,"key":"70001"},{"value":25.1,"key":"70002"},{"value":27.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"}]},
+            //                         {"date":"14:50","values":[{"value":24.6,"key":"70001"},{"value":25,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"}]},
+            //                         {"date":"14:55","values":[{"value":24.7,"key":"70001"},{"value":25,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"}]},
+            //                         {"date":"15:0","values":[{"value":24.7,"key":"70001"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":28.1,"key":"70002"},{"value":29.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"}]},
+            //                         {"date":"15:5","values":[{"value":24.7,"key":"70001"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":24.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"}]},
+            //                         {"date":"15:10","values":[{"value":24.7,"key":"70001"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"}]},
+            //                         {"date":"15:15","values":[{"value":24.8,"key":"70001"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"}]},
+            //                         {"date":"15:20","values":[{"value":24.6,"key":"70001"},{"value":25.2,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"}]}],
+            //                 "labels":["70001","70002","70003","70004","70005","70006","70007","70008","70009","70010","70011","70012"]};
+            //
+            //
             // chart.ChartType = 'bar';
             // chart.ChartType = 'multiBar3D';
-
-            chart.ChartType = 'line';
+            // chart.ChartType = 'line';
             // chart.ChartType = 'multiWavy';
-            chart.ChartType = 'wavy';
+            // chart.ChartType = 'wavy';
             // chart.ChartType = 'multiBar';
             // chart.ChartType = 'multiLine';
 
             // chart.isShowTitle = false;
-            chart.SetWidth('400px');
-            chart.SetHeight('300px');
+            chart.SetWidth('800px');
+            chart.SetHeight('600px');
 
 
 
@@ -87,27 +90,29 @@
             // chart.Datas = {values:[10,0,0,0,0,0,0],labels:["土豆","西瓜胡萝卜","南瓜胡萝卜胡萝卜","青菜胡萝卜","胡萝卜","白菜","辣椒"]};
 
             //构造多组数据
-            var infos = {datas:[],labels:[]};
+            // var infos = {datas:[],labels:[]};
 
             var labels = [];
 
 
-            for(var m=0;m<30;m++){
-                var values = [],
-                    data = {};
-                for(var i=0;i<18;i++){
-                    var v = {};
-                    v.value = (Math.random()*3)+1;
-                    values.push(v);
-                }
-                data.date = Math.floor(Math.random()*10000);
-                data.values = values;
-                infos.datas.push(data);
-            }
+            // for(var m=0;m<30;m++){
+            //     var values = [],
+            //         data = {};
+            //     for(var i=0;i<18;i++){
+            //         var v = {};
+            //         v.value = (Math.random()*3)+1;
+            //         values.push(v);
+            //     }
+            //     data.date = Math.floor(Math.random()*10000);
+            //     data.values = values;
+            //     infos.datas.push(data);
+            // }
+            //
+            // infos.labels = ["怎么放置都不对吗怎么放置","这里又该怎么放置文字","70003","70004","70005","70006","70007","70008","70009","70010","70011","70012",
+            //     "70001","70002","70003","70004","70005","70006","70007","70008","70009","70010","70011","70012",
+            //     "70001","70002","70003","70004","70005","70006","70007","70008","70009","70010","70011","70012"];
 
-            infos.labels = ["怎么放置都不对吗怎么放置","这里又该怎么放置文字","70003","70004","70005","70006","70007","70008","70009","70010","70011","70012",
-                "70001","70002","70003","70004","70005","70006","70007","70008","70009","70010","70011","70012",
-                "70001","70002","70003","70004","70005","70006","70007","70008","70009","70010","70011","70012"];
+
             //测试波浪线图表
             // chart.Configs = infos;
 
@@ -118,10 +123,20 @@
 
             // console.log(chart.clickedDataContext);
 
+
+
+            //TODO:绘制热力图
+            // chart.drawHeatMap();
+
+            //绘制仪表盘
+            // chart.drawInstrumentPanel();
+            // chart.ChartType = 'instrumentPanel';
         }catch(error){
             console.log(error);
         }
 
+        var date = new Date(1559089302982);
+        console.log(date);
 
     </script>
 </body>
