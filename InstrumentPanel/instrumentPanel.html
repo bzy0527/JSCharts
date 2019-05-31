@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>instrumentPanel</title>
+    <script src="https://lc.dbazure.cn/dbfx/dbfx.js"></script>
+    <script src="https://lc.dbazure.cn/dbfxui/dbfx.web.controls.js"></script>
+    <script src="https://lc.dbazure.cn/dbfx/dbfx.commodel.js"></script>
+    <script src="../dbfx.web.dbchart.js"></script>
+</head>
+<body>
+
+<body style="width: 800px;height: 800px;border: 1px solid blue">
+<div id="div01"></div>
+<script>
+    try{
+        var insTP = DBFX.Web.DBChart.InstrumentPanel();
+        var d = document.getElementById("div01");
+
+        d.appendChild(insTP.VisualElement);
+
+
+        insTP.SetWidth('375px');
+        insTP.SetHeight('340px');
+        // insTP.drawInstrumentPanel();
+        // insTP.BackgroundColor = "green";
+
+        // insTP.SetWidth('600px');
+        // insTP.SetHeight('300px');
+
+    }catch (error){
+        console.log(error);
+    }
+</script>
+</body>
+</html>
