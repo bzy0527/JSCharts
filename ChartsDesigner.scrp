@@ -93,5 +93,7 @@
 
       </controls>
     </c>
+    <c T="dv:TypeEditors.EventList" Name="EventListBox" Text="事件处理程序" Shadow="node" Margin="2px 0px 2px 0px" MinWidth="64px">
+    </c>
   </controls>
 </screenpart>

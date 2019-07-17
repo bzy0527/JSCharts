@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .div1{
+            width: 300px;
+            height: 300px;
+            border: 1px solid #b3d4fc;
+            padding: 0px;
+            font-size: 0px;
+
+            overflow: auto;
+            display: flex; /* IE10 */
+            display: flexbox; /* IE10 */
+            display: -moz-box; /* Firefox */
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+
+        }
+
+        .div2{
+            display: inline-block;
+            min-height: 80px;
+            min-width: 180px;
+            /*direction: ltr;*/
+            /*height: 100%;*/
+            /*width: 100%;*/
+            border: 1px solid #fc4c38;
+            width: 180px;
+            height: 80px;
+            margin: 20px;
+            /*float: left;*/
+            box-sizing: border-box;
+        }
+
+        .div3{
+            box-sizing: border-box;
+            position: relative;
+            /*display: inline-block;*/
+            height: 100%;
+            width: 80%;
+            min-height: 60px;
+            min-width: 60px;
+            background-color: dodgerblue;
+            border: 1px solid #2b2b2b;
+        }
+
+        .div4{
+            border:1px solid gray;
+            min-width:24px;
+            display:inline-block;
+            overflow:hidden;
+            position:relative;
+
+
+
+            box-sizing: border-box;
+            display: flex; /* IE10 */
+            display: flexbox; /* IE10 */
+            display: -moz-box; /* Firefox */
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+
+        }
+
+        .img1{
+            text-align:right;
+            max-height:18px;
+            /*height: 18px;*/
+            /*width: 18px;*/
+            float:right;
+            margin-top:2px;
+        }
+        .input1{
+            border-width: 0px;
+            display: inline-block;
+            min-width: 30px;
+            /*margin-left: 18px;*/
+            height: 100%;
+            width: 80%;
+            /*float: left;*/
+        }
+
+    </style>
+</head>
+<body>
+
+
+<div class="div1" id="div1">
+
+    <div class="div2">
+        <div class="div3"></div>
+    </div>
+
+    <div class="div2"></div>
+    <div class="div2"></div>
+    <div class="div2"></div>
+    <div class="div2"></div>
+    <div class="div2"></div>
+
+</div>
+
+
+<div class="div4" id="div4">
+    <input type="text" class="input1" id="input1">
+    <img src="https://vde.dbazure.cn/themes/dbtheme/Images/colorpicker.png" alt="" class="img1">
+</div>
+
+<script>
+    var div1 = document.getElementById("div1");
+    var div2 = div1.querySelector("div.div2");
+    var div3 = div1.querySelector("div.div3");
+
+
+    var cssObj1 = window.getComputedStyle(div3,null);
+    console.log(cssObj1.width);
+    console.log(cssObj1.height);
+
+
+    var input1 = document.getElementById("input1");
+    input1.onmousedown = function (ev) {
+        ev.cancelBubble = true;
+        // ev.stopPropagation();
+    }
+
+    input1.onblur = function (ev) {
+        console.log(input1.value);
+    }
+
+
+    var div4 = document.getElementById("div4");
+    div4.onmousedown = function (ev) {
+        console.log("hello")
+    }
+
+    //https://wfs.dbazure.cn/root//OwnerProfiles/co_id/3b5a0533153c4a0fa5f0a35305123423/a237e93d3228421a889bc87f19287584.png
+    //https://wfs.dbazure.cn/root//OwnerProfiles/111/3b5a0533153c4a0fa5f0a35305123423/aa4abf5f79c04e18afc1600054b393e6.png
+    //https://wfs.dbazure.cn/root//OwnerProfiles/co_id/3b5a0533153c4a0fa5f0a35305123423/766f764735164d1cbfa6203919166c3f.png
+    //https://wfs.dbazure.cn/root//OwnerProfiles/co_id/3b5a0533153c4a0fa5f0a35305123423/0b421d67a8654eacaa67115e98b89d4c.png
+    //https://wfs.dbazure.cn/root//OwnerProfiles/111/3b5a0533153c4a0fa5f0a35305123423/e3b27443103e493a80778bcc98346857.png
+    var itemSource = [{"title":"项目1","Sources":[{"Text":"项目11","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/co_id/3b5a0533153c4a0fa5f0a35305123423/a237e93d3228421a889bc87f19287584.png","Description":"描述1","counter":3},
+                                                    {"Text":"项目12","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/co_id/3b5a0533153c4a0fa5f0a35305123423/a237e93d3228421a889bc87f19287584.png","Description":"描述1","counter":3},
+            {"Text":"项目13","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/co_id/3b5a0533153c4a0fa5f0a35305123423/a237e93d3228421a889bc87f19287584.png","Description":"描述1","counter":3},{"Text":"项目14","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/co_id/3b5a0533153c4a0fa5f0a35305123423/a237e93d3228421a889bc87f19287584.png","Description":"描述1","counter":3},
+            {"Text":"项目15","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/co_id/3b5a0533153c4a0fa5f0a35305123423/a237e93d3228421a889bc87f19287584.png","Description":"描述1","counter":3},{"Text":"项目16","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/co_id/3b5a0533153c4a0fa5f0a35305123423/a237e93d3228421a889bc87f19287584.png","Description":"描述1","counter":3},
+            {"Text":"项目17","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/co_id/3b5a0533153c4a0fa5f0a35305123423/a237e93d3228421a889bc87f19287584.png","Description":"描述1","counter":3}]},
+        {"title":"项目2","Sources":[{"Text":"项目21","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/111/3b5a0533153c4a0fa5f0a35305123423/aa4abf5f79c04e18afc1600054b393e6.png","Description":"描述1","counter":3},
+                                    {"Text":"项目22","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/111/3b5a0533153c4a0fa5f0a35305123423/aa4abf5f79c04e18afc1600054b393e6.png","Description":"描述1","counter":3},{"Text":"项目23","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/111/3b5a0533153c4a0fa5f0a35305123423/aa4abf5f79c04e18afc1600054b393e6.png","Description":"描述1","counter":3},
+                {"Text":"项目24","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/111/3b5a0533153c4a0fa5f0a35305123423/aa4abf5f79c04e18afc1600054b393e6.png","Description":"描述2","counter":3},{"Text":"项目25","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/111/3b5a0533153c4a0fa5f0a35305123423/aa4abf5f79c04e18afc1600054b393e6.png","Description":"描述1","counter":3},
+                {"Text":"项目26","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/111/3b5a0533153c4a0fa5f0a35305123423/aa4abf5f79c04e18afc1600054b393e6.png","Description":"描述2","counter":3},{"Text":"项目27","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/111/3b5a0533153c4a0fa5f0a35305123423/aa4abf5f79c04e18afc1600054b393e6.png","Description":"描述1","counter":3}]},
+        {"title":"项目3","Sources":[{"Text":"项目31","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/co_id/3b5a0533153c4a0fa5f0a35305123423/766f764735164d1cbfa6203919166c3f.png","Description":"描述1","counter":3},
+                {"Text":"项目32","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/co_id/3b5a0533153c4a0fa5f0a35305123423/766f764735164d1cbfa6203919166c3f.png","Description":"描述1","counter":3}]},
+        {"title":"项目4","Sources":[{"Text":"项目41","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/co_id/3b5a0533153c4a0fa5f0a35305123423/0b421d67a8654eacaa67115e98b89d4c.png","Description":"描述1","counter":3},
+                {"Text":"项目42","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/co_id/3b5a0533153c4a0fa5f0a35305123423/0b421d67a8654eacaa67115e98b89d4c.png","Description":"描述1","counter":3},{"Text":"项目42","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/co_id/3b5a0533153c4a0fa5f0a35305123423/0b421d67a8654eacaa67115e98b89d4c.png","Description":"描述1","counter":3},
+                {"Text":"项目42","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/co_id/3b5a0533153c4a0fa5f0a35305123423/0b421d67a8654eacaa67115e98b89d4c.png","Description":"描述1","counter":3},{"Text":"项目42","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/co_id/3b5a0533153c4a0fa5f0a35305123423/0b421d67a8654eacaa67115e98b89d4c.png","Description":"描述1","counter":3},
+                {"Text":"项目42","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/co_id/3b5a0533153c4a0fa5f0a35305123423/0b421d67a8654eacaa67115e98b89d4c.png","Description":"描述1","counter":3},{"Text":"项目42","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/co_id/3b5a0533153c4a0fa5f0a35305123423/0b421d67a8654eacaa67115e98b89d4c.png","Description":"描述1","counter":3}]},
+        {"title":"项目5","Sources":[{"Text":"项目51","ImageUrl":"图片地址5","Description":"描述1","counter":3},
+                {"Text":"项目52","ImageUrl":"图片地址5","Description":"描述1","counter":3}]},
+        {"title":"项目6","Sources":[{"Text":"项目61","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/co_id/3b5a0533153c4a0fa5f0a35305123423/a237e93d3228421a889bc87f19287584.png","Description":"描述1","counter":3},
+                {"Text":"项目62","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/co_id/3b5a0533153c4a0fa5f0a35305123423/a237e93d3228421a889bc87f19287584.png","Description":"描述1","counter":3}]},
+        {"title":"项目7","Sources":[{"Text":"项目71","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/111/3b5a0533153c4a0fa5f0a35305123423/aa4abf5f79c04e18afc1600054b393e6.png","Description":"描述1","counter":3},
+                {"Text":"项目72","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/111/3b5a0533153c4a0fa5f0a35305123423/aa4abf5f79c04e18afc1600054b393e6.png","Description":"描述1","counter":3},{"Text":"项目72","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/111/3b5a0533153c4a0fa5f0a35305123423/aa4abf5f79c04e18afc1600054b393e6.png","Description":"描述1","counter":3},
+                {"Text":"项目72","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/111/3b5a0533153c4a0fa5f0a35305123423/aa4abf5f79c04e18afc1600054b393e6.png","Description":"描述1","counter":3},{"Text":"项目72","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/111/3b5a0533153c4a0fa5f0a35305123423/aa4abf5f79c04e18afc1600054b393e6.png","Description":"描述1","counter":3},
+                {"Text":"项目72","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/111/3b5a0533153c4a0fa5f0a35305123423/aa4abf5f79c04e18afc1600054b393e6.png","Description":"描述1","counter":3},{"Text":"项目72","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/111/3b5a0533153c4a0fa5f0a35305123423/aa4abf5f79c04e18afc1600054b393e6.png","Description":"描述1","counter":3},
+                {"Text":"项目72","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/111/3b5a0533153c4a0fa5f0a35305123423/aa4abf5f79c04e18afc1600054b393e6.png","Description":"描述1","counter":3},{"Text":"项目72","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/111/3b5a0533153c4a0fa5f0a35305123423/aa4abf5f79c04e18afc1600054b393e6.png","Description":"描述1","counter":3},
+                {"Text":"项目72","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/111/3b5a0533153c4a0fa5f0a35305123423/aa4abf5f79c04e18afc1600054b393e6.png","Description":"描述1","counter":3},{"Text":"项目72","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/111/3b5a0533153c4a0fa5f0a35305123423/aa4abf5f79c04e18afc1600054b393e6.png","Description":"描述1","counter":3}]},
+        {"title":"项目8","Sources":[{"Text":"项目81","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/co_id/3b5a0533153c4a0fa5f0a35305123423/766f764735164d1cbfa6203919166c3f.png","Description":"描述1","counter":3},
+                {"Text":"项目82","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/co_id/3b5a0533153c4a0fa5f0a35305123423/766f764735164d1cbfa6203919166c3f.png","Description":"描述1","counter":3}]},
+        {"title":"项目9","Sources":[{"Text":"项目91","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/111/3b5a0533153c4a0fa5f0a35305123423/e3b27443103e493a80778bcc98346857.png","Description":"描述1","counter":3},
+                {"Text":"项目92","ImageUrl":"https://wfs.dbazure.cn/root//OwnerProfiles/111/3b5a0533153c4a0fa5f0a35305123423/e3b27443103e493a80778bcc98346857.png","Description":"描述1","counter":3}]}]
+
+
+    var arr = ["a","b","c","d","f"];
+    arr.forEach(function (value) {
+        if(value.valueOf() == "c"){
+            delete value;
+        }
+    })
+
+    console.log(arr);
+
+
+</script>
+</body>
+</html>

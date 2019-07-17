@@ -137,7 +137,7 @@ DBFX.Web.DBChart.Charts = function () {
     //配置参数对象
     c.configs = {
         "datas":[
-            {date:"2018-02-24",values:[{value:10},{value:20},{value:30},{value:40}]},
+            {date:"2018-02-24",values:[{value:10,id:123},{value:20},{value:30},{value:40}]},
             {date:"2018-02-25",values:[{value:28400},{value:12600},{value:22524},{value:6522}]},
             {date:"2018-02-26",values:[{value:54400},{value:15600},{value:18524},{value:7822}]},
             {date:"2018-02-27",values:[{value:38400},{value:17600},{value:25524},{value:10122}]}
@@ -452,7 +452,7 @@ DBFX.Web.DBChart.Charts = function () {
         }
     });
 
-    c.insideCTitle = '标题';
+    c.insideCTitle = 'insideTitle';
     Object.defineProperty(c,"InsideCTitle",{
         get:function () {
             return c.insideCTitle;
@@ -462,7 +462,7 @@ DBFX.Web.DBChart.Charts = function () {
         }
     });
 
-    c.insideCValue = 'value';
+    c.insideCValue = 'insideValue';
     Object.defineProperty(c,"InsideCValue",{
         get:function () {
             return c.insideCValue;
@@ -472,7 +472,7 @@ DBFX.Web.DBChart.Charts = function () {
         }
     });
 
-    c.insideCImageURL = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1522139851306&di=5480db34fad84e29005c91942afac90b&imgtype=0&src=http%3A%2F%2Fpic.58pic.com%2F58pic%2F15%2F41%2F98%2F65G58PICtUm_1024.png';
+    c.insideCImageURL = 'insideImage';
     Object.defineProperty(c,"InsideCImageURL",{
         get:function () {
             return c.insideCImageURL;
@@ -1662,15 +1662,19 @@ DBFX.Web.DBChart.Charts = function () {
         }
 
 
+        var cx = 0;
+
         //绘制柱状图
         for(var i=0;i<len;i++){
+            cx = len == 1 ? x_margin*1.5-x_margin*0.3: x_margin*(i+1);
+
             var barRect = document.createElementNS(c.SVG_NS,'rect');
             c.svg.appendChild(barRect);
 
             c.setAttr(barRect,{
                 'stroke':'none',
                 'fill':colors[i],
-                'x':x_margin*(i+1),
+                'x':cx,
                 'y':Math.floor(y_margin*12)+0.5-values[i].value/perValue_y*y_margin,
                 'width':x_margin*0.3,
                 'height':values[i].value/perValue_y*y_margin
@@ -1714,8 +1718,8 @@ DBFX.Web.DBChart.Charts = function () {
             }
         }
 
-        //每组图例占据的宽度
-        var perW = (maxTextC+3)*labelFontSize;
+        //TODO：每组图例占据的宽度
+        var perW = (maxTextC+1)*labelFontSize;
 
         //图例所在区域的总宽度
         var labelsW = x_margin*len;
@@ -1726,30 +1730,43 @@ DBFX.Web.DBChart.Charts = function () {
         var rowsCount = Math.ceil(len/perLineCount);
 
 
+
         if(rowsCount == 1){//只需要一行显示
+
+            var cx_1 = 0;
             //图例开始位置
             var startP= c.chartW*0.5 - len*0.5*perW;
             for(var m=0;m<len;m++){
 
+                cx_1 = len==1 ? c.chartW*0.5-x_margin*0.3 : startP+perW*m;
+                //图例g 20190612添加
+                var cutlineG = document.createElementNS(c.SVG_NS,'g');
+                cirG.appendChild(cutlineG);
+                //赋值数据上下文
+                cutlineG.DataContext = values[m];
+                cutlineG.DataContext.text = labels[m];
+                //添加鼠标响应事件
+                cutlineG.addEventListener('mousedown',c.OnCutlineClick,false);
+
                 var cir = document.createElementNS(c.SVG_NS,'circle');
-                cirG.appendChild(cir);
+                cutlineG.appendChild(cir);
 
                 c.setAttr(cir,{
-                    'cx':startP+perW*m,
+                    'cx':cx_1,
                     'cy':y_margin*13.8,
                     'r':labelFontSize*0.5,
                     'stroke':colors[m],
                     'fill':colors[m]
                 });
                 var keyText = document.createElementNS(c.SVG_NS,'text');
-                cirG.appendChild(keyText);
+                cutlineG.appendChild(keyText);
                 keyText.textContent = labels[m];
 
                 c.setAttr(keyText,{
                     'font-size':labelFontSize,
                     'font-family':c.titleFontFamily,
                     'fill':c.titleColor,
-                    "x":startP+perW*m+labelFontSize*0.8,
+                    "x":cx_1+labelFontSize*0.8,
                     "y":y_margin*13.8,
                     "text-anchor":"left",
                     "dominant-baseline": "middle",
@@ -1766,6 +1783,7 @@ DBFX.Web.DBChart.Charts = function () {
             if(perLineH < labelFontSize*0.9){
                 labelFontSize = perLineH;
                 perW = (maxTextC+3)*perLineH;
+                // perW = (maxTextC+3)*labelFontSize*0.9;
                 perLineCount = Math.floor(labelsW/perW);
                 rowsCount = Math.ceil(len/perLineCount);
             }
@@ -1783,8 +1801,17 @@ DBFX.Web.DBChart.Charts = function () {
 
                 for(var pc=0;pc<perLineCount;pc++){//每行多少个
 
+                    //图例g 20190612添加
+                    var cutlineG = document.createElementNS(c.SVG_NS,'g');
+                    cirG.appendChild(cutlineG);
+                    //赋值数据上下文
+                    cutlineG.DataContext = values[pc];
+                    cutlineG.DataContext.text = labels[pc];
+                    //添加鼠标响应事件
+                    cutlineG.addEventListener('mousedown',c.OnCutlineClick,false);
+
                     var cir = document.createElementNS(c.SVG_NS,'circle');
-                    cirG.appendChild(cir);
+                    cutlineG.appendChild(cir);
 
                     c.setAttr(cir,{
                         'cx':startP+perW*pc,
@@ -1794,7 +1821,7 @@ DBFX.Web.DBChart.Charts = function () {
                         'fill':colors[totalC]
                     });
                     var keyText = document.createElementNS(c.SVG_NS,'text');
-                    cirG.appendChild(keyText);
+                    cutlineG.appendChild(keyText);
 
                     keyText.textContent = labels[totalC];
 
@@ -2108,9 +2135,9 @@ DBFX.Web.DBChart.Charts = function () {
         //保存展示数据中最小的值
         var minValue = Number.MAX_VALUE;
 
-        //获取所有数据总和
+        //FIXME:获取所有数据总和  考虑有负数数据的情况
         for (var i=0;i<len;i++){
-            tcount += values[i].value;
+            tcount += Math.abs(values[i].value);
             if(values[i].value<minValue){
                 minValue = values[i].value;
             }
@@ -2150,7 +2177,7 @@ DBFX.Web.DBChart.Charts = function () {
             //设置事件的类型
             arcPath.type = "pie";
             arcPath.startA = starA;
-            arcPath.endA = starA+values[j].value/tcount*Math.PI*2;
+            arcPath.endA = starA+Math.abs(values[j].value)/tcount*Math.PI*2;
             arcPath.r = c.pieR;
             //父元素
             arcPath.superE = arcPathG;
@@ -2346,7 +2373,7 @@ DBFX.Web.DBChart.Charts = function () {
             // arcPath.setAttribute('stroke',colors[j]);
 
             arcPath.setAttribute('fill',colors[j]);
-            starA += values[j].value/tcount*Math.PI*2;
+            starA += Math.abs(values[j].value)/tcount*Math.PI*2;
 
         }
 
@@ -2385,7 +2412,8 @@ DBFX.Web.DBChart.Charts = function () {
             //内圆标题标签
             var insideTitle = document.createElementNS(c.SVG_NS,'text');
             insideG.appendChild(insideTitle);
-            insideTitle.textContent = c.insideCTitle;
+            // insideTitle.textContent = c.insideCTitle;
+            insideTitle.textContent = datas[c.insideCTitle]||"";
             c.setAttr(insideTitle,{
                'x':c.pieCenterX,
                'y':c.pieCenterY-c.insideR*0.4,
@@ -2400,7 +2428,7 @@ DBFX.Web.DBChart.Charts = function () {
             //数值显示标签
             var insideValue = document.createElementNS(c.SVG_NS,'text');
             insideG.appendChild(insideValue);
-            insideValue.textContent = c.insideCValue;
+            insideValue.textContent = datas[c.insideCValue]||"";
             c.setAttr(insideValue,{
                 'x':c.pieCenterX,
                 'y':c.pieCenterY,
@@ -2416,7 +2444,8 @@ DBFX.Web.DBChart.Charts = function () {
             var insideImage = document.createElementNS(c.SVG_NS,'image');
             insideG.appendChild(insideImage);
 
-            insideImage.setAttributeNS("http://www.w3.org/1999/xlink",'href',c.insideCImageURL);
+            var imageUrl = datas[c.insideCImageURL]||"";
+            insideImage.setAttributeNS("http://www.w3.org/1999/xlink",'href',imageUrl);
             c.setAttr(insideImage,{
                 'x':c.pieCenterX-c.insideR*0.23,
                 'y':c.pieCenterY+c.insideR*0.5-c.insideR*0.23,
@@ -2431,10 +2460,10 @@ DBFX.Web.DBChart.Charts = function () {
         c.setTitle();
 
         //绘制图例
+        var cirG = document.createElementNS(c.SVG_NS,'g');
+        c.svg.appendChild(cirG);
         //图例在右侧
         if(c.cutlinePos == 'right'){
-            var cirG = document.createElementNS(c.SVG_NS,'g');
-            c.svg.appendChild(cirG);
 
             //设置图例文字最大的长度:多少个字符
             var maxTextC = 0;
@@ -2486,8 +2515,19 @@ DBFX.Web.DBChart.Charts = function () {
                 var startP= c.chartH;
 
                 for(var m=0;m<len;m++){
+
+                    //图例g 20190612添加
+                    var cutlineG = document.createElementNS(c.SVG_NS,'g');
+                    cirG.appendChild(cutlineG);
+                    //赋值数据上下文
+                    cutlineG.DataContext = values[m];
+                    cutlineG.DataContext.text = labels[m];
+                    //添加鼠标响应事件
+                    cutlineG.addEventListener('mousedown',c.OnCutlineClick,false);
+
+
                     var cir = document.createElementNS(c.SVG_NS,'circle');
-                    cirG.appendChild(cir);
+                    cutlineG.appendChild(cir);
 
                     c.setAttr(cir,{
                         'cx':startP,
@@ -2497,7 +2537,7 @@ DBFX.Web.DBChart.Charts = function () {
                         'fill':colors[m]
                     });
                     var keyText = document.createElementNS(c.SVG_NS,'text');
-                    cirG.appendChild(keyText);
+                    cutlineG.appendChild(keyText);
                     // keyText.textContent = labels[m];
 
                     if(labels[m].length>maxTextC){
@@ -2537,8 +2577,18 @@ DBFX.Web.DBChart.Charts = function () {
 
                     for(var pc=0;pc<perLineCount;pc++){//每列多少个
 
+                        //图例g 20190612添加
+                        var cutlineG = document.createElementNS(c.SVG_NS,'g');
+                        cirG.appendChild(cutlineG);
+                        //赋值数据上下文
+                        cutlineG.DataContext = values[pc];
+                        cutlineG.DataContext.text = labels[pc];
+                        //添加鼠标响应事件
+                        cutlineG.addEventListener('mousedown',c.OnCutlineClick,false);
+
+
                         var cir = document.createElementNS(c.SVG_NS,'circle');
-                        cirG.appendChild(cir);
+                        cutlineG.appendChild(cir);
 
                         c.setAttr(cir,{
                             'cx':startP+perW*rc,
@@ -2548,7 +2598,7 @@ DBFX.Web.DBChart.Charts = function () {
                             'fill':colors[totalC]
                         });
                         var keyText = document.createElementNS(c.SVG_NS,'text');
-                        cirG.appendChild(keyText);
+                        cutlineG.appendChild(keyText);
 
                         // keyText.textContent = labels[totalC];
 
@@ -2579,8 +2629,7 @@ DBFX.Web.DBChart.Charts = function () {
 
         //图例在下方
         if(c.cutlinePos == 'down'){
-            var cirG = document.createElementNS(c.SVG_NS,'g');
-            c.svg.appendChild(cirG);
+
 
             //设置图例文字最大的长度:多少个字符;20180808废弃，限定显示字符数8个 否则字符多的时候会超过图表范围
             var maxTextC = 0;
@@ -2609,8 +2658,17 @@ DBFX.Web.DBChart.Charts = function () {
                 var startP= c.chartW*0.5 - len*0.5*perW;
                 for(var m=0;m<len;m++){
 
+                    //图例g 20190612添加
+                    var cutlineG = document.createElementNS(c.SVG_NS,'g');
+                    cirG.appendChild(cutlineG);
+                    //赋值数据上下文
+                    cutlineG.DataContext = values[m];
+                    cutlineG.DataContext.text = labels[m];
+                    //添加鼠标响应事件
+                    cutlineG.addEventListener('mousedown',c.OnCutlineClick,false);
+
                     var cir = document.createElementNS(c.SVG_NS,'circle');
-                    cirG.appendChild(cir);
+                    cutlineG.appendChild(cir);
 
                     c.setAttr(cir,{
                         'cx':startP+perW*m,
@@ -2620,7 +2678,7 @@ DBFX.Web.DBChart.Charts = function () {
                         'fill':colors[m]
                     });
                     var keyText = document.createElementNS(c.SVG_NS,'text');
-                    cirG.appendChild(keyText);
+                    cutlineG.appendChild(keyText);
                     // keyText.textContent = labels[m];
 
                     if(labels[m].length>maxTextC){
@@ -2664,8 +2722,17 @@ DBFX.Web.DBChart.Charts = function () {
 
                     for(var pc=0;pc<perLineCount;pc++){//每行多少个
 
+                        //图例g 20190612添加
+                        var cutlineG = document.createElementNS(c.SVG_NS,'g');
+                        cirG.appendChild(cutlineG);
+                        //赋值数据上下文
+                        cutlineG.DataContext = values[pc];
+                        cutlineG.DataContext.text = labels[pc];
+                        //添加鼠标响应事件
+                        cutlineG.addEventListener('mousedown',c.OnCutlineClick,false);
+
                         var cir = document.createElementNS(c.SVG_NS,'circle');
-                        cirG.appendChild(cir);
+                        cutlineG.appendChild(cir);
 
                         c.setAttr(cir,{
                             'cx':startP+perW*pc,
@@ -2675,7 +2742,7 @@ DBFX.Web.DBChart.Charts = function () {
                             'fill':colors[totalC]
                         });
                         var keyText = document.createElementNS(c.SVG_NS,'text');
-                        cirG.appendChild(keyText);
+                        cutlineG.appendChild(keyText);
 
                         if(labels[totalC].length>maxTextC){
                             keyText.textContent = labels[totalC].substring(0,maxTextC-3)+"...";
@@ -2737,9 +2804,8 @@ DBFX.Web.DBChart.Charts = function () {
         //     });
         // }
 
-
-        
     }
+
 
     /************************** 绘制折线图 *****************************/
     //绘制折线图
@@ -2799,7 +2865,7 @@ DBFX.Web.DBChart.Charts = function () {
 
         var maginV = maxV - minV,
             // x_margin = c.chartW/(row+2),
-            x_margin = xPerMargin*10/(len-1),
+            x_margin = len-1<=0?xPerMargin:xPerMargin*10/(len-1),//20190716:只有一个数据时 避免计算结果出现NaN
             y_margin = c.chartH/15;//y坐标分成15等分
 
 
@@ -2816,12 +2882,6 @@ DBFX.Web.DBChart.Charts = function () {
 
 
         }
-
-
-
-
-
-
 
 
 
@@ -2881,17 +2941,24 @@ DBFX.Web.DBChart.Charts = function () {
         var bethelPath = '';
 
 
-        var points = []
+        var points = [];
+        //TODO:20190716
+        var cx = 0;
+        var transA = 0;
+
         for(var i=0;i<len;i++){
             //所有X点数组
             c.allXPoints.push(x_margin*i+xPerMargin);
             //折线线上的点
             var cirPoint = document.createElementNS(c.SVG_NS,'circle');
             // c.svg.appendChild(cirPoint);
+            //TODO:20190716  当只有一个点时
+            cx = len == 1 ? xPerMargin*6 : x_margin*i+xPerMargin;
+
             points.push(cirPoint);
             if(i%gap01==0 || i==len-1){
                 c.setAttr(cirPoint,{
-                    'cx':x_margin*i+xPerMargin,
+                    'cx':cx,
                     'cy':Math.floor(y_margin*12)+0.5-values[i].value/perValue_y*y_margin,
                     'r':2,
                     'stroke':"none",
@@ -2902,7 +2969,7 @@ DBFX.Web.DBChart.Charts = function () {
 
             cirPoint.title = labels[i];
             // cirPoint.subTitle = datas.datas[0].date;
-            cirPoint.subTitle = '2018-12-22 12:30:03';
+            // cirPoint.subTitle = '2018-12-22 12:30:03';
             cirPoint.value = values[i].value;
             cirPoint.type = "multiLine_point";
             // cirPoint.superE = lineG;
@@ -2935,12 +3002,13 @@ DBFX.Web.DBChart.Charts = function () {
             // var x_g = document.createElementNS(c.SVG_NS,'g');
             // c.svg.appendChild(x_g);
 
+            transA = len == 1 ? "":"rotate("+(45)+","+(x_margin*i+xPerMargin)+","+y_margin*12.7+")";
             if(i%gap==0 || i==len-1){
                 //绘制横坐标
                 //横坐标点
                 var coordinateP = document.createElementNS(c.SVG_NS,'circle');
                 c.setAttr(coordinateP,{
-                    'cx':x_margin*i+xPerMargin,
+                    'cx':cx,
                     'cy':Math.floor(y_margin*12)+0.5,
                     'r':1.5,
                     'stroke':"none",
@@ -2955,13 +3023,13 @@ DBFX.Web.DBChart.Charts = function () {
                     'font-size':labelFontSize-3,
                     'font-family':c.titleFontFamily,
                     'fill':c.titleColor,
-                    "x":x_margin*i+xPerMargin,
+                    "x":cx,
                     "y":y_margin*12.7,
                     "text-anchor":"middle",
                     // "height":c.titleFontSize*1.2,
                     'letter-spacing':c.labelLetterSpacing,
                     // 'transform':"rotate("+(36)+","+(x_margin+(z+0.4)*x_margin*tcount/row)+","+y_margin*12.6+")"
-                    'transform':"rotate("+(45)+","+(x_margin*i+xPerMargin)+","+y_margin*12.7+")"
+                    'transform':transA
                 });
             }
 
@@ -3119,7 +3187,7 @@ DBFX.Web.DBChart.Charts = function () {
 
     /************************** 绘制热力图 *****************************/
 
-    //TODO:绘制热力图
+    //TODO:绘制热力图  在地图控件里实现
     c.LoadMap = function () {
         // delete window[c.CbName];
         c.aMap = new AMap.Map("container",{
@@ -3457,7 +3525,7 @@ DBFX.Web.DBChart.Charts = function () {
                    // points.push(cirPoint);
 
                    cirPoint.title = labels[p];
-                   cirPoint.subTitle = totalV[q].date;
+                   // cirPoint.subTitle = totalV[q].date;
                    cirPoint.value = perlinePoints[q].value;
                    cirPoint.type = "multiLine_point";
                    cirPoint.superE = lineG;
@@ -4130,7 +4198,7 @@ DBFX.Web.DBChart.Charts = function () {
                 var configs = {
                     title:et.title,
                     color:et.getAttribute('fill'),
-                    value:et.value,
+                    value:et.value+'',
                     subTitle:et.subTitle
                 }
                 c.tip.setFrame(x+w*0.5-44,y-44,88,44,configs);
@@ -4138,6 +4206,26 @@ DBFX.Web.DBChart.Charts = function () {
         }
     }
 
+    //TODO: 20190612添加 图例点击事件 饼状图、柱状图
+    c.OnCutlineClick = function (e) {
+        //获取点击的图例
+        var t = e.currentTarget;
+        console.log(t.DataContext);
+
+        if (c.Command != undefined && c.Command != null) {
+            c.Command.Sender = c;
+            c.Command.Execute();
+        }
+
+        if(c.CutlineClick != undefined && c.CutlineClick.GetType() == "Command"){
+            c.CutlineClick.Sender = t;
+            c.CutlineClick.Execute();
+        }
+
+        if(c.CutlineClick != undefined && c.CutlineClick.GetType() == "function"){
+            c.CutlineClick(e,t);
+        }
+    }
 
     //当前选择的元素
     c.curSelectE = undefined;
@@ -4405,11 +4493,12 @@ DBFX.Serializer.ChartsSerializer = function () {
 
     //反系列化
     this.DeSerialize = function (c, xe, ns) {
-        // DBFX.Serializer.DeSerialProperty("chartW", c, xe);
-        // DBFX.Serializer.DeSerialProperty("chartH", c, xe);
-        // DBFX.Serializer.DeSerialProperty("Configs", c, xe);
+
         DBFX.Serializer.DeSerialProperty("ChartType", c, xe);
         DBFX.Serializer.DeSerialProperty("InsideR", c, xe);
+        DBFX.Serializer.DeSerialProperty("InsideCTitle", c, xe);
+        DBFX.Serializer.DeSerialProperty("InsideCValue", c, xe);
+        DBFX.Serializer.DeSerialProperty("InsideCImageURL", c, xe);
         DBFX.Serializer.DeSerialProperty("ChartTitle", c, xe);
         DBFX.Serializer.DeSerialProperty("TitleColor", c, xe);
         DBFX.Serializer.DeSerialProperty("TitleFontSize", c, xe);
@@ -4417,15 +4506,18 @@ DBFX.Serializer.ChartsSerializer = function () {
         // DBFX.Serializer.DeSerialProperty("IsShowTitle", c, xe);
         DBFX.Serializer.DeSerialProperty("Option3d", c, xe);
         DBFX.Serializer.DeSerialProperty("ColorSerie", c, xe);
+
+        DBFX.Serializer.DeSerializeCommand("CutlineClick", xe, c);
     }
 
     //系列化 开发平台保存设置时调用
     this.Serialize = function (c, xe, ns) {
-        // DBFX.Serializer.SerialProperty("chartW", c.chartW, xe);
-        // DBFX.Serializer.SerialProperty("chartH", c.chartH, xe);
-        // DBFX.Serializer.SerialProperty("Configs", c.Configs, xe);
+
         DBFX.Serializer.SerialProperty("ChartType", c.ChartType, xe);
         DBFX.Serializer.SerialProperty("InsideR", c.InsideR, xe);
+        DBFX.Serializer.SerialProperty("InsideCTitle", c.InsideCTitle, xe);
+        DBFX.Serializer.SerialProperty("InsideCValue", c.InsideCValue, xe);
+        DBFX.Serializer.SerialProperty("InsideCImageURL", c.InsideCImageURL, xe);
         DBFX.Serializer.SerialProperty("ChartTitle", c.ChartTitle, xe);
         DBFX.Serializer.SerialProperty("TitleColor", c.TitleColor, xe);
         DBFX.Serializer.SerialProperty("TitleFontSize", c.TitleFontSize, xe);
@@ -4433,6 +4525,8 @@ DBFX.Serializer.ChartsSerializer = function () {
         // DBFX.Serializer.SerialProperty("IsShowTitle", c.IsShowTitle, xe);
         DBFX.Serializer.SerialProperty("Option3d", c.Option3d, xe);
         DBFX.Serializer.SerialProperty("ColorSerie", c.ColorSerie, xe);
+
+        DBFX.Serializer.SerializeCommand("CutlineClick", c.CutlineClick, xe);
     }
 }
 DBFX.Design.ControlDesigners.ChartsDesigner = function () {
@@ -4452,8 +4546,21 @@ DBFX.Design.ControlDesigners.ChartsDesigner = function () {
             //是否显示内圆设计器设置项
             // od.FormContext.Form.FormControls.cbxIsShowInsideC.ItemSource =  [{Text:"显示",Value:true,ImageUrl:""},
             //                                                 {Text:"不显示",Value:false,ImageUrl:""}];
+
+            //设计器中绑定事件处理
+            od.EventListBox = od.FormContext.Form.FormControls.EventListBox;
+            od.EventListBox.ItemSource = [{EventName:"CutlineClick",EventCode:undefined,Command:od.dataContext.CutlineClick,Control:od.dataContext}];
+
         }, obdc);
 
+    }
+
+    //事件处理程序
+    obdc.DataContextChanged = function (e) {
+        obdc.DataBind(e);
+        if(obdc.EventListBox != undefined){
+            obdc.EventListBox.ItemSource = [{EventName:"CutlineClick",EventCode:undefined,Command:obdc.dataContext.CutlineClick,Control:obdc.dataContext}];
+        }
     }
 
     obdc.HorizonScrollbar = "hidden";
@@ -4521,7 +4628,7 @@ DBFX.Web.DBChart.TipLabel = function () {
         tip.boundingP.setAttribute('stroke','#7cb5ec');
         tip.boundingP.setAttribute('fill','white');
         tip.boundingP.setAttribute('stroke-width',1);
-        tip.boundingP.setAttribute('fill-opacity',0.5);
+        tip.boundingP.setAttribute('fill-opacity',0.8);
         tip.boundingP.setAttribute('stroke-opacity',0.5);
 
 
@@ -4533,7 +4640,7 @@ DBFX.Web.DBChart.TipLabel = function () {
         tip.cir.setAttribute('fill',configs.color);
 
         //设置标题
-        tip.titleE.textContent = configs.title;
+        tip.titleE.textContent = configs.title.length>8?configs.title.substring(0,6)+"...":configs.title;
         tip.titleE.setAttribute('font-size',h*0.22);
         tip.titleE.setAttribute('font-family','华文宋体');
         tip.titleE.setAttribute('fill','black');
@@ -4546,7 +4653,7 @@ DBFX.Web.DBChart.TipLabel = function () {
 
         //设置副标题
         if(configs.subTitle){
-            tip.subTitleE.textContent = configs.subTitle;
+            tip.subTitleE.textContent = configs.subTitle.length>8?configs.subTitle.substring(0,6)+"...":configs.subTitle;
 
         }else {
             tip.subTitleE.textContent = '';
@@ -4566,7 +4673,7 @@ DBFX.Web.DBChart.TipLabel = function () {
 
 
         //设置数值
-        tip.valueE.textContent = configs.value;
+        tip.valueE.textContent = configs.value.length>8?configs.value.substring(0,6)+"...":configs.value;
         tip.valueE.setAttribute('font-size',h*0.22);
         tip.valueE.setAttribute('font-family','方正');
         tip.valueE.setAttribute('fill','black');
@@ -5337,9 +5444,9 @@ DBFX.Web.DBChart.InstrumentPanel = function () {
     ip.ClassDescriptor.Serializer = "DBFX.Serializer.InstrumentPanelSerializer";
 
     // TODO:图表边界！！测试时打开注释
-    ip.VisualElement.style.borderColor = 'aqua';
-    ip.VisualElement.style.borderStyle = 'solid';
-    ip.VisualElement.style.borderWidth = '1px';
+    // ip.VisualElement.style.borderColor = 'aqua';
+    // ip.VisualElement.style.borderStyle = 'solid';
+    // ip.VisualElement.style.borderWidth = '1px';
 
     ip.OnCreateHandle();
     ip.OnCreateHandle = function () {
@@ -5386,6 +5493,7 @@ DBFX.Web.DBChart.InstrumentPanel = function () {
         },
         set:function (v) {
             ip.arcWidth = isNaN(v*1) ? 10 : v*1;
+            ip.drawInstrumentPanel();
         }
     });
 
@@ -5398,6 +5506,7 @@ DBFX.Web.DBChart.InstrumentPanel = function () {
         },
         set:function (v) {
             ip.sectionCount = isNaN(v*1) ? 4 : v*1;
+            ip.drawInstrumentPanel();
         }
     });
 
@@ -5409,6 +5518,7 @@ DBFX.Web.DBChart.InstrumentPanel = function () {
         },
         set:function (v) {
             ip.totalAngle = v*1*Math.PI*2;
+            ip.drawInstrumentPanel();
         }
     });
 
@@ -5420,6 +5530,7 @@ DBFX.Web.DBChart.InstrumentPanel = function () {
         },
         set:function (v) {
             ip.title = v;
+            ip.drawInstrumentPanel();
         }
     });
 
@@ -5430,6 +5541,7 @@ DBFX.Web.DBChart.InstrumentPanel = function () {
         },
         set:function (v) {
             ip.subTitle = v;
+            ip.drawInstrumentPanel();
         }
     });
 
@@ -5440,6 +5552,7 @@ DBFX.Web.DBChart.InstrumentPanel = function () {
         },
         set:function (v) {
             ip.tColor = v;
+            ip.drawInstrumentPanel();
         }
     });
 
@@ -5451,6 +5564,7 @@ DBFX.Web.DBChart.InstrumentPanel = function () {
         },
         set:function (v) {
             ip.numMode = v;
+            ip.drawInstrumentPanel();
         }
     });
 
@@ -5462,6 +5576,7 @@ DBFX.Web.DBChart.InstrumentPanel = function () {
         },
         set:function (v) {
             ip.maxValue = isNaN(v*1) ? 1 : v*1;
+            ip.drawInstrumentPanel();
         }
     });
 
@@ -5473,12 +5588,24 @@ DBFX.Web.DBChart.InstrumentPanel = function () {
         },
         set:function (v) {
             ip.minValue = isNaN(v*1) ? 0 : v*1;
+            ip.drawInstrumentPanel();
         }
     });
+    
+    ip.SetValue = function (v) {
+        ip.value = v;
+        ip.drawInstrumentPanel();
+    }
+
+    ip.GetValue = function () {
+        return ip.value;
+    }
 
 
     /************************** 绘制仪表盘图 *****************************/
     ip.drawInstrumentPanel = function (datas) {
+
+        var num = isNaN(ip.value*1) ? 0:ip.value*1;
 
         //!!!清空svg下所有子元素后再绘制，防止图表重叠绘制
         if(ip.svg.childNodes.length){
@@ -5547,7 +5674,6 @@ DBFX.Web.DBChart.InstrumentPanel = function () {
             sA -= sectionA;
         }
 
-
         //刻度文字的对齐方式
         var text_anchor = "middle";
 
@@ -5578,7 +5704,19 @@ DBFX.Web.DBChart.InstrumentPanel = function () {
             //刻度文字
             var limbT = document.createElementNS(ip.SVG_NS,'text');
             group.appendChild(limbT);
-            limbT.textContent = (ip.minValue + aveNum*f).toFixed(2)*100 +"%";
+
+
+            switch (ip.numMode){
+                case "ratio"://百分比
+                    limbT.textContent = (ip.minValue + aveNum*f).toFixed(2)*100 +"%";
+                    break;
+                case "number"://TODO：数值
+                    limbT.textContent = (ip.minValue + aveNum*f)<ip.sectionCount?(ip.minValue + aveNum*f).toFixed(2)+"":(ip.minValue + aveNum*f).toFixed(0);
+                    break;
+                default:
+                    break;
+            }
+
             ip.setAttr(limbT,{
                 'font-size':"12",
                 'fill':"#777777",
@@ -5586,7 +5724,6 @@ DBFX.Web.DBChart.InstrumentPanel = function () {
                 "y":p2_y,
                 "text-anchor":text_anchor
             });
-
 
 
             //刻度线
@@ -5599,7 +5736,6 @@ DBFX.Web.DBChart.InstrumentPanel = function () {
                 'stroke':"#2c2f30",
                 'stroke-width':"2"
             });
-
 
         }
 
@@ -5637,7 +5773,7 @@ DBFX.Web.DBChart.InstrumentPanel = function () {
         var disL = inner_r*0.7;
 
         var paths = [];
-        paths.push("M",center_x+disS,center_y,"L",center_x,center_y-disS*0.6,"L",center_x-disL,center_y,"L",center_x,center_y+disS*0.6,"C");
+        paths.push("M",center_x+disS,center_y,"L",center_x,center_y-disS*0.6,"L",center_x-disL,center_y,"L",center_x,center_y+disS*0.6,"Z");
         var pathsStr = paths.join(' ');
         var line = document.createElementNS(ip.SVG_NS,'path');
         group.appendChild(line);
@@ -5647,16 +5783,16 @@ DBFX.Web.DBChart.InstrumentPanel = function () {
         });
 
         //绘制指针圆心
-        var cir = document.createElementNS(ip.SVG_NS,'circle');
-        group.appendChild(cir);
-
-        ip.setAttr(cir,{
-            'cx':center_x,
-            'cy':center_y,
-            'r':disS*0.5,
-            'stroke':"#ffffff",
-            'fill':"#ffffff"
-        });
+        // var cir = document.createElementNS(ip.SVG_NS,'circle');
+        // group.appendChild(cir);
+        //
+        // ip.setAttr(cir,{
+        //     'cx':center_x,
+        //     'cy':center_y,
+        //     'r':disS*0.5,
+        //     'stroke':"#ffffff",
+        //     'fill':"#ffffff"
+        // });
 
 
         //指针指向起始角度
@@ -5664,12 +5800,28 @@ DBFX.Web.DBChart.InstrumentPanel = function () {
         line.setAttribute('transform',"rotate("+originalA*180/Math.PI+" "+center_x+" "+center_y+")");
 
         //FIXME:指针偏移的角度 角度数值0-360 根据当前数值所占的比例进行计算
-        var ratio = 0.5;
+        var ratio = num/(ip.maxValue*1 - ip.minValue);
+        ratio = isNaN(ratio) ? 0: ratio;
+        ratio = ratio <0?0:(ratio>1?1:ratio);
+
+
         var rotateTotalA = (ratio*totalA+originalA)*180/Math.PI;
 
         //FIXME:角度的增量需要根据实际情况计算  控制动画的快慢
         var stepA = 2;
-        var stepV = ratio/((rotateTotalA-originalA*180/Math.PI)/stepA);
+        var stepV = 0;
+        switch (ip.numMode){
+            case "ratio":
+                stepV = ratio/((rotateTotalA-originalA*180/Math.PI)/stepA);
+                break;
+            case "number":
+                stepV = num/((rotateTotalA-originalA*180/Math.PI)/stepA);
+                break;
+
+            default:
+                break;
+        }
+
 
         //起始角度
         var rotateA = originalA*180/Math.PI;
@@ -5681,12 +5833,26 @@ DBFX.Web.DBChart.InstrumentPanel = function () {
             rotateA += stepA;
             startNum += stepV;
 
-            if(startNum < ratio){
-                subTElement.textContent = Math.round(startNum*100)+"%";
+            switch (ip.numMode){
+                case "ratio":
+                    if(startNum < ratio){
+                        subTElement.textContent = Math.round(startNum*100)+"%";
+                    }else {
+                        subTElement.textContent = Math.round(ratio*100)+"%";
+                    }
+                    break;
+                case "number":
+                    if(startNum < num){
+                        subTElement.textContent = startNum<1?startNum.toFixed(2)+"":startNum+"";
+                    }else {
+                        subTElement.textContent = num+"";
+                    }
+                    break;
 
-            }else {
-                subTElement.textContent = Math.round(ratio*100)+"%";
+                default:
+                    break;
             }
+
             if(rotateA < rotateTotalA){
                 line.setAttribute('transform',"rotate("+rotateA+" "+center_x+" "+center_y+")");
                 requestAnimationFrame(rotateStep);
