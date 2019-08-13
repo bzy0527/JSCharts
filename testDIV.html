@@ -19,6 +19,8 @@
             justify-content: flex-start;
             align-items: center;
 
+            /*background: url("./image.png") no-repeat center;*/
+
         }
 
         .div2{
@@ -34,6 +36,7 @@
             margin: 20px;
             /*float: left;*/
             box-sizing: border-box;
+
         }
 
         .div3{
@@ -110,6 +113,11 @@
     <img src="https://vde.dbazure.cn/themes/dbtheme/Images/colorpicker.png" alt="" class="img1">
 </div>
 
+
+<svg width="400" height="300" viewBox="0,0,40,30" style="border:1px solid #cd0000;">
+    <rect x="10" y="5" width="40" height="30" fill="#cd0000"/>
+</svg>
+
 <script>
     var div1 = document.getElementById("div1");
     var div2 = div1.querySelector("div.div2");
@@ -180,7 +188,10 @@
         }
     })
 
-    console.log(arr);
+    console.log(itemSource[""]);
+    console.log(itemSource[undefined]);
+    console.log(itemSource[null]);
+    console.log(itemSource[-2]);
 
 
 </script>

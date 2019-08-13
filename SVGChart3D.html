@@ -61,7 +61,8 @@
             // console.log(chart.configs);
 
             //{"date":"14:35","values":[{"value":24.9,"key":"70001"},{"value":25.1,"key":"70002"}]},
-            chart.Configs ={"datas":[{"date":"14:40","values":[{"value":24.8,"key":"70001"}]},{"date":"14:35","values":[{"value":-240.9999999999,"key":"70001"},{"value":-25.1,"key":"70002"},{"value":26.1,"key":"70002"},{"value":25.1,"key":"70002"}]},
+            chart.Configs ={"datas":[
+                                    {"date":"14:35","values":[{"value":27,"key":"70001"},{"value":25.1,"key":"70002"},{"value":20.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"}]},
                                     {"date":"14:40","values":[{"value":24.8,"key":"70001"},{"value":25.1,"key":"70002"},{"value":24.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"}]},
                                     {"date":"14:45","values":[{"value":24.6,"key":"70001"},{"value":25.1,"key":"70002"},{"value":27.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"}]},
                                     {"date":"14:50","values":[{"value":24.6,"key":"70001"},{"value":25,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"}]},
@@ -71,21 +72,22 @@
                                     {"date":"15:10","values":[{"value":24.7,"key":"70001"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"}]},
                                     {"date":"15:15","values":[{"value":24.8,"key":"70001"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"}]},
                                     {"date":"15:20","values":[{"value":24.6,"key":"70001"},{"value":25.2,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":25.1,"key":"70002"},{"value":23.1,"key":"70002"},{"value":25.1,"key":"70002"}]}],
-                            "labels":["某公司本月销售","某公司本月计划销售","70003","70004","70005","70006","70007","70008","70009","70010","70011","70012"],
+                            "labels":["本月销售","计划销售","70003","70004","70005","70006","70007","70008","70009","70010","70011","70012"],
             title:"内标题",value:"222","img":"https://wfs.dbazure.cn/root//OwnerProfiles/co_id/3b5a0533153c4a0fa5f0a35305123423/a237e93d3228421a889bc87f19287584.png"};
 
-            //
+
             // chart.ChartType = 'bar';
             // chart.ChartType = 'multiBar3D';
-            chart.ChartType = 'line';
+            // chart.ChartType = 'line';
             // chart.ChartType = 'multiWavy';
             // chart.ChartType = 'wavy';
-            // chart.ChartType = 'multiBar';
+            chart.ChartType = 'multiBar';
             // chart.ChartType = 'pie';
+            // chart.ChartType = 'multiLine';
 
             // chart.isShowTitle = false;
-            chart.SetWidth('100%');
-            chart.SetHeight('50%');
+            chart.SetWidth('220px');
+            chart.SetHeight('150px');
 
 
 
@@ -141,8 +143,7 @@
             console.log(error);
         }
 
-        var date = new Date(1559089302982);
-        console.log(date);
+
 
     </script>
 </body>
