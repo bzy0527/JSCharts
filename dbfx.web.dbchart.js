@@ -6,7 +6,7 @@ DBFX.RegisterNamespace("DBFX.Design.ControlDesigners");
 //图表类
 DBFX.Web.DBChart.Charts = function () {
 
-    var c = DBFX.Web.Controls.Control("Charts");
+    var c =new DBFX.Web.Controls.Control("Charts");
 
     c.ClassDescriptor.Designers.splice(1, 0, "DBFX.Design.ControlDesigners.ChartsDesigner");
     c.ClassDescriptor.Serializer = "DBFX.Serializer.ChartsSerializer";
@@ -67,15 +67,17 @@ DBFX.Web.DBChart.Charts = function () {
     c.y_scale = 1;
     c.t_scale = 1;
 
-    /*==================================平台属性配置=======================================================*/
+    /**==================================平台属性配置=======================================================*/
     c.SetHeight = function (v) {
 
-        if(v.indexOf("%") != -1 || v.indexOf("px") != -1){
-            c.VisualElement.style.height = v;
-        }else {
-            c.VisualElement.style.height = parseFloat(v)+'px';
-        }
+        // if(v.indexOf("%") != -1 || v.indexOf("px") != -1){
+        //     c.VisualElement.style.height = v;
+        // }else {
+        //     c.VisualElement.style.height = parseFloat(v)+'px';
+        // }
 
+        //20191219
+        c.VisualElement.style.height = v;
         var cssObj = window.getComputedStyle(c.VisualElement,null);
         var h = cssObj.height;
 
@@ -99,12 +101,14 @@ DBFX.Web.DBChart.Charts = function () {
 
     c.SetWidth = function (v) {
 
-        if(v.indexOf("%") != -1 || v.indexOf("px") != -1){
-            c.VisualElement.style.width = v;
-        }else {
-            c.VisualElement.style.width = parseFloat(v)+'px';
-        }
+        // if(v.indexOf("%") != -1 || v.indexOf("px") != -1){
+        //     c.VisualElement.style.width = v;
+        // }else {
+        //     c.VisualElement.style.width = parseFloat(v)+'px';
+        // }
 
+        //20191219
+        c.VisualElement.style.width = v;
 
         var cssObj = window.getComputedStyle(c.VisualElement,null);
         var w = cssObj.width;
@@ -132,7 +136,7 @@ DBFX.Web.DBChart.Charts = function () {
         c.createChart(c.chartType);
     }
 
-    /*=======================================end===================================================*/
+    /**=======================================end===================================================*/
 
     c.svgrender = new DBFX.Web.DBChart.SVGRender(c);
     c.deg2rad = Math.PI *2 /360;
@@ -213,8 +217,6 @@ DBFX.Web.DBChart.Charts = function () {
 
     }
 
-
-
     //保存被点击的扇形区域对应的数据 默认保存第0组数据
     c.clickedDataContext = new Object();
 
@@ -270,28 +272,8 @@ DBFX.Web.DBChart.Charts = function () {
 
     //图表显示的宽度和高度
     c.chartW = 240;
-    // Object.defineProperty(c,"ChartW",{
-    //     get:function () {
-    //         return c.chartW;
-    //     },
-    //     set:function (v) {
-    //         c.chartW = v;
-    //         c.VisualElement.style.width = v+'px';
-    //         c.svg.setAttribute('viewBox','0,0,800,500');
-    //     }
-    // });
-
     c.chartH = 150;
-    // Object.defineProperty(c,"ChartH",{
-    //     get:function () {
-    //         return c.chartH;
-    //     },
-    //     set:function (v) {
-    //         c.chartH = v;
-    //         c.VisualElement.style.height = v+'px';
-    //         c.svg.setAttribute('viewBox','0,0,800,500');
-    //     }
-    // });
+
 
     /**
      *设置图表类型
@@ -453,7 +435,11 @@ DBFX.Web.DBChart.Charts = function () {
             return c.isShowInsideC;
         },
         set:function (v) {
-            c.isShowInsideC = v;
+            if(v=="true"||v == true){
+                c.isShowInsideC = true;
+            }else {
+                c.isShowInsideC = false;
+            }
         }
     });
 
@@ -532,7 +518,7 @@ DBFX.Web.DBChart.Charts = function () {
             c.svg.textContent = '';
         }
 
-        if(!(c.configs && c.configs.datas && c.configs.datas[0] && c.configs.datas[0].values)){
+        if(!(c.configs && c.configs.datas && c.configs.datas[0] && c.configs.datas[0].values && c.configs.datas[0].values.length>0 && c.configs.datas[0].values.value != false)){
             c.createNoDataTip();
             return;
         }
@@ -543,20 +529,20 @@ DBFX.Web.DBChart.Charts = function () {
             var values = c.configs.datas[0].values;
             for(var j=0;j<values.length;j++){
                 var value = isNaN(values[j].value) ? 0 : values[j].value;
-                count += value;
+                count += Math.abs(value);
             }
         }else {
             for(var i=0;i<c.configs.datas.length;i++){
                 var values = c.configs.datas[i].values;
                 for(var j=0;j<values.length;j++){
                     var value = isNaN(values[j].value) ? 0 : values[j].value;
-                    count += value;
+                    count += Math.abs(value);
                 }
             }
         }
 
 
-        if(isNaN(count) || typeof(count) == 'string' ){
+        if(isNaN(count) || typeof(count) == 'string' || count === 0){
             c.createNoDataTip();
             return;
         }
@@ -588,7 +574,8 @@ DBFX.Web.DBChart.Charts = function () {
                 break;
 
             case 'multiBar': //绘制多组柱状图
-                c.drawMultiBar(c.configs);
+                // c.drawMultiBar(c.configs);
+                c.drawMultiBar01(c.configs);
                 break;
             case 'multiBar3D': //绘制3D多组柱状图
                 c.drawMultiBar3D(c.configs);
@@ -1919,6 +1906,13 @@ DBFX.Web.DBChart.Charts = function () {
         });
 
 
+        //20190816
+        if(totalCount == 0){
+            c.createNoDataTip();
+            return;
+        }
+
+
         //FIXME:最大值和最小值  需要考虑正负数同时存在的情况
         var minV = Math.min.apply(null,vArr),
             maxV = Math.max.apply(null,vArr);
@@ -1945,14 +1939,14 @@ DBFX.Web.DBChart.Charts = function () {
         var gH = perW * Math.sin(Math.PI*leanA/180);
         var gW = perW * Math.cos(Math.PI*leanA/180)*0.5;
 
-        if(gH >= c.chartH/2){
-            leanA = 30;
-            gH = perW * Math.sin(Math.PI*leanA/180);
-            gW = perW * Math.cos(Math.PI*leanA/180)*0.5;
-        }else if(len == 1){//FIXME:只有一组数据时  图例不倾斜
+        if(len == 1){//FIXME:只有一组数据时  图例不倾斜
             leanA = 0;
             gH = labelFontSize*2;
             gW = 0;
+        }else if(gH >= c.chartH/2){
+            leanA = 30;
+            gH = perW * Math.sin(Math.PI*leanA/180);
+            gW = perW * Math.cos(Math.PI*leanA/180)*0.5;
         }
 
 
@@ -2080,6 +2074,7 @@ DBFX.Web.DBChart.Charts = function () {
         if(len == 1){
             text_anchor = "middle";
         }
+
         for(var z = 0;z<len;z++){
             cx = len == 1 ? gW + x_margin*1.5-x_margin*0.3: gW + x_margin*(z+1);
 
@@ -2094,132 +2089,12 @@ DBFX.Web.DBChart.Charts = function () {
                 "y":cH,
                 "text-anchor":text_anchor,
                 "dominant-baseline": "text-before-edge",
-                "height":c.titleFontSize,
-                "transform":"rotate(-"+leanA+" "+cx+" "+cH+")"
+                // "height":c.titleFontSize,
+                "transform":"rotate(-"+leanA+" "+(cx+x_margin*0.15)+" "+cH+")"
             });
         }
 
         /****** 绘制柱状图 end*****/
-        return;
-
-        //图例所在区域的总宽度
-        var labelsW = x_margin*len;
-
-        //每行能放的图例数量
-        var perLineCount = Math.floor(labelsW/perW);
-        //总共需要多少行
-        var rowsCount = Math.ceil(len/perLineCount);
-
-        if(rowsCount == 1){//只需要一行显示
-
-            var cx_1 = 0;
-            //图例开始位置
-            var startP= c.chartW*0.5 - len*0.5*perW;
-            for(var m=0;m<len;m++){
-
-                cx_1 = len==1 ? c.chartW*0.5-x_margin*0.3 : startP+perW*m;
-                //图例g 20190612添加
-                var cutlineG = document.createElementNS(c.SVG_NS,'g');
-                cirG.appendChild(cutlineG);
-                //赋值数据上下文
-                cutlineG.DataContext = values[m];
-                cutlineG.DataContext.text = labels[m];
-                //添加鼠标响应事件
-                cutlineG.addEventListener('mousedown',c.OnCutlineClick,false);
-
-                var cir = document.createElementNS(c.SVG_NS,'circle');
-                cutlineG.appendChild(cir);
-
-                c.setAttr(cir,{
-                    'cx':cx_1,
-                    'cy':y_margin*13.8,
-                    'r':labelFontSize*0.5,
-                    'stroke':colors[m],
-                    'fill':colors[m]
-                });
-                var keyText = document.createElementNS(c.SVG_NS,'text');
-                cutlineG.appendChild(keyText);
-                keyText.textContent = labels[m];
-
-                c.setAttr(keyText,{
-                    'font-size':labelFontSize,
-                    'font-family':c.titleFontFamily,
-                    'fill':c.titleColor,
-                    "x":cx_1+labelFontSize*0.8,
-                    "y":y_margin*13.8,
-                    "text-anchor":"left",
-                    "dominant-baseline": "middle",
-                    "height":c.titleFontSize*1.2
-                });
-            }
-        }else { //需要多行显示
-
-            //图例开始位置
-            var startP= x_margin;
-            var perLineH = y_margin*2/rowsCount;//每行图例所占高度
-
-            //TODO:如果行高小于图例字体大小 需要重新计算行高和每行显示的数量
-            if(perLineH < labelFontSize*0.9){
-                labelFontSize = perLineH;
-                perW = (maxTextC+3)*perLineH;
-                // perW = (maxTextC+3)*labelFontSize*0.9;
-                perLineCount = Math.floor(labelsW/perW);
-                rowsCount = Math.ceil(len/perLineCount);
-            }
-
-            //最后一行显示的数量
-            var lastLineC = len - perLineCount*(rowsCount-1);
-
-            //保存总循环次数
-            var totalC = 0;
-
-            for(var rc=0;rc<rowsCount;rc++){//多少行
-
-                //最后一行且最后一行显示的数量小于每行能显示的数量
-                perLineCount = (rc == rowsCount-1 && lastLineC<perLineCount) ? lastLineC : perLineCount;
-
-                for(var pc=0;pc<perLineCount;pc++){//每行多少个
-
-                    //图例g 20190612添加
-                    var cutlineG = document.createElementNS(c.SVG_NS,'g');
-                    cirG.appendChild(cutlineG);
-                    //赋值数据上下文
-                    cutlineG.DataContext = values[pc];
-                    cutlineG.DataContext.text = labels[pc];
-                    //添加鼠标响应事件
-                    cutlineG.addEventListener('mousedown',c.OnCutlineClick,false);
-
-                    var cir = document.createElementNS(c.SVG_NS,'circle');
-                    cutlineG.appendChild(cir);
-
-                    c.setAttr(cir,{
-                        'cx':startP+perW*pc,
-                        'cy':y_margin*13.1 + rc*perLineH,
-                        'r':labelFontSize*0.45,
-                        'stroke':colors[totalC],
-                        'fill':colors[totalC]
-                    });
-                    var keyText = document.createElementNS(c.SVG_NS,'text');
-                    cutlineG.appendChild(keyText);
-
-                    keyText.textContent = labels[totalC];
-
-                    c.setAttr(keyText,{
-                        'font-size':labelFontSize*0.9,
-                        'font-family':c.titleFontFamily,
-                        'fill':c.titleColor,
-                        "x":startP+perW*pc+labelFontSize*0.8,
-                        "y":y_margin*13.1 + rc*perLineH,
-                        "text-anchor":"left",
-                        "dominant-baseline": "middle",
-                        "height":c.titleFontSize*1.2
-                    });
-
-                    totalC++;
-                }
-
-            }
-        }
 
     }
 
@@ -2278,6 +2153,7 @@ DBFX.Web.DBChart.Charts = function () {
 
         var minV = Math.min.apply(null,tarr),
             maxV = Math.max.apply(null,tarr);
+
 
         var maginV = maxV - minV,
             x_margin = c.chartW/(tcount+2),
@@ -2456,11 +2332,161 @@ DBFX.Web.DBChart.Charts = function () {
         }
     }
 
+    //20190813
+    c.drawMultiBar01 = function (datas) {
+        //1.处理分析数据
+        c.analyzeData(datas);
+
+        //2.绘制图例
+        //先计算图例所占高度 然后再绘制图表
+        c.drawCutline();
+
+
+        //3.绘制图表
+        //x轴均分间隔 左右各一份留给坐标标识
+        var x_aveMargin = c.chartW/12;
+        var maginV = c.maxValue - c.minValue,
+            x_margin = x_aveMargin*10/(c.datasC),//
+            y_margin = (c.chartH-c.cutlineH)/14;//y坐标分成15等分
+
+
+        //通过最大值均分坐标系
+        //最大数值的整数部分位数
+        var n = Math.ceil(c.maxValue).toString().length;
+        var maxAxesV = Math.ceil(c.maxValue/0.9/Math.pow(10,n-1))*Math.pow(10,n-1);
+
+        //假设最大值占y方向上10份，则每份代表的数值
+        var perValue_y = maxAxesV/10;
+
+        //绘制坐标轴
+        var gAxes = document.createElementNS(c.SVG_NS,'g');
+        c.svg.appendChild(gAxes);
+
+        var start_x = Math.floor(x_aveMargin)+0.5,
+            end_x = Math.floor(x_aveMargin*11)+0.5;
+
+
+        //绘制横坐标轴线
+        for(var k=0;k<=5;k++){
+
+            var start_y = Math.floor(y_margin*2*(k+1))+0.5,
+                end_y = Math.floor(y_margin*2*(k+1))+0.5;
+
+            //坐标
+            var xAxes = document.createElementNS(c.SVG_NS,'path');
+            gAxes.appendChild(xAxes);
+            var pathV = 'M '+start_x+' '+start_y+'L '+end_x+' '+end_y;
+
+            c.setAttr(xAxes,{
+                'd':pathV,
+                'stroke':'#f0f0f0',
+                'stroke-width':0.5
+            });
+
+
+            //单位标记数值
+            var markText = document.createElementNS(c.SVG_NS,'text');
+            gAxes.appendChild(markText);
+
+            markText.textContent = perValue_y*10000*(10-2*k)/10000;
+            if(k==0){
+                //TODO:需要完善宽度过小时，文字重叠问题，解决办法？
+                // console.log((perValue_y*(10-2*k)).toString().length);
+            }
+
+
+            c.setAttr(markText,{
+                'font-size':c.labelFontSize-2,
+                'font-family':c.titleFontFamily,
+                'fill':c.titleColor,
+                "x":Math.floor(x_aveMargin*0.5)+0.5,
+                "y":start_y,
+                "text-anchor":"middle",
+                "height":c.titleFontSize*1.2,
+                'letter-spacing':c.labelLetterSpacing,
+                // 'transform':"rotate("+(-60)+","+(Math.floor(x_margin*0.6)+0.5)+","+start_y+")"
+
+            });
+        }
+
+
+        /*
+        * 计算每个子数据柱状图显示的宽度w
+        * 子数据间距为w/3
+        * 组与组之间的间距为2w
+        * 每组数据所占横坐标的宽度为2w + groupLen * w + (groupLen-1)*w/3
+        * (5+4*groupLen)*w/3
+        *
+        * */
+        var aveBarWidth = (x_margin*c.datasC/c.dataRows * 3)/(5 + 4*c.len);
+
+        //多组柱状图
+        for(var m=0;m<c.dataRows;m++) {
+            var values = c.totalV[m].values;
+
+            for (var n = 0; n < c.len; n++) {
+                var value = values[n].value;
+
+                var barRect = document.createElementNS(c.SVG_NS,'rect');
+                c.svg.appendChild(barRect);
+
+                c.setAttr(barRect,{
+                    'x':x_aveMargin+aveBarWidth/3*n+m*x_margin*c.datasC/c.dataRows+aveBarWidth*n,
+                    'y':Math.floor(y_margin*12)+0.5-value/perValue_y*y_margin,
+                    'width':aveBarWidth,
+                    'height':value/perValue_y*y_margin,
+                    'stroke':'none',
+                    'fill':c.colors[n]
+                });
+
+                barRect.title = c.labels[n];
+                barRect.value = values[n].value;
+
+                barRect.addEventListener("mouseover",c.handleMouseover,false);
+                barRect.addEventListener("mouseout",c.handleMouseout,false);
+
+            }
+        }
+
+        //设置标题
+        c.setTitle();
+
+
+        //FIXME:20190813
+        var text_anchor = "end";
+        if(c.len == 1){
+            text_anchor = "middle";
+        }
+
+        //绘制横坐标标识
+        var x_g = document.createElementNS(c.SVG_NS,'g');
+        c.svg.appendChild(x_g);
+        for(var z=0;z<c.dataRows;z++){
+            var x_text = document.createElementNS(c.SVG_NS,'text');
+            x_g.appendChild(x_text);
+            x_text.textContent = c.totalV[z].date;
+
+            c.setAttr(x_text,{
+                'font-size':c.labelFontSize-3,
+                'font-family':c.titleFontFamily,
+                'fill':c.titleColor,
+                "x":x_aveMargin+(z+0.4)*x_margin*c.datasC/c.dataRows,
+                "y":y_margin*12.6,
+                "text-anchor":text_anchor,
+                "dominant-baseline": "text-before-edge",
+                "height":c.titleFontSize*1.2,
+                'letter-spacing':c.labelLetterSpacing,
+                'transform':"rotate("+(-45)+","+(x_margin+(z+0.4)*x_margin*c.datasC/c.dataRows)+","+y_margin*12.6+")"
+            });
+        }
+
+    }
+
 
     /************************** 绘制平面饼图 *****************************/
     //绘制平面饼图
 
-    //20190731前
+    //20190731前 暂废弃
     c.drawPie = function (datas) {
         c.chartH = c.chartH*1;
         c.chartW = c.chartW*1;
@@ -3148,104 +3174,46 @@ DBFX.Web.DBChart.Charts = function () {
         }
 
 
-        // //绘制图例
-        // var cirG = document.createElementNS(c.SVG_NS,'g');
-        // c.svg.appendChild(cirG);
-        //
-        // var x_margin = c.chartW/(len+2);
-        // var y_margin = c.chartH/14;//y坐标分成14等分
-        // for(var m=0;m<len;m++){
-        //     var cir = document.createElementNS(c.SVG_NS,'circle');
-        //     cirG.appendChild(cir);
-        //
-        //     c.setAttr(cir,{
-        //         'cx':x_margin*(m+1.2),
-        //         'cy':y_margin*13,
-        //         'r':y_margin*0.3,
-        //         'stroke':colors[m],
-        //         'fill':colors[m]
-        //     });
-        //
-        //
-        //     var keyText = document.createElementNS(c.SVG_NS,'text');
-        //     cirG.appendChild(keyText);
-        //     keyText.textContent = labels[m];
-        //
-        //     c.setAttr(keyText,{
-        //         'font-size':c.titleFontSize/1.2 < 18 ? c.titleFontSize/1.2 : 17,
-        //         'font-family':c.titleFontFamily,
-        //         'fill':'black',
-        //         "x":x_margin*(m+1.2)+y_margin*0.39,
-        //         "y":y_margin*13+y_margin*0.2,
-        //         "text-anchor":"left",
-        //         "height":c.titleFontSize*1.2
-        //     });
-        // }
-
     }
 
 
     //20190731修改后
     c.drawPie01 = function (datas) {
-        c.chartH = c.chartH*1;
-        c.chartW = c.chartW*1;
 
-        var values = datas.datas[0].values;
-        var colors = c.colorSeries;
+
+        //1.分析数据
+        c.analyzeData(datas);
+
+        //20190816
+        if(c.len < 1){
+            c.createNoDataTip();
+            return;
+        }
+
+        //2.绘制图表图例
+        c.drawCutline();
+
         var insideR = c.insideR || 0;
-
-        var labels = [];
-
-        //设置横纵坐标和图例文字的大小
-        var labelFontSize = c.titleFontSize/1.5 < 12 ? c.titleFontSize/1.5 : 12;
-
-        if(c.pieR/c.titleFontSize < 5){
-            labelFontSize = 9;
-        }
-
-        //展示的图例数量
-        var len = values.length;
-        //颜色系中颜色值数量
-        var colorsLen = colors.length;
-
-        //如果展示的图例数量超过了给定颜色系的个数 那么就要增加颜色系
-        if(colors ==  undefined || colorsLen<len){
-            console.log("增加颜色系");
-            var addLength = len-colorsLen;
-            for (var addL=0;addL<addLength;addL++){
-                var newColor = c.svgrender.lightenDarkenColor(c.colorSeries[addL%colorsLen],30);//Math.ceil((addL+1)/10)*10
-                colors.push(newColor);
-            }
-        }
-
-        //创建默认图例文字
-        for (var q=1;q<=len;q++){
-            labels.push("图例"+q);
-        }
-
-        labels = datas.labels ? datas.labels : labels;
-
-        //20190515 labels数量不足时 补充label个数 避免下面数组溢出报错
-        if(labels.length < len){
-            for (var u = 0;u<len-labels.length;u++){
-                labels.push("");
-            }
-        }
-
-
         var tcount = 0;
         var arcs = [];
         //保存展示数据中最小的值
         var minValue = Number.MAX_VALUE;
 
         //FIXME:获取所有数据总和  考虑有负数数据的情况
-        for (var i=0;i<len;i++){
-            var value = isNaN(values[i].value)?0:values[i].value;
+        for (var i=0;i<c.len;i++){
+            var value = isNaN(c.totalValues[i].value)?0:c.totalValues[i].value;
             tcount += Math.abs(value);
             if(value<minValue){
                 minValue = value;
             }
         }
+
+        //20190816
+        if(tcount == 0){
+            c.createNoDataTip();
+            return;
+        }
+
 
         //创建饼状图分组
         var group = document.createElementNS(c.SVG_NS,'g');
@@ -3255,15 +3223,15 @@ DBFX.Web.DBChart.Charts = function () {
         var starA = 0;
 
         //设置默认的选中数据为第0个元素
-        c.clickedDataContext = values[0];
+        c.clickedDataContext = c.totalValues[0];
 
         //第一个扇形区的中间角度
         var firstMidA = 0;
 
         //绘制扇形区域
-        for (var j=0;j<len;j++){
+        for (var j=0;j<c.len;j++){
 
-            var val = isNaN(values[j].value)?0:values[j].value;
+            var val = isNaN(c.totalValues[j].value)?0:c.totalValues[j].value;
             arcs.push(val/tcount*Math.PI*2);
 
             //扇形区域路径
@@ -3277,7 +3245,7 @@ DBFX.Web.DBChart.Charts = function () {
             var textPath = document.createElementNS(c.SVG_NS,'path');
             arcPathG.appendChild(textPath);
 
-            arcPath.title = labels[j];
+            arcPath.title = c.labels[j];
             arcPath.value = val;
             //设置事件的类型
             arcPath.type = "pie";
@@ -3291,7 +3259,7 @@ DBFX.Web.DBChart.Charts = function () {
 
             arcPath.insideR = insideR<arcPath.r ? insideR : 0;
             //设置对应的对象
-            arcPath.dataContext = values[j];
+            arcPath.dataContext = c.totalValues[j];
 
             //设置初始选择的扇形
             if(j==0){
@@ -3301,8 +3269,7 @@ DBFX.Web.DBChart.Charts = function () {
             }
 
 
-            if(parseFloat(arcPath.insideR) <= 0 || isNaN(parseFloat(arcPath.insideR))){//内径为0的扇形图
-
+            if((parseFloat(arcPath.insideR) <= 0 || isNaN(parseFloat(arcPath.insideR))) && c.IsShowInsideC == false){//内径为0的扇形图
 
                 var tagL = document.createElementNS(c.SVG_NS,'path');//标示线
                 var tagText = document.createElementNS(c.SVG_NS,'text');//
@@ -3314,12 +3281,12 @@ DBFX.Web.DBChart.Charts = function () {
                 var ratio = (val/tcount*100).toFixed(1);
 
                 //TODO:当显示图例或者占比小于一定比例时  只显示百分比不显示图例文字
-                if(c.isShowCutline || ratio <= 10){
+                if(c.isShowCutline || Math.abs(ratio) <= 10){
                     tagTextCon = ratio+'%';
                     tspan01.textContent = tagTextCon;
                     // tspan02.textContent = tagTextCon;
                 }else {
-                    tspan01.textContent = labels[j]+': '+ ratio +'%';
+                    tspan01.textContent = c.labels[j]+': '+ ratio +'%';
                 }
 
                 //绘制扇形区域标识线
@@ -3359,12 +3326,12 @@ DBFX.Web.DBChart.Charts = function () {
                 c.setAttr(tspan02,{
                     'x':labelX,
                     'y':labelY,
-                    'dy':labelFontSize
+                    'dy':c.labelFontSize
                 });
 
                 c.setAttr(tagL,{
                     'd':tagPathStr,
-                    'stroke':colors[j],
+                    'stroke':c.colors[j],
                     'stroke-width':0.5,
                     'fill':'none'
                 });
@@ -3374,9 +3341,9 @@ DBFX.Web.DBChart.Charts = function () {
                 c.setAttr(tagText,{
                     'x':labelX,
                     'y':labelY,
-                    'fill':colors[j],
+                    'fill':c.colors[j],
                     'dominant-baseline':'middle',
-                    'font-size':labelFontSize,
+                    'font-size':c.labelFontSize,
                     'font-family':c.titleFontFamily,
                     'letter-spacing':0,
                     "text-anchor":"middle",
@@ -3396,6 +3363,10 @@ DBFX.Web.DBChart.Charts = function () {
             }else {//有内圆的环形图
                 //让标识文字沿着扇形中间弧线进行排列
                 //中间弧线所在的半径
+                //内圆半径不能过大 否则会导致饼图绘制失败
+                // arcPath.insideR = arcPath.insideR<c.pieR*0.8?arcPath.insideR:c.pieR*0.8;
+                arcPath.insideR = c.pieR*0.618;
+
                 var midR = arcPath.r*0.7 + arcPath.insideR*0.3;
                 var start_x = c.pieCenterX + midR * Math.cos(-arcPath.startA),  //起始X点
                     start_y = c.pieCenterY + midR * Math.sin(-arcPath.startA),   //起始Y点
@@ -3403,18 +3374,22 @@ DBFX.Web.DBChart.Charts = function () {
                     end_y = c.pieCenterY + midR * Math.sin(-arcPath.endA);   //起始Y点
                 var textArcPathStr = ['M',start_x,start_y,'A',midR,midR,0,+(arcPath.endA-arcPath.startA>Math.PI),0,end_x,end_y].join(' ');
 
+                //201908016 确保文字路径的id不重复 避免同一个界面创建多个内院的饼状图时 图例文字位置出错
+                var randomId = new Date().valueOf()+Math.floor(Math.random()*1000)+"";
+
                 c.setAttr(textPath,{
                    'd':textArcPathStr,
                     'stroke':'none',
                     'stroke-width':0,
                     'fill':'none',
-                    'id':'textPath'+j
+                    // 'id':'textPath'+j
+                    'id':randomId
                 });
 
                 var labelT = document.createElementNS(c.SVG_NS,'text');
                 var labelTP = document.createElementNS(c.SVG_NS,'textPath');
 
-                // labelTP.textContent = labels[j]+':'+' '+(val/tcount*100).toFixed(2)+'%';
+                // labelTP.textContent = c.labels[j]+':'+' '+(val/tcount*100).toFixed(2)+'%';
 
                 var ratio = (val/tcount*100).toFixed(1);
                 //TODO:当占比小于一定比例时  只显示百分比不显示图例文字
@@ -3423,13 +3398,18 @@ DBFX.Web.DBChart.Charts = function () {
                 //     labelTP.textContent = tagTextCon;
                 //     // tspan02.textContent = tagTextCon;
                 // }else {
-                //     labelTP.textContent = labels[j]+': '+ ratio +'%';
+                //     labelTP.textContent = c.labels[j]+': '+ ratio +'%';
                 // }
 
                 labelTP.textContent = ratio +'%';
+                if(Math.abs(ratio) < 6){
+                    labelTP.textContent = "";
+                }
 
 
-                labelTP.setAttributeNS("http://www.w3.org/1999/xlink",'href','#textPath'+j);
+
+                // labelTP.setAttributeNS("http://www.w3.org/1999/xlink",'href','#textPath'+j);
+                labelTP.setAttributeNS("http://www.w3.org/1999/xlink",'href',"#"+randomId);
                 labelTP.setAttribute('startOffset','50%');
 
                 labelTP.superE = arcPathG;
@@ -3439,16 +3419,16 @@ DBFX.Web.DBChart.Charts = function () {
                 labelTP.endA = arcPath.endA;
                 labelTP.value = val;
                 //设置元素对应的数据
-                labelTP.dataContext = values[j];
+                labelTP.dataContext = c.totalValues[j];
 
 
 
-                var rgbC = c.svgrender.hex2rgb(colors[j]);
+                var rgbC = c.svgrender.hex2rgb(c.colors[j]);
                 var fillC = c.svgrender.oppositeColor(rgbC);
 
                 c.setAttr(labelTP,{
                     'fill':fillC,
-                    'font-size':c.titleFontSize*0.5,
+                    'font-size':c.labelFontSize*0.8,
                     'font-family':c.titleFontFamily,
                     'text-anchor':'middle'
                 });
@@ -3475,18 +3455,18 @@ DBFX.Web.DBChart.Charts = function () {
 
 
             arcPath.setAttribute('d',pathStr);
-            // arcPathG.setAttribute('stroke',colors[j]);
-            // arcPathG.setAttribute('fill',colors[j]);
-            // arcPath.setAttribute('stroke',colors[j]);
+            // arcPathG.setAttribute('stroke',c.colors[j]);
+            // arcPathG.setAttribute('fill',c.colors[j]);
+            // arcPath.setAttribute('stroke',c.colors[j]);
 
-            arcPath.setAttribute('fill',colors[j]);
+            arcPath.setAttribute('fill',c.colors[j]);
             starA += Math.abs(val)/tcount*Math.PI*2;
 
         }
 
 
         //FIXME:如果有内圆 设置初始旋转角度 配置内圆标题、数值、图片
-        if(c.insideR>0){
+        if(c.insideR>0 || c.IsShowInsideC == true){
 
             //设置初始旋转角度，让第一个扇形旋转到正下方
             var firstRotateA = 0;
@@ -3523,9 +3503,9 @@ DBFX.Web.DBChart.Charts = function () {
             insideTitle.textContent = datas[c.insideCTitle]||"";
             c.setAttr(insideTitle,{
                'x':c.pieCenterX,
-               'y':c.pieCenterY-c.insideR*0.4,
-                'font-size':c.insideR*0.14,
-                'fill':'#D4D4D4',
+               'y':c.pieCenterY-c.labelFontSize,
+                'font-size':c.labelFontSize,
+                'fill':'#585858',
                 'stroke-width':0,
                 'font-family':c.titleFontFamily,
                 'dominant-baseline':'middle',
@@ -3539,7 +3519,7 @@ DBFX.Web.DBChart.Charts = function () {
             c.setAttr(insideValue,{
                 'x':c.pieCenterX,
                 'y':c.pieCenterY,
-                'font-size':c.insideR*0.2,
+                'font-size':c.labelFontSize,
                 'fill':'#595959',
                 'stroke-width':0,
                 'font-family':c.titleFontFamily,
@@ -3554,363 +3534,16 @@ DBFX.Web.DBChart.Charts = function () {
             var imageUrl = datas[c.insideCImageURL]||"";
             insideImage.setAttributeNS("http://www.w3.org/1999/xlink",'href',imageUrl);
             c.setAttr(insideImage,{
-                'x':c.pieCenterX-c.insideR*0.23,
+                'x':c.pieCenterX-c.pieR*0.618*0.23,
                 'y':c.pieCenterY+c.insideR*0.5-c.insideR*0.23,
-                'width':c.insideR*0.46,
-                'height':c.insideR*0.46
+                'width':c.pieR*0.618*0.46,
+                'height':c.pieR*0.618*0.46
             });
 
         }
 
         //设置标题
         c.setTitle();
-
-        //绘制图例
-        var cirG = document.createElementNS(c.SVG_NS,'g');
-        c.svg.appendChild(cirG);
-
-        //图例在右侧
-        if(c.cutlinePos == 'right'){
-
-            //设置图例文字最大的长度:多少个字符
-            var maxTextC = 0;
-            for(var l=0;l<labels.length;l++){
-                if(maxTextC < labels[l].length){
-                    maxTextC = labels[l].length;
-                }
-            }
-
-            maxTextC = 8;
-            //每组图例占据的宽度
-            var perW = (maxTextC+1)*labelFontSize;
-
-            //图例所在区域的总高度
-            var labelsH = c.chartH*0.8;
-
-
-
-            // //初始设置每组图例占据的高度
-            // var perH = labelFontSize*3;
-            // //从调试来看 每列最大放置的图例数
-            // var maxLen = Math.floor(labelsH/labelFontSize/1.2);
-            // if(labelsH/perH < len){
-            //     perH = labelFontSize*2;
-            // }
-
-
-            var perH = labelsH/len;
-            if(perH<labelFontSize*1.5){
-                perH = labelFontSize*1.5;
-            }
-
-
-            //图例所在区域的总宽度
-            // var labelsW = c.chartW-(c.pieCenterX + c.pieR*1.05);
-            var labelsW = c.chartW-c.chartH;
-
-            //每列能放的图例数量
-            var perLineCount = Math.floor(labelsH/perH);
-
-
-            //总共需要多少列
-            var rowsCount = Math.ceil(len/perLineCount);
-
-            if(rowsCount == 1){//只需要一列显示
-                //图例x开始位置
-                // var startP= c.pieCenterX + c.pieR*1.3;
-                //20180808
-                var startP= c.chartH;
-
-                for(var m=0;m<len;m++){
-
-                    //图例g 20190612添加
-                    var cutlineG = document.createElementNS(c.SVG_NS,'g');
-                    cirG.appendChild(cutlineG);
-                    //赋值数据上下文
-                    cutlineG.DataContext = values[m];
-                    cutlineG.DataContext.text = labels[m];
-                    //添加鼠标响应事件
-                    cutlineG.addEventListener('mousedown',c.OnCutlineClick,false);
-
-
-                    var cir = document.createElementNS(c.SVG_NS,'circle');
-                    cutlineG.appendChild(cir);
-
-                    c.setAttr(cir,{
-                        'cx':startP,
-                        'cy':c.chartH*0.15+perH*m,
-                        'r':labelFontSize*0.5,
-                        'stroke':colors[m],
-                        'fill':colors[m]
-                    });
-                    var keyText = document.createElementNS(c.SVG_NS,'text');
-                    cutlineG.appendChild(keyText);
-                    // keyText.textContent = labels[m];
-
-                    if(labels[m].length>maxTextC){
-                        keyText.textContent = labels[m].substring(0,maxTextC-3)+"...";
-                    }else {
-                        keyText.textContent = labels[m];
-                    }
-
-                    c.setAttr(keyText,{
-                        'font-size':labelFontSize,
-                        'font-family':c.titleFontFamily,
-                        'fill':c.titleColor,
-                        "x":startP+labelFontSize,
-                        "y":c.chartH*0.15+perH*m,
-                        "text-anchor":"left",
-                        "dominant-baseline": "middle",
-                        "height":c.titleFontSize*1.2
-                    });
-                }
-            }else { //需要多列显示
-
-                //图例x开始位置
-                var startP= c.pieCenterX + c.pieR*1.4;
-
-                var perLineW = perW;//每列图例所占宽度
-
-                //最后一列显示的数量
-                var lastLineC = len - perLineCount*(rowsCount-1);
-
-                //保存总循环次数
-                var totalC = 0;
-
-                for(var rc=0;rc<rowsCount;rc++){//多少列
-
-                    //最后一列且最后一列显示的数量小于每列能显示的数量
-                    perLineCount = (rc == rowsCount-1 && lastLineC<perLineCount) ? lastLineC : perLineCount;
-
-                    for(var pc=0;pc<perLineCount;pc++){//每列多少个
-
-                        //图例g 20190612添加
-                        var cutlineG = document.createElementNS(c.SVG_NS,'g');
-                        cirG.appendChild(cutlineG);
-                        //赋值数据上下文
-                        cutlineG.DataContext = values[pc];
-                        cutlineG.DataContext.text = labels[pc];
-                        //添加鼠标响应事件
-                        cutlineG.addEventListener('mousedown',c.OnCutlineClick,false);
-
-
-                        var cir = document.createElementNS(c.SVG_NS,'circle');
-                        cutlineG.appendChild(cir);
-
-                        c.setAttr(cir,{
-                            'cx':startP+perW*rc,
-                            'cy':c.chartH*0.15 + pc*perH,
-                            'r':labelFontSize*0.45,
-                            'stroke':colors[totalC],
-                            'fill':colors[totalC]
-                        });
-                        var keyText = document.createElementNS(c.SVG_NS,'text');
-                        cutlineG.appendChild(keyText);
-
-                        // keyText.textContent = labels[totalC];
-
-                        if(labels[totalC].length>maxTextC){
-                            keyText.textContent = labels[totalC].substring(0,maxTextC-3)+"...";
-                        }else {
-                            keyText.textContent = labels[totalC];
-                        }
-
-                        c.setAttr(keyText,{
-                            'font-size':labelFontSize*0.9,
-                            'font-family':c.titleFontFamily,
-                            'fill':c.titleColor,
-                            "x":startP+labelFontSize+perW*rc,
-                            "y":c.chartH*0.15+perH*pc,
-                            "text-anchor":"left",
-                            "dominant-baseline": "middle",
-                            "height":c.titleFontSize*1.2
-                        });
-
-                        totalC++;
-                    }
-                }
-            }
-
-        }
-
-
-        //图例在下方
-        if(c.cutlinePos == 'down'){
-
-
-            //设置图例文字最大的长度:多少个字符;20180808废弃，限定显示字符数8个 否则字符多的时候会超过图表范围
-            var maxTextC = 0;
-            for(var l=0;l<labels.length;l++){
-                if(maxTextC < labels[l].length){
-                    maxTextC = labels[l].length;
-                }
-            }
-
-            maxTextC = 10;
-
-            //每组图例占据的宽度
-            var perW = (maxTextC+1)*labelFontSize;
-
-            //图例所在区域的总宽度
-            var labelsW = c.chartW*0.9;
-
-            //每行能放的图例数量
-            var perLineCount = Math.floor(labelsW/perW);
-            //总共需要多少行
-            var rowsCount = Math.ceil(len/perLineCount);
-
-
-            if(rowsCount == 1){//只需要一行显示
-                //图例开始位置
-                var startP= c.chartW*0.5 - len*0.5*perW;
-                for(var m=0;m<len;m++){
-
-                    //图例g 20190612添加
-                    var cutlineG = document.createElementNS(c.SVG_NS,'g');
-                    cirG.appendChild(cutlineG);
-                    //赋值数据上下文
-                    cutlineG.DataContext = values[m];
-                    cutlineG.DataContext.text = labels[m];
-                    //添加鼠标响应事件
-                    cutlineG.addEventListener('mousedown',c.OnCutlineClick,false);
-
-                    var cir = document.createElementNS(c.SVG_NS,'circle');
-                    cutlineG.appendChild(cir);
-
-                    c.setAttr(cir,{
-                        'cx':startP+perW*m,
-                        'cy':c.chartW,
-                        'r':labelFontSize*0.5,
-                        'stroke':colors[m],
-                        'fill':colors[m]
-                    });
-                    var keyText = document.createElementNS(c.SVG_NS,'text');
-                    cutlineG.appendChild(keyText);
-                    // keyText.textContent = labels[m];
-
-                    if(labels[m].length>maxTextC){
-                        keyText.textContent = labels[m].substring(0,maxTextC-3)+"...";
-                    }else {
-                        keyText.textContent = labels[m];
-                    }
-
-                    c.setAttr(keyText,{
-                        'font-size':labelFontSize,
-                        'font-family':c.titleFontFamily,
-                        'fill':c.titleColor,
-                        "x":startP+perW*m+labelFontSize*0.8,
-                        "y":c.chartW,
-                        "text-anchor":"left",
-                        "dominant-baseline": "middle",
-                        "height":c.titleFontSize*1.2
-                    });
-                }
-            }else { //需要多行显示
-
-                //FIXME:对于svg中的g，此方法不能获取实际位置、大小数据
-                var styleObj = c.arcPathG.getBoundingClientRect();
-
-                //图例占用的高度
-                var h = c.chartH - (c.pieCenterY + c.pieR*1.3);
-                //图例开始位置
-                var startP= c.chartW*0.05;
-                var perLineH = h/rowsCount;//每行图例所占高度
-
-                //最后一行显示的数量
-                var lastLineC = len - perLineCount*(rowsCount-1);
-
-                //保存总循环次数
-                var totalC = 0;
-
-                for(var rc=0;rc<rowsCount;rc++){//多少行
-
-                    //最后一行且最后一行显示的数量小于每行能显示的数量
-                    perLineCount = (rc == rowsCount-1 && lastLineC<perLineCount) ? lastLineC : perLineCount;
-
-                    for(var pc=0;pc<perLineCount;pc++){//每行多少个
-
-                        //图例g 20190612添加
-                        var cutlineG = document.createElementNS(c.SVG_NS,'g');
-                        cirG.appendChild(cutlineG);
-                        //赋值数据上下文
-                        cutlineG.DataContext = values[pc];
-                        cutlineG.DataContext.text = labels[pc];
-                        //添加鼠标响应事件
-                        cutlineG.addEventListener('mousedown',c.OnCutlineClick,false);
-
-                        var cir = document.createElementNS(c.SVG_NS,'circle');
-                        cutlineG.appendChild(cir);
-
-                        c.setAttr(cir,{
-                            'cx':startP+perW*pc,
-                            'cy':c.chartH-h + rc*perLineH,
-                            'r':labelFontSize*0.45,
-                            'stroke':colors[totalC],
-                            'fill':colors[totalC]
-                        });
-                        var keyText = document.createElementNS(c.SVG_NS,'text');
-                        cutlineG.appendChild(keyText);
-
-                        if(labels[totalC].length>maxTextC){
-                            keyText.textContent = labels[totalC].substring(0,maxTextC-3)+"...";
-                        }else {
-                            keyText.textContent = labels[totalC];
-                        }
-
-
-                        c.setAttr(keyText,{
-                            'font-size':labelFontSize*0.9,
-                            'font-family':c.titleFontFamily,
-                            'fill':c.titleColor,
-                            "x":startP+perW*pc+labelFontSize*0.8,
-                            "y":c.chartH-h + rc*perLineH,
-                            "text-anchor":"left",
-                            "dominant-baseline": "middle",
-                            "height":c.titleFontSize*1.2
-                        });
-
-                        totalC++;
-                    }
-                }
-            }
-
-        }
-
-
-        // //绘制图例
-        // var cirG = document.createElementNS(c.SVG_NS,'g');
-        // c.svg.appendChild(cirG);
-        //
-        // var x_margin = c.chartW/(len+2);
-        // var y_margin = c.chartH/14;//y坐标分成14等分
-        // for(var m=0;m<len;m++){
-        //     var cir = document.createElementNS(c.SVG_NS,'circle');
-        //     cirG.appendChild(cir);
-        //
-        //     c.setAttr(cir,{
-        //         'cx':x_margin*(m+1.2),
-        //         'cy':y_margin*13,
-        //         'r':y_margin*0.3,
-        //         'stroke':colors[m],
-        //         'fill':colors[m]
-        //     });
-        //
-        //
-        //     var keyText = document.createElementNS(c.SVG_NS,'text');
-        //     cirG.appendChild(keyText);
-        //     keyText.textContent = labels[m];
-        //
-        //     c.setAttr(keyText,{
-        //         'font-size':c.titleFontSize/1.2 < 18 ? c.titleFontSize/1.2 : 17,
-        //         'font-family':c.titleFontFamily,
-        //         'fill':'black',
-        //         "x":x_margin*(m+1.2)+y_margin*0.39,
-        //         "y":y_margin*13+y_margin*0.2,
-        //         "text-anchor":"left",
-        //         "height":c.titleFontSize*1.2
-        //     });
-        // }
-
     }
 
 
@@ -3959,6 +3592,12 @@ DBFX.Web.DBChart.Charts = function () {
             vArr.push(v.value);
         });
 
+        //20191129-数据的绝对值总和等于零时 不绘制
+        if(totalCount<=0){
+            c.createNoDataTip();
+            return;
+        }
+
         //最大值和最小值
         var minV = Math.min.apply(null,vArr),
             maxV = Math.max.apply(null,vArr);
@@ -3982,15 +3621,6 @@ DBFX.Web.DBChart.Charts = function () {
         var maxAxesV = Math.ceil(maxV/0.9/Math.pow(10,n-1))*Math.pow(10,n-1);
         //假设最大值占y方向上9份，则每份代表的数值
         var perValue_y = (maxAxesV/10).toFixed(2);
-
-        console.log("y轴上每份数值大小："+perValue_y);
-        if(maxV <=1 && maxV >=0){
-
-
-
-        }
-
-
 
 
         //绘制坐标轴
@@ -4030,7 +3660,8 @@ DBFX.Web.DBChart.Charts = function () {
                 "y":start_y,
                 "text-anchor":"middle",
                 "height":c.titleFontSize*1.2,
-                'letter-spacing':c.labelLetterSpacing
+                'letter-spacing':c.labelLetterSpacing,
+                'dominant-baseline':"middle"
             });
         }
 
@@ -4073,7 +3704,6 @@ DBFX.Web.DBChart.Charts = function () {
                 });
             }
 
-
             cirPoint.title = labels[i];
             // cirPoint.subTitle = datas.datas[0].date;
             // cirPoint.subTitle = '2018-12-22 12:30:03';
@@ -4109,7 +3739,13 @@ DBFX.Web.DBChart.Charts = function () {
             // var x_g = document.createElementNS(c.SVG_NS,'g');
             // c.svg.appendChild(x_g);
 
-            transA = len == 1 ? "":"rotate("+(45)+","+(x_margin*i+xPerMargin)+","+y_margin*12.7+")";
+            //FIXME:20190812
+            var text_anchor = "end";
+            if(len == 1){
+                text_anchor = "middle";
+            }
+
+            transA = len == 1 ? "":"rotate("+(-45)+","+(x_margin*i+xPerMargin)+","+y_margin*12+")";
             if(i%gap==0 || i==len-1){
                 //绘制横坐标
                 //横坐标点
@@ -4132,9 +3768,10 @@ DBFX.Web.DBChart.Charts = function () {
                     'fill':c.titleColor,
                     "x":cx,
                     "y":y_margin*12.7,
-                    "text-anchor":"middle",
+                    "text-anchor":text_anchor,
                     // "height":c.titleFontSize*1.2,
                     'letter-spacing':c.labelLetterSpacing,
+                    "dominant-baseline": "text-before-edge",
                     // 'transform':"rotate("+(36)+","+(x_margin+(z+0.4)*x_margin*tcount/row)+","+y_margin*12.6+")"
                     'transform':transA
                 });
@@ -4442,7 +4079,7 @@ DBFX.Web.DBChart.Charts = function () {
 
     }
 
-    //绘制多组折线图
+    //绘制多组折线图20190813
     c.drawMultiLineGraph = function (datas) {
         var totalV = datas.datas,
             colors = c.colorSeries,
@@ -4554,7 +4191,7 @@ DBFX.Web.DBChart.Charts = function () {
             var markText = document.createElementNS(c.SVG_NS,'text');
             gAxes.appendChild(markText);
 
-            markText.textContent = perValue_y*10000*(10-2*k)/10000 + minAxesV;
+            markText.textContent = (perValue_y*10000*(10-2*k)/10000*10000 + minAxesV*10000)/10000;
 
 
             c.setAttr(markText,{
@@ -4874,11 +4511,16 @@ DBFX.Web.DBChart.Charts = function () {
     }
 
 
-    //FIXME:1.处理分析数据
+    //1.处理分析数据  多组图表
     c.analyzeData = function(datas){
-        c.totalV = datas.datas,
-            c.colors = c.colorSeries,
-            c.labels = [];
+        //多组数据的数据集
+        c.totalV = datas.datas;
+
+        //单组数据的数据集
+        c.totalValues = datas.datas && datas.datas[0].values;
+
+        c.colors = c.colorSeries;
+        c.labels = [];
 
         //设置横纵坐标和图例文字的大小
         c.labelFontSize = c.titleFontSize/1.2 < 14 ? Math.floor(c.titleFontSize/1.2) : 14;
@@ -4888,7 +4530,7 @@ DBFX.Web.DBChart.Charts = function () {
         c.dataRows = c.totalV.length;
 
         //每组数据的个数
-        var len = c.totalV[0].values.length;
+        var len = c.totalValues.length;
 
         //数据数量
         c.len = len;
@@ -4921,7 +4563,8 @@ DBFX.Web.DBChart.Charts = function () {
             }
         }
 
-        var tcount = tarr.length;
+        //总数据量
+        c.datasC = tarr.length;
 
         c.minValue = Math.min.apply(null,tarr);
         c.maxValue = Math.max.apply(null,tarr);
@@ -4933,11 +4576,12 @@ DBFX.Web.DBChart.Charts = function () {
     }
 
 
-    //FIXME:2.绘制图表图例
+    //2.绘制图表图例
     c.cutlineH = 0;
     c.drawCutline = function(datas){
 
-        /*---------------------绘制图例开始------------------------------------*/
+
+        /*---------------------绘制图例开始-默认绘制在图表下方-----------------------------------*/
         //绘制图例
         var cutline_g = document.createElementNS(c.SVG_NS,'g');
         c.svg.appendChild(cutline_g);
@@ -4950,100 +4594,234 @@ DBFX.Web.DBChart.Charts = function () {
             }
         }
 
-        //图例所在区域的总宽度
-        var labelsW = c.xPerMargin*10;
-
-        //图例开始位置
-        var startP= c.xPerMargin;
-
         //动态计算图例所占的宽高 进行布局
         var currentH = 10;
         var currentW = 0;
+        //根据svg的宽高比例决定图例的位置
+        if(c.chartW>=c.chartH*1.3 && c.chartType == "pie"){//图表宽度大于图表的高度，图例绘制在右侧
 
-        for(var lc = 0;lc<c.len;lc++){
+            // console.log("图例绘制在右方");
+            //图例所在区域的总高度
+            var labelsH = c.chartH*0.85;
+            var startP = 10;
 
-            var labelG = document.createElementNS(c.SVG_NS,'g');
-            cutline_g.appendChild(labelG);
+            //图例远点的半径
+            var cir_r = c.labelFontSize*0.45;
+            //图例画在右侧  需要根据图表的宽高决定图例的位置
 
-            var cir = document.createElementNS(c.SVG_NS,'circle');
-            labelG.appendChild(cir);
+            for(var lc = 0;lc<c.len;lc++){
 
-            c.setAttr(cir,{
-                'cx':startP+currentW,
-                'cy':currentH,
-                'r':c.labelFontSize*0.45,
-                'stroke':c.colors[lc],
-                'fill':c.colors[lc]
-            });
+                var labelG = document.createElementNS(c.SVG_NS,'g');
+                cutline_g.appendChild(labelG);
 
+                var cir = document.createElementNS(c.SVG_NS,'circle');
+                labelG.appendChild(cir);
 
-            var cirBox = cir.getBBox();
-            cir.x = cirBox.x;
-            cir.y = cirBox.y;
-            cir.width = cirBox.width;
-            cir.height = cirBox.height;
-
-
-            var keyText = document.createElementNS(c.SVG_NS,'text');
-            labelG.appendChild(keyText);
-            keyText.textContent = c.labels[lc];
-            c.setAttr(keyText,{
-                'font-size':c.labelFontSize*0.8,
-                'font-family':c.titleFontFamily,
-                'fill':c.titleColor,
-                "x":cir.x+cir.width+2,
-                "y":currentH,
-                "text-anchor":"left",
-                "dominant-baseline": "middle",
-                "height":c.titleFontSize*1.2
-            });
-
-
-            var labelBox = labelG.getBBox();
-
-            currentW = labelBox.width+labelBox.x;
-            // currentH = labelBox.y;
-
-            if(currentW>labelsW){//绘制的图例超过了图例总宽度，则换行
                 c.setAttr(cir,{
-                    'cx':startP,
-                    'cy':currentH+labelBox.height
+                    'cx':startP+currentW,
+                    'cy':currentH+cir_r,
+                    'r':cir_r,
+                    'stroke':c.colors[lc],
+                    'fill':c.colors[lc]
                 });
 
-                cirBox = cir.getBBox();
+
+                var cirBox = cir.getBBox();
                 cir.x = cirBox.x;
                 cir.y = cirBox.y;
                 cir.width = cirBox.width;
                 cir.height = cirBox.height;
 
+
+                var keyText = document.createElementNS(c.SVG_NS,'text');
+                labelG.appendChild(keyText);
+                //截取最大的字符数量
+                keyText.textContent = c.labels[lc].length<7?c.labels[lc]:c.labels[lc].substr(0,6)+"...";
                 c.setAttr(keyText,{
-                    "x":cir.x+cir.width+2,
-                    "y":currentH+labelBox.height
+                    'font-size':c.labelFontSize*0.8,
+                    'font-family':c.titleFontFamily,
+                    'fill':c.titleColor,
+                    "x":startP+currentW+cir.width,
+                    "y":currentH+cir_r,
+                    "text-anchor":"left",
+                    "dominant-baseline": "middle",
+                    "height":c.titleFontSize*1.2
                 });
 
-                labelBox = labelG.getBBox();
+
+                var labelBox = labelG.getBBox();
+
+
+                currentH = labelBox.height+labelBox.y+3;
+                // currentH = labelBox.y;
+
+                if(currentH>labelsH){//绘制的图例高度超过了图例总高度，则换列
+                    console.log("换列绘制");
+                    var cutlineBox = cutline_g.getBBox();
+                    currentW = cutlineBox.width+cutlineBox.x;
+                    currentH = 10;
+
+                    c.setAttr(cir,{
+                        'cx':currentW+10,
+                        'cy':currentH+cir_r
+                    });
+
+                    cirBox = cir.getBBox();
+                    cir.x = cirBox.x;
+                    cir.y = cirBox.y;
+                    cir.width = cirBox.width;
+                    cir.height = cirBox.height;
+                    //
+                    c.setAttr(keyText,{
+                        "x":cir.x+10+cir.width*0.5,
+                        "y":currentH+cir_r
+                    });
+                    //
+                    labelBox = labelG.getBBox();
+                    // currentW = labelBox.width+labelBox.x;
+                    currentH = labelBox.y+labelBox.height*0.5+10;
+                }
+            }
+
+            var cirGBox = cutline_g.getBBox();
+            var cirGH = cirGBox.height;
+            var cirGW = cirGBox.width;
+            var cirGY = cirGBox.y;
+            var cirGX = cirGBox.x;
+
+            //图例所占总宽度
+            c.cutlineW = cirGW+5;
+            //将图例g元素右移 下移让图表居中显示
+            //下移的距离
+            var transY = c.chartH*0.5>cirGH*0.5?(c.chartH*0.5-cirGY-cirGH*0.5):0;
+
+            cutline_g.setAttribute("transform","translate("+(c.chartW-c.cutlineW-cirGX)+","+transY+") "+"scale(1,1)");
+            // cutline_g.setAttribute("transform","scaleY(0.5)");
+
+            //重新计算圆心点坐标 饼状图半径
+            c.pieCenterX = (c.chartW-c.cutlineW)*0.5;
+            c.pieCenterY = c.chartH*0.5;
+            c.pieR = (c.chartH < c.chartW-c.cutlineW) ? c.chartH*0.35:(c.chartW-c.cutlineW)*0.35;
+
+
+        }else {//默认图例绘制在下方
+
+            // console.log("图例绘制在下方");
+            //图例所在区域的总宽度
+            var labelsW = c.xPerMargin*10;
+            //图例开始位置
+            var startP= c.xPerMargin;
+
+            if(c.chartType == "pie"){
+                labelsW = c.xPerMargin*11;
+                startP = c.xPerMargin*0.5;
+            }
+
+            // //动态计算图例所占的宽高 进行布局
+            // var currentH = 10;
+            // var currentW = 0;
+
+            //FIXME：默认图例画在下侧  需要根据图表的宽高决定图例的位置
+            for(var lc = 0;lc<c.len;lc++){
+
+                var labelG = document.createElementNS(c.SVG_NS,'g');
+                cutline_g.appendChild(labelG);
+
+                var cir = document.createElementNS(c.SVG_NS,'circle');
+                labelG.appendChild(cir);
+
+                c.setAttr(cir,{
+                    'cx':startP+currentW,
+                    'cy':currentH,
+                    'r':c.labelFontSize*0.45,
+                    'stroke':c.colors[lc],
+                    'fill':c.colors[lc]
+                });
+
+
+                var cirBox = cir.getBBox();
+                cir.x = cirBox.x;
+                cir.y = cirBox.y;
+                cir.width = cirBox.width;
+                cir.height = cirBox.height;
+
+
+                var keyText = document.createElementNS(c.SVG_NS,'text');
+                labelG.appendChild(keyText);
+                keyText.textContent = c.labels[lc];
+                c.setAttr(keyText,{
+                    'font-size':c.labelFontSize*0.8,
+                    'font-family':c.titleFontFamily,
+                    'fill':c.titleColor,
+                    "x":cir.x+cir.width+2,
+                    "y":currentH,
+                    "text-anchor":"left",
+                    "dominant-baseline": "middle",
+                    "height":c.titleFontSize*1.2
+                });
+
+
+                var labelBox = labelG.getBBox();
+
                 currentW = labelBox.width+labelBox.x;
-                currentH = labelBox.y+labelBox.height*0.5;
+                // currentH = labelBox.y;
+
+                if(currentW>labelsW){//绘制的图例超过了图例总宽度，则换行
+                    c.setAttr(cir,{
+                        'cx':startP,
+                        'cy':currentH+labelBox.height
+                    });
+
+                    cirBox = cir.getBBox();
+                    cir.x = cirBox.x;
+                    cir.y = cirBox.y;
+                    cir.width = cirBox.width;
+                    cir.height = cirBox.height;
+
+                    c.setAttr(keyText,{
+                        "x":cir.x+cir.width+2,
+                        "y":currentH+labelBox.height
+                    });
+
+                    labelBox = labelG.getBBox();
+                    currentW = labelBox.width+labelBox.x;
+                    currentH = labelBox.y+labelBox.height*0.5;
+
+                }
 
             }
 
+            var cirGBox = cutline_g.getBBox();
+            var cirGH = cirGBox.height;
+            var cirGW = cirGBox.width;
+            var cirGX = cirGBox.x;
+            var cirGY = cirGBox.y;
+
+            //图例所占总高度
+            c.cutlineH = cirGH+5;
+
+            //将图例g元素下移 右移在图表居中显示
+            //右移的距离
+            var transX = c.chartW*0.5>cirGW*0.5?(c.chartW*0.5-cirGX-cirGW*0.5):0;
+
+
+            cutline_g.setAttribute("transform","translate("+transX+","+(c.chartH-c.cutlineH-cirGY)+") "+"scale(1,1)");
+            // cutline_g.setAttribute("transform","scaleY(0.5)");
+
+
+            //重新计算圆心点坐标 饼状图半径
+            //先考虑图例在下方的情况
+            c.pieCenterX = c.chartW*0.5;
+            c.pieCenterY = (c.chartH-c.cutlineH)*0.5;
+            c.pieR = (c.chartW < c.chartH-c.cutlineH)?c.chartW*0.35:(c.chartH-c.cutlineH)*0.35;
         }
 
-        var cirGBox = cutline_g.getBBox();
-        var cirGH = cirGBox.height;
-        var cirGW = cirGBox.width;
 
-        //图例所占总高度
-        c.cutlineH = cirGH;
-
-        //将图例g元素下移
-        cutline_g.setAttribute("transform","translate(0,"+(c.chartH-cirGH)+") "+"scale(1,1)");
-        // cutline_g.setAttribute("transform","scaleY(0.5)");
         /*---------------------绘制图例结束------------------------------------*/
 
     }
 
-    //FIXME:20190812-绘制多组折线图 绘制思路：先计算绘制图例 然后绘制图表
+    //20190812-绘制多组折线图 绘制思路：先计算绘制图例 然后绘制图表
     c.drawMultiLineGraph01 = function (datas) {
 
         //1.处理分析数据
@@ -5057,7 +4835,7 @@ DBFX.Web.DBChart.Charts = function () {
         var maginV = c.maxValue - c.minValue,
             // x_margin = c.chartW/(c.dataRows+2),
             x_margin = c.xPerMargin*10/(c.dataRows-1),
-            y_margin = (c.chartH-c.cutlineH)/14;//y坐标分成15等分
+            y_margin = (c.chartH-c.cutlineH)/14;//y坐标分成14等分
 
 
         //通过最大值均分坐标系
@@ -5104,7 +4882,7 @@ DBFX.Web.DBChart.Charts = function () {
             var markText = document.createElementNS(c.SVG_NS,'text');
             gAxes.appendChild(markText);
 
-            markText.textContent = perValue_y*10000*(10-2*k)/10000 + minAxesV;
+            markText.textContent = (perValue_y*10000*(10-2*k)/10000*10000 + minAxesV*10000)/10000;
 
 
             c.setAttr(markText,{
@@ -5827,7 +5605,8 @@ DBFX.Web.DBChart.Charts = function () {
             }
         }
 
-        timer = requestAnimationFrame(step);
+        //FIXME:暂不支持旋转动画
+        // timer = requestAnimationFrame(step);
 
 
     }
@@ -5871,7 +5650,6 @@ DBFX.Web.DBChart.Charts = function () {
                 y = event.offsetY;
                 c.tip.setFrame(x-44-5,y-88-5,88,44,configs);
             }
-
 
         }else if(c.y_scale<c.x_scale){
             console.log('2');
@@ -6007,7 +5785,6 @@ DBFX.Web.DBChart.Charts = function () {
 
     return c;
 }
-
 DBFX.Serializer.ChartsSerializer = function () {
 
     //反系列化
@@ -6015,6 +5792,7 @@ DBFX.Serializer.ChartsSerializer = function () {
 
         DBFX.Serializer.DeSerialProperty("ChartType", c, xe);
         DBFX.Serializer.DeSerialProperty("InsideR", c, xe);
+        DBFX.Serializer.DeSerialProperty("IsShowInsideC", c, xe);
         DBFX.Serializer.DeSerialProperty("InsideCTitle", c, xe);
         DBFX.Serializer.DeSerialProperty("InsideCValue", c, xe);
         DBFX.Serializer.DeSerialProperty("InsideCImageURL", c, xe);
@@ -6034,6 +5812,7 @@ DBFX.Serializer.ChartsSerializer = function () {
 
         DBFX.Serializer.SerialProperty("ChartType", c.ChartType, xe);
         DBFX.Serializer.SerialProperty("InsideR", c.InsideR, xe);
+        DBFX.Serializer.SerialProperty("IsShowInsideC", c.IsShowInsideC, xe);
         DBFX.Serializer.SerialProperty("InsideCTitle", c.InsideCTitle, xe);
         DBFX.Serializer.SerialProperty("InsideCValue", c.InsideCValue, xe);
         DBFX.Serializer.SerialProperty("InsideCImageURL", c.InsideCImageURL, xe);
@@ -6088,7 +5867,6 @@ DBFX.Design.ControlDesigners.ChartsDesigner = function () {
     obdc.Text = "图表设置";
     return obdc;
 }
-
 
 
 /**
@@ -6949,8 +6727,6 @@ DBFX.Web.DBChart.SVGRender = function (C) {
         return rgbColor;
     }
 
-
-
     return render;
 };
 
@@ -7438,3 +7214,31 @@ DBFX.Design.ControlDesigners.InstrumentPanelDesigner = function () {
     return obdc;
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

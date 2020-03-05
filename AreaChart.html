@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AreaChart</title>
+    <script src="https://lc.dbazure.cn/dbfx/dbfx.js"></script>
+    <script src="https://lc.dbazure.cn/dbfxui/dbfx.web.controls.js"></script>
+    <script src="https://lc.dbazure.cn/dbfx/dbfx.commodel.js"></script>
+    <script src="dbfx.web.charts.js"></script>
+</head>
+<body style="width: 100%;height: 700px;border: 1px solid blue;overflow: hidden;display: block">
+
+<div id="div01" style="height: 540px;display: block;overflow: visible;margin: 10px 0px;position: relative"></div>
+
+<img src="./001.svg" alt="" style="width: 100px;height: 100px">
+<!--<div id="div02" style="height: 100%;display: inline-block;width: 400px"></div>-->
+</div>
+
+
+<script>
+    var chart =new DBFX.Web.DBChart.AreaChart();
+    var d = document.getElementById("div01");
+    d.appendChild(chart.VisualElement);
+
+    var list = [
+        {"Value":7,"Title":"70001"},{"Value":25.1,"Title":"70002"},{"Value":20.1,"Title":"70003"},{"Value":25.1,"Title":"70004"},{"Value":25.1,"Title":"70005"},{"Value":25.1,"Title":"70006"},{"Value":29.1,"Title":"70007"},{"Value":25.1,"Title":"70008"},{"Value":27.1,"Title":"70009"}
+    ];
+
+
+
+    chart.Width = "500px";
+    chart.Height = "400px";
+    // chart.BackgroundColor = "#b0c4de";
+    chart.ValueAttr = "Value";
+    chart.TitleAttr = "title";
+
+    chart.ItemSource = list;
+
+    // var sorted = chart.GroupBy(list, function (item) {
+    //     return [item[""]];
+    // });
+    // console.log(sorted);
+
+    var data = {};
+    var f = 1;
+    data.a = f;
+    for(var i=0;i<20;i++){
+        f = f+1;
+        var para = {};
+        // console.log(data.a);
+        para.p = data;
+        // console.log(para.p.a);
+
+        data.a= f;
+    }
+
+    var para = {    "SvcUri":"",//存储过程的服务资源，字符串；
+                    "ServiceUrl":"",//数据库所在服务器地址，字符串；
+                    "StoreProcedure":"SP*********",//调用的存储过程名，字符串；
+                    "DBName":"",//数据库名，字符串
+                    "ConnectionString":"",//存储服务，字符串；
+                    "QParams":{},//调用存储过程的参数，对象；
+                    "TH":"",//导出的列头标题，按顺序填写，每列之间用逗号","分隔；
+                    "Columns":[],//需要导出的数据的列名，按顺序填写；数组；
+                    "DefaultFileName":"",//导出的文件名，字符串；
+                    "Title":""//导出界面的显示标题，字符串；
+                }
+
+    var para1 = {    "SvcUri":"DB.FX.Storage.MongoDBService",//存储过程的服务资源，字符串；
+        "ServiceUrl":"https://inkstone.dbazure.cn/svcbus/svcbus.ashx",//数据库所在服务器地址，字符串；
+        "StoreProcedure":"SP5e12909c219afd4ab697209a",//调用的存储过程名，字符串；
+        "DBName":"DB_AppTest",//数据库名，字符串
+        "ConnectionString":"DBAzure",//存储服务，字符串；
+        "QParams":{},//调用存储过程的参数，对象；
+        "TH":"列1,列2,列三",//导出的列头标题，按顺序填写，每列之间用逗号","分隔；
+        "Columns":["price","world","_id"],//需要导出的数据的列名，按顺序填写；数组；
+        "DefaultFileName":"test.csv",//导出的文件名，字符串；
+        "Title":"测试导出数据"//导出界面的显示标题，字符串；
+    }
+
+    var res = { Pager:{PageCount:0,//PageCount-总页数,数值类型；
+                        RowCount:0},//RowCount-总数据行数，数值类型；
+                Items:[]}//Items-数组，每次返回的数据集；
+
+
+</script>
+</body>
+</html>

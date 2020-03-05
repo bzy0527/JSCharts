@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FunneledChart</title>
+    <script src="https://lc.dbazure.cn/dbfx/dbfx.js"></script>
+    <script src="https://lc.dbazure.cn/dbfxui/dbfx.web.controls.js"></script>
+    <script src="https://lc.dbazure.cn/dbfx/dbfx.commodel.js"></script>
+    <script src="dbfx.web.charts.js"></script>
+</head>
+<body style="width: 100%;height: 700px;border: 1px solid blue;overflow: hidden;display: block">
+
+<div id="div01" style="height: 540px;display: block;overflow: visible;margin: 10px 0px;position: relative"></div>
+<!--<div id="div02" style="height: 100%;display: inline-block;width: 400px"></div>-->
+</div>
+
+
+<script>
+    var chart =new DBFX.Web.DBChart.FunnelledChart();
+    var d = document.getElementById("div01");
+    d.appendChild(chart.VisualElement);
+    chart.ColorSerie = "quietDay";
+    var data = [
+            {Value:2000,Title:"加入购物车"},
+            {Value:3890,Title:"注册量"},
+            {Value:800,Title:"结算量"},
+            {Value:5000,Title:"访问量"},
+            {Value:10000,Title:"推广总数"}];
+
+    var a = data.slice();
+    // datas.sort(function (a, b) { return b.Value - a.Value });
+
+
+    chart.ItemSource = data;
+    chart.Width = "400px";
+    chart.Height = "300px";
+    // chart.BackgroundColor = "#b0c4de";
+
+    // console.log(data);
+
+
+
+    var list = [
+        {"name": "John", "Average": 15, "High": 10, "DtmStamp": 1358226000000},
+        {"name": "Jane", "Average": 16, "High": 92, "DtmStamp": 1358226000000},
+        {"name": "Jane", "Average": 17, "High": 45, "DtmStamp": 1358226000000},
+        {"name": "John", "Average": 18, "High": 87, "DtmStamp": 1358226000000},
+        {"name": "Jane", "Average": 15, "High": 10, "DtmStamp": 1358226060000},
+        {"name": "John", "Average": 16, "High": 87, "DtmStamp": 1358226060000},
+        {"name": "John", "Average": 17, "High": 45, "DtmStamp": 1358226060000},
+        {"name": "Jane", "Average": 18, "High": 92, "DtmStamp": 1358226060000}
+    ];
+
+
+    //
+    // function groupBy(array, f) {
+    //     // debugger;
+    //     var groups = {};
+    //     array.forEach(function (o) {
+    //         var group = JSON.stringify(f(o));
+    //         groups[group] = groups[group] || [];
+    //         groups[group].push(o);
+    //     });
+    //     return Object.keys(groups).map(function (group) {
+    //         return groups[group];
+    //     });
+    // }
+
+    var sorted = chart.GroupBy(list, function (item) {
+        return [item[""]];
+    });
+    console.log(sorted);
+
+
+
+
+
+
+</script>
+</body>
+</html>

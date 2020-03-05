@@ -77,9 +77,7 @@
 
 
     <c T="wc:BreakLine" />
-    <c T="wc:Label" Text="内圆半径:" Margin="4px 2px 2px 16px" Float="left"/>
-    <c T="wc:TextBox" Display="block"  Height="26px" Margin="2px 14px 2px 16px" DataBindings="{&quot;Path&quot;:&quot;InsideR&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}" />
-
+    <c T="wc:CheckedBox" Text="显示内圆"  Margin="2px 2px 2px 16px"  DataBindings="{&quot;Path&quot;:&quot;IsShowInsideC&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}"/>
     <c T="wc:BreakLine" />
     <c T="wc:Label" Text="内圆标题:" Margin="4px 2px 2px 16px" Float="left"/>
     <c T="wc:TextBox"  Display="block"  Height="26px" Margin="2px 14px 2px 16px" DataBindings="{&quot;Path&quot;:&quot;InsideCTitle&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}" />
