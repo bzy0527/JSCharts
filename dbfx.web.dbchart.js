@@ -1922,7 +1922,7 @@ DBFX.Web.DBChart.Charts = function () {
         //设置图例文字最大的长度:多少个字符
         var maxTextC = 0;
         for(var l=0;l<labels.length;l++){
-            if(maxTextC < labels[l].length){
+            if(labels[l] && (maxTextC < labels[l].length)){
                 maxTextC = labels[l].length;
             }
         }
@@ -4589,7 +4589,7 @@ DBFX.Web.DBChart.Charts = function () {
         //设置图例文字最大的长度:多少个字符
         var maxTextC = 0;
         for(var l=0;l<c.labels.length;l++){
-            if(maxTextC < c.labels[l].length){
+            if(c.labels[l] && maxTextC < c.labels[l].length){
                 maxTextC = c.labels[l].length;
             }
         }
@@ -6886,7 +6886,7 @@ DBFX.Web.DBChart.InstrumentPanel = function () {
             ip.drawInstrumentPanel();
         }
     });
-    
+
     ip.SetValue = function (v) {
         ip.value = v;
         ip.drawInstrumentPanel();

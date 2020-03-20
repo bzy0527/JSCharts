@@ -251,8 +251,11 @@ DBFX.Web.DBChart.FunnelledChart = function () {
         for(var i=1;i<len;i++){
 
             var rate = datas[i][fc.valueAttr]/preV;
+            //屏蔽掉NaN的数据
+            rate = isNaN(rate) ? 0 : rate;
+
             //计算当前矩形下边的长度
-            lw = rate*lw;
+            lw = rate*lw <= 0 ? 8:rate*lw;
             //计算当前梯形上边的长度
             topLineW = topR[0]-topL[0];
 

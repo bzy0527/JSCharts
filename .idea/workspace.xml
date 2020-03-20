@@ -2,16 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a2d281e9-99f6-4175-bbcf-a51561e9e853" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/AreaChart.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FunneledChart.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dbfx.web.charts.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/opData.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChartsDesigner.scrp" beforeDir="false" afterPath="$PROJECT_DIR$/ChartsDesigner.scrp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FunneledChart.html" beforeDir="false" afterPath="$PROJECT_DIR$/FunneledChart.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SVGChart3D.html" beforeDir="false" afterPath="$PROJECT_DIR$/SVGChart3D.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dbfx.web.charts.js" beforeDir="false" afterPath="$PROJECT_DIR$/dbfx.web.charts.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dbfx.web.dbchart.js" beforeDir="false" afterPath="$PROJECT_DIR$/dbfx.web.dbchart.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testDIV.html" beforeDir="false" afterPath="$PROJECT_DIR$/testDIV.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -35,7 +30,7 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="HbShouldOpenHtmlAsHb" value="" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../DBSoft_DBFX" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
@@ -135,6 +130,8 @@
       <workItem from="1581897633083" duration="557000" />
       <workItem from="1582608778659" duration="48000" />
       <workItem from="1582611154647" duration="995000" />
+      <workItem from="1584338087856" duration="401000" />
+      <workItem from="1584605348909" duration="4509000" />
     </task>
     <servers />
   </component>
