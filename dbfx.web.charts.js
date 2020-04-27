@@ -64,7 +64,7 @@ DBFX.Web.DBChart.BaseChart = function (cn) {
     });
 
 
-    //颜色组合
+    //颜色组合  内置的5组颜色
     bc.colorScheme = {
         default:['#7cb5ec','#90ed7d','#f7a35c','#8085e9','#f15c80','#e4d354','#2b908f','#f45b5b','#91e8e1','#434348'],
         afterMoon:['#E03636','#EDD0BE','#FF534D','#EDD0BE','#25C6FC','#EDE387','#EDEDED','#3B200C','#DE8100','#CCFC62'],
@@ -83,6 +83,21 @@ DBFX.Web.DBChart.BaseChart = function (cn) {
             bc.colorSerie = v;
         }
     });
+
+
+    //2020-04-26  添加自定义设置颜色系列
+    bc.customColors = [];
+    Object.defineProperty(bc,"CustomColors",{
+        get:function () {
+            return bc.customColors;
+        },
+        set:function (v) {
+            bc.customColors = v;
+            typeof bc.ChangeColors == "function" && bc.ChangeColors();
+        }
+    });
+
+    bc.ChangeColors = function(){}
 
     /**
      * 为SVG元素设置属性
@@ -789,5 +804,235 @@ DBFX.Serializer.AreaChartSerializer = function () {
         DBFX.Serializer.SerialProperty("FillC", c.FillC, xe);
 
         // DBFX.Serializer.SerializeCommand("CutlineClick", c.CutlineClick, xe);
+    }
+}
+
+
+
+/************************** 20200424-绘制横向比例区块图 *****************************/
+DBFX.Web.DBChart.ScaleBlockChart = function () {
+    var sbc = new DBFX.Web.DBChart.BaseChart("ScaleBlockChart");
+    sbc.ClassDescriptor.Designers.splice(1, 0, "DBFX.Design.ControlDesigners.ScaleBlockChartDesigner");
+    sbc.ClassDescriptor.Serializer = "DBFX.Serializer.ScaleBlockChartSerializer";
+
+    sbc.OnCreateHandle();
+    sbc.OnCreateHandle = function () {
+
+    }
+
+
+    //实现更改颜色序列的方法
+    sbc.ChangeColors = function(){
+        if(!(sbc.CustomColors && Array.isArray(sbc.CustomColors) && sbc.CustomColors.length>0)) return;
+        sbc.Draw(sbc.ItemSource);
+    }
+
+    /**绘制 */
+    sbc.Draw = function (datas) {
+        if(!(Array.isArray(datas)&&datas.length>0))return;
+
+        // c.svg.innerHTML = '';
+        //!!!清空svg下所有子元素后再绘制，防止图表重叠绘制
+        if(sbc.svg.childNodes.length){
+            sbc.svg.textContent = '';
+        }
+        //数据总数
+        var len = datas.length;
+
+        //所有数据总和
+        var totalCount = 0;
+        var vArr = [];
+        datas.forEach(function (v) {
+            totalCount += Math.abs(v[sbc.valueAttr]);
+            vArr.push(v[sbc.valueAttr]);
+        });
+        //20191129-数据的绝对值总和等于零时 不绘制
+        if(isNaN(totalCount)||totalCount<=0){
+            sbc.NoDataTip("暂无数据");
+            return;
+        }
+
+
+        var x = 0;
+        //颜色序列已设定的为主  如果设定的颜色系少于实际数据数，则循环使用设定的颜色序列
+        var colors = [];
+        if(sbc.CustomColors && sbc.CustomColors.length>0){
+            colors = sbc.CustomColors;
+        }else {
+            colors = sbc.colorScheme[sbc.ColorSerie];
+        }
+
+        var cLen = colors.length;
+
+        if(cLen < len){
+            for (var k = 0; k < len-cLen; k++) {
+                colors.push(colors[(k)%cLen]);
+            }
+        }
+
+        //显示比例文字的x坐标
+        var ratioY= 3;
+        var ratio_Y = 0;
+        //显示title的文字x坐标
+        var titleY = sbc.chartH -3;
+        var title_Y = titleY;
+
+        //矩形块的y坐标和高度
+        var rectY = 0;
+        var rectH = 0;
+
+        //保存所有区域块
+        sbc.Blocks = [];
+
+        //遍历创建文字显示
+        for (var i = 0; i < len; i++) {
+            var g = document.createElementNS(sbc.SVG_NS,'g');
+            g.DataContext = datas[i];
+            sbc.Blocks.push(g);
+            sbc.svg.appendChild(g);
+            //比例
+            var ratio = (datas[i][sbc.ValueAttr]/totalCount);
+            ratio = isNaN(ratio) ? 0:ratio;
+            var w = sbc.chartW*ratio;
+
+            ratioY = i%2 === 0 ? 0 : ratio_Y;
+            titleY = i%2 === 0 ? sbc.chartH - 3 : title_Y;
+
+
+            //显示百分比
+            var ratioT = document.createElementNS(sbc.SVG_NS,'text');
+            ratioT.textContent = (ratio*100).toFixed(2)+"%";
+            sbc.SetAttr(ratioT,{
+                "fill":sbc.Color || colors[i],
+                "x":x+3,
+                "y":ratioY,
+                "text-anchor":"start",
+                "dominant-baseline": "hanging"
+            });
+
+            //显示文字
+            var titleT = document.createElementNS(sbc.SVG_NS,'text');
+            titleT.textContent = datas[i][sbc.TitleAttr];
+            sbc.SetAttr(titleT,{
+                fill:sbc.Color || colors[i],
+                "x":x+3,
+                "y":titleY,
+                "text-anchor":"start",
+                "dominant-baseline": "text-after-edge"
+                // "textLength":w*0.9,
+                // "lengthAdjust":"spacingAndGlyphs"
+            });
+
+            g.appendChild(ratioT);
+            g.appendChild(titleT);
+
+            if(i === 0){
+                var ratioBox = ratioT.getBBox();
+                var titleBox = titleT.getBBox();
+
+                ratio_Y = ratioBox.y+ratioBox.height;
+                title_Y = titleBox.y;
+
+            }
+            if(i === 1){
+                ratioBox = ratioT.getBBox();
+                titleBox = titleT.getBBox();
+                rectY = ratioBox.y+ratioBox.height+3;
+                var t_Y = titleBox.y;
+                rectH = t_Y - rectY -3;
+            }
+
+            x+=w;
+        }
+
+        x=0;
+        for (var j = 0; j < len ; j++) {
+            var g_element = sbc.Blocks[j];
+            //比例
+            var ratio02 = (datas[j][sbc.ValueAttr]/totalCount);
+            ratio02 = isNaN(ratio02) ? 0:ratio02;
+            var w02 = sbc.chartW*ratio02;
+            //矩形块
+            var rectangle = document.createElementNS(sbc.SVG_NS,'rect');
+            sbc.SetAttr(rectangle,{
+                height:rectH,
+                width:w02,
+                fill:colors[j],
+                "x":x,
+                "y":rectY
+            });
+            g_element.appendChild(rectangle);
+
+            var topY = j%2===0 ? 0:ratio_Y;
+            var bottomY = j%2===0 ? sbc.chartH - 3:title_Y;
+            //上标线
+            var top_line = document.createElementNS(sbc.SVG_NS,'line');
+            sbc.SetAttr(top_line,{
+                "x1":Math.ceil(x),
+                "y1":topY,
+                "x2":Math.ceil(x),
+                "y2":rectY,
+                "stroke":colors[j],
+                "stroke-width":1
+            });
+
+            //下标线
+            var bottom_line = document.createElementNS(sbc.SVG_NS,'line');
+            sbc.SetAttr(bottom_line,{
+                "x1":Math.ceil(x),
+                "y1":rectY+rectH,
+                "x2":Math.ceil(x),
+                "y2":bottomY,
+                "stroke":colors[j],
+                "stroke-width":1
+            });
+
+            g_element.appendChild(top_line);
+            g_element.appendChild(bottom_line);
+            x+=w02;
+        }
+
+
+    }
+
+    sbc.OnCreateHandle();
+    return sbc;
+}
+DBFX.Design.ControlDesigners.ScaleBlockChartDesigner = function () {
+    var obdc = new DBFX.Web.Controls.GroupPanel();
+    obdc.OnCreateHandle();
+    obdc.OnCreateHandle = function () {
+        DBFX.Resources.LoadResource("design/DesignerTemplates/FormDesignerTemplates/ScaleBlockChartDesigner.scrp", function (od) {
+            od.DataContext = obdc.dataContext;
+        }, obdc);
+    }
+
+    //事件处理程序
+    obdc.DataContextChanged = function (e) {
+        obdc.DataBind(e);
+    }
+
+    obdc.HorizonScrollbar = "hidden";
+    obdc.OnCreateHandle();
+    obdc.Class = "VDE_Design_ObjectGeneralDesigner";
+    obdc.Text = "比例区块图表设置";
+    return obdc;
+}
+DBFX.Serializer.ScaleBlockChartSerializer = function () {
+    //反系列化
+    this.DeSerialize = function (c, xe, ns) {
+
+        DBFX.Serializer.DeSerialProperty("ValueAttr", c, xe);
+        DBFX.Serializer.DeSerialProperty("TitleAttr", c, xe);
+        DBFX.Serializer.DeSerialProperty("ColorSerie", c, xe);
+
+    }
+
+    //系列化 开发平台保存设置时调用
+    this.Serialize = function (c, xe, ns) {
+        DBFX.Serializer.SerialProperty("ValueAttr", c.ValueAttr, xe);
+        DBFX.Serializer.SerialProperty("TitleAttr", c.TitleAttr, xe);
+        DBFX.Serializer.SerialProperty("ColorSerie", c.ColorSerie, xe);
+
     }
 }

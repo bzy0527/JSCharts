@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no, initial-scale=1.0, maximum-scale=5.0, minimun-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>AreaChart</title>
+    <script src="https://lc.dbazure.cn/dbfx/dbfx.js"></script>
+    <script src="https://lc.dbazure.cn/dbfxui/dbfx.web.controls.js"></script>
+    <script src="https://lc.dbazure.cn/dbfx/dbfx.commodel.js"></script>
+    <script src="../dbfx.web.charts.js"></script>
+</head>
+<body style="width: 100%;height: 700px;border: 1px solid blue;overflow: hidden;display: block">
+
+<div id="div01" style="height: 540px;display: block;overflow: visible;position: relative"></div>
+
+<!--<div id="div02" style="height: 100%;display: inline-block;width: 400px"></div>-->
+</div>
+
+
+<script>
+    var chart =new DBFX.Web.DBChart.ScaleBlockChart();
+    var d = document.getElementById("div01");
+    d.appendChild(chart.VisualElement);
+
+    var list = [
+        {"Value":7,"Title":"70001"},{"Value":25.1,"Title":"70002"},{"Value":20.1,"Title":"70003"},{"Value":25.1,"Title":"70004"},{"Value":2.1,"Title":"70005"},{"Value":25.1,"Title":"70006"}
+    ];
+
+
+    chart.Width = "500px";
+    chart.Height = "100px";
+    chart.BackgroundColor = "white";
+
+    chart.ValueAttr = "Value";
+    chart.TitleAttr = "Title";
+    chart.FontSize = "12px";
+    chart.Color = "black";
+
+    // chart.CustomColors = ["#dae333","red","green"];
+
+    chart.ItemSource = list;
+
+
+</script>
+</body>
+</html>
