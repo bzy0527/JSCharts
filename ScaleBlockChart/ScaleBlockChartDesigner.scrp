@@ -22,6 +22,18 @@
     <c T="wc:Label" Text="图例标题属性:" Margin="4px 2px 2px 16px" Float="left"/>
     <c T="wc:TextBox"  Display="block"  Height="26px" Margin="2px 14px 2px 16px" DataBindings="{&quot;Path&quot;:&quot;TitleAttr&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}"/>
 
+    <c T="wc:BreakLine" />
+    <c T="wc:Label" Text="图表颜色系:" Margin="4px 2px 2px 16px" Float="left"/>
+    <c T="wc:ComboBox"  Display="block"  Margin="2px 14px 2px 16px" Height="26px"  DataBindings="{&quot;Path&quot;:&quot;ColorSerie&quot;,&quot;Mode&quot;:&quot;OneWay&quot;,&quot;Source&quot;:&quot;&quot;}" >
+      <Items>
+           <Item Text="默认" Value="default"  ImageUrl="" />
+           <Item Text="午后" Value="afterMoon"  ImageUrl="" />
+           <Item Text="森林" Value="forest"  ImageUrl="" />
+           <Item Text="安静一天" Value="quietDay"  ImageUrl="" />
+           <Item Text="商务" Value="business"  ImageUrl="" />
+      </Items>
+    </c>
+
     </controls>
     </c>
   </controls>

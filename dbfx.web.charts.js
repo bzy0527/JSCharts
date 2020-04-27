@@ -434,13 +434,6 @@ DBFX.Design.ControlDesigners.FunnelledChartDesigner = function () {
     obdc.OnCreateHandle = function () {
         DBFX.Resources.LoadResource("design/DesignerTemplates/FormDesignerTemplates/FunnelledChartDesigner.scrp", function (od) {
             od.DataContext = obdc.dataContext;
-            //是否显示标题设计器设置项
-            // od.FormContext.Form.FormControls.cbxIsShowTitle.ItemSource =    [{Text:"显示",Value:true,ImageUrl:""},
-            //                                                 {Text:"不显示",Value:false,ImageUrl:""}];
-
-            //设计器中绑定事件处理
-            // od.EventListBox = od.FormContext.Form.FormControls.EventListBox;
-            // od.EventListBox.ItemSource = [{EventName:"CutlineClick",EventCode:undefined,Command:od.dataContext.CutlineClick,Control:od.dataContext}];
 
         }, obdc);
     }
@@ -448,9 +441,6 @@ DBFX.Design.ControlDesigners.FunnelledChartDesigner = function () {
     //事件处理程序
     obdc.DataContextChanged = function (e) {
         obdc.DataBind(e);
-        // if(obdc.EventListBox != undefined){
-        //     obdc.EventListBox.ItemSource = [{EventName:"CutlineClick",EventCode:undefined,Command:obdc.dataContext.CutlineClick,Control:obdc.dataContext}];
-        // }
     }
 
     obdc.HorizonScrollbar = "hidden";
