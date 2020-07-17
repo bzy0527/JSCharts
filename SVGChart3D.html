@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no, initial-scale=1.0, maximum-scale=5.0, minimun-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>SVGChart3D</title>
     <script src="https://lc.dbazure.cn/dbfx/dbfx.js"></script>
     <script src="https://lc.dbazure.cn/dbfxui/dbfx.web.controls.js"></script>
@@ -12,7 +15,7 @@
 
 <!--<div style="border-style: solid;border-color: aqua;border-width: 1px">-->
 <div id="div01" style="height: 340px;display: block;overflow: hidden;margin: 10px 0px;position: relative"></div>
-<!--<div id="div02" style="height: 100%;display: inline-block;width: 400px"></div>-->
+<div id="div02" style="height: 100%;display: inline-block;width: 400px"></div>
 
 </div>
     <script>
@@ -49,10 +52,10 @@
             chart.SetWidth('100%');
             chart.SetHeight('100%');
 
-            chart.InsideR = "30";
-            chart.InsideCTitle = "title";
-            chart.InsideCValue = "value";
-            chart.InsideCImageURL = "img";
+            // chart.InsideR = "30";
+            // chart.InsideCTitle = "title";
+            // chart.InsideCValue = "value";
+            // chart.InsideCImageURL = "img";
 
             // chart.Values = [6,7,3,9,10];
             // chart.Labels = ["土豆","西瓜","南瓜","青菜","胡萝卜"];
@@ -96,14 +99,32 @@
 
             // chart.ChartType = 'bar';
             // chart.ChartType = 'multiBar3D';
-            chart.ChartType = 'line';
+            // chart.ChartType = 'line';
             // chart.ChartType = 'multiWavy';
             // chart.ChartType = 'wavy';
             // chart.ChartType = 'multiBar';
             // chart.ChartType = 'pie';
             //✅
-            // chart.ChartType = 'multiLine';
 
+            var values = [];
+            var labels = [];
+            for(var kk = 0;kk<300;kk++){
+                var value = {};
+                value.value = Math.random()*100+kk;
+                value.key="8"+kk;
+                values.push(value);
+                labels.push("图例"+kk);
+            }
+
+            chart.Configs ={"datas":[
+                    {"date":"14:35","values":values}],
+                    "labels":labels};
+            // chart.Configs ={"datas":[
+            //         {"date":"14:35","values":[{"value":7,"key":"70001"},{"value":333,"key":"70002"},{"value":33,"key":"70002"}]}],
+            //         "labels":["计划销售","计划销售1"]};
+
+                // chart.ChartType = 'multiLine';
+            chart.ChartType = 'pie';
             // chart.isShowTitle = false;
 
 

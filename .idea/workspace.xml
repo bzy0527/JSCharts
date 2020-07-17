@@ -3,8 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="a2d281e9-99f6-4175-bbcf-a51561e9e853" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScaleBlockChart/ScaleBlockChartDesigner.scrp" beforeDir="false" afterPath="$PROJECT_DIR$/ScaleBlockChart/ScaleBlockChartDesigner.scrp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dbfx.web.charts.js" beforeDir="false" afterPath="$PROJECT_DIR$/dbfx.web.charts.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SVGChart3D.html" beforeDir="false" afterPath="$PROJECT_DIR$/SVGChart3D.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ScaleBlockChart/ScaleBlockChart.html" beforeDir="false" afterPath="$PROJECT_DIR$/ScaleBlockChart/ScaleBlockChart.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dbfx.web.dbchart.js" beforeDir="false" afterPath="$PROJECT_DIR$/dbfx.web.dbchart.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -15,8 +16,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="JavaScript File" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -131,7 +132,11 @@
       <workItem from="1584338087856" duration="401000" />
       <workItem from="1584605348909" duration="4509000" />
       <workItem from="1587704190086" duration="2552000" />
-      <workItem from="1587858858373" duration="21517000" />
+      <workItem from="1587858858373" duration="29563000" />
+      <workItem from="1588754054967" duration="2835000" />
+      <workItem from="1590555501235" duration="766000" />
+      <workItem from="1592526947245" duration="5523000" />
+      <workItem from="1594884443047" duration="4698000" />
     </task>
     <servers />
   </component>

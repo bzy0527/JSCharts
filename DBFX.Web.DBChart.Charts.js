@@ -1,8 +1,3 @@
-DBFX.RegisterNamespace("DBFX.Web.DBChart");
-DBFX.RegisterNamespace("DBFX.Design");
-DBFX.RegisterNamespace("DBFX.Serializer");
-DBFX.RegisterNamespace("DBFX.Design.ControlDesigners");
-
 //图表类
 DBFX.Web.DBChart.Charts = function () {
 
@@ -781,7 +776,7 @@ DBFX.Web.DBChart.Charts = function () {
 
     c.perspective = function(points) {
 
-           var inverted = c.option3d.inverted,
+        var inverted = c.option3d.inverted,
             origin = {
                 x: c.chartW/2,
                 y: c.chartH/2,
@@ -1198,92 +1193,92 @@ DBFX.Web.DBChart.Charts = function () {
 
         for(var k=0;k<=5;k++){
 
-                var start_y = Math.floor(y_margin*2*(k+1))+0.5,
-                    end_y = Math.floor(y_margin*2*(k+1))+0.5;
+            var start_y = Math.floor(y_margin*2*(k+1))+0.5,
+                end_y = Math.floor(y_margin*2*(k+1))+0.5;
 
-                //坐标
-                var xAxes = document.createElementNS(c.SVG_NS,'path');
-                gAxes.appendChild(xAxes);
-                var pathV = 'M '+start_x+' '+start_y+'L '+end_x+' '+end_y;
+            //坐标
+            var xAxes = document.createElementNS(c.SVG_NS,'path');
+            gAxes.appendChild(xAxes);
+            var pathV = 'M '+start_x+' '+start_y+'L '+end_x+' '+end_y;
 
-                c.setAttr(xAxes,{
-                    'd':pathV,
-                    'stroke':'#f0f0f0',
-                    'stroke-width':0.5
-                });
+            c.setAttr(xAxes,{
+                'd':pathV,
+                'stroke':'#f0f0f0',
+                'stroke-width':0.5
+            });
 
-                //单位标记数值
-                var markText = document.createElementNS(c.SVG_NS,'text');
-                gAxes.appendChild(markText);
-                markText.textContent = perValue_y*10000*(10-2*k)/10000;
+            //单位标记数值
+            var markText = document.createElementNS(c.SVG_NS,'text');
+            gAxes.appendChild(markText);
+            markText.textContent = perValue_y*10000*(10-2*k)/10000;
 
-                c.setAttr(markText,{
-                    'font-size':labelFontSize,
-                    'fill':c.titleColor,
-                    "x":Math.floor(x_margin*0.7)+0.5,
-                    "y":start_y,
-                    "text-anchor":"middle",
-                    "height":c.titleFontSize*1.2,
-                    'letter-spacing':c.labelLetterSpacing
-                });
-            }
+            c.setAttr(markText,{
+                'font-size':labelFontSize,
+                'fill':c.titleColor,
+                "x":Math.floor(x_margin*0.7)+0.5,
+                "y":start_y,
+                "text-anchor":"middle",
+                "height":c.titleFontSize*1.2,
+                'letter-spacing':c.labelLetterSpacing
+            });
+        }
 
 
         //绘制立方图
         for(var j=0;j<len;j++){
 
-                var shapeArgs = new Object();
-                //根据数据变化
-                shapeArgs.x = x_margin*(j+1);
-                shapeArgs.y = y_margin*12;
-                shapeArgs.z = 0;
-                //根据数据变化
-                shapeArgs.height = -values[j].value/perValue_y*y_margin;
-                shapeArgs.width = x_margin*0.3;
-                shapeArgs.depth = x_margin*0.3;
-                // shapeArgs.alpha = Math.PI*30/180;
-                // shapeArgs.beta = Math.PI*30/180;
+            var shapeArgs = new Object();
+            //根据数据变化
+            shapeArgs.x = x_margin*(j+1);
+            shapeArgs.y = y_margin*12;
+            shapeArgs.z = 0;
+            //根据数据变化
+            shapeArgs.height = -values[j].value/perValue_y*y_margin;
+            shapeArgs.width = x_margin*0.3;
+            shapeArgs.depth = x_margin*0.3;
+            // shapeArgs.alpha = Math.PI*30/180;
+            // shapeArgs.beta = Math.PI*30/180;
 
-                var paths = c.svgrender.cuboidPath(shapeArgs);
-                console.log(paths);
+            var paths = c.svgrender.cuboidPath(shapeArgs);
+            console.log(paths);
 
-                var gElement = document.createElementNS(c.SVG_NS,'g');
-                gElement.setAttribute('stroke-linejoin','round');
-                c.svg.appendChild(gElement);
+            var gElement = document.createElementNS(c.SVG_NS,'g');
+            gElement.setAttribute('stroke-linejoin','round');
+            c.svg.appendChild(gElement);
 
-                var darker = c.svgrender.lightenDarkenColor(colors[j],-40);
-                for(var i=0;i<paths.length;i++){
+            var darker = c.svgrender.lightenDarkenColor(colors[j],-40);
+            for(var i=0;i<paths.length;i++){
 
-                    // console.log(Array.isArray(paths[i]));
-                    // console.log(paths[i].constructor ===Array);
+                // console.log(Array.isArray(paths[i]));
+                // console.log(paths[i].constructor ===Array);
 
-                    if(Array.isArray(paths[i])){
-                        var path = document.createElementNS(c.SVG_NS,'path');
-                        path.setAttribute("d",paths[i].join(" "));
+                if(Array.isArray(paths[i])){
+                    var path = document.createElementNS(c.SVG_NS,'path');
+                    path.setAttribute("d",paths[i].join(" "));
 
-                        path.setAttribute("stroke-width",1);
-                        if (i==0){
-                            path.setAttribute("fill",colors[j]);
-                            path.setAttribute("stroke",colors[j]);
-                            path.style.cursor = 'pointer';
-                            //设置需要传递的属性值，处理事件时获取
-                            path.title = labels[j];
-                            path.value = values[j].value;
+                    path.setAttribute("stroke-width",1);
+                    if (i==0){
+                        path.setAttribute("fill",colors[j]);
+                        path.setAttribute("stroke",colors[j]);
+                        path.style.cursor = 'pointer';
+                        //设置需要传递的属性值，处理事件时获取
+                        path.title = labels[j];
+                        path.value = values[j].value;
 
 
-                            //添加鼠标事件
-                            path.addEventListener('mouseover',c.handleMouseover,false);
-                            path.addEventListener('mouseout',c.handleMouseout,false);
-                        }else {
-                            path.setAttribute("fill",darker);
-                            path.setAttribute("stroke",darker);
-                        }
-
-                        gElement.appendChild(path);
+                        //添加鼠标事件
+                        path.addEventListener('mouseover',c.handleMouseover,false);
+                        path.addEventListener('mouseout',c.handleMouseout,false);
+                    }else {
+                        path.setAttribute("fill",darker);
+                        path.setAttribute("stroke",darker);
                     }
-                }
 
+                    gElement.appendChild(path);
+                }
             }
+
+        }
 
 
         //设置标题
@@ -1928,7 +1923,7 @@ DBFX.Web.DBChart.Charts = function () {
         }
 
         /****** 计算图例占据的宽度*****/
-        //用最长的图例文字计算每组图例占据的宽度
+            //用最长的图例文字计算每组图例占据的宽度
         var perW = (maxTextC+1)*labelFontSize;
 
         //20190729 计算图例需要占据的高度  图例倾斜leanA绘制
@@ -2703,7 +2698,7 @@ DBFX.Web.DBChart.Charts = function () {
                 var textArcPathStr = ['M',start_x,start_y,'A',midR,midR,0,+(arcPath.endA-arcPath.startA>Math.PI),0,end_x,end_y].join(' ');
 
                 c.setAttr(textPath,{
-                   'd':textArcPathStr,
+                    'd':textArcPathStr,
                     'stroke':'none',
                     'stroke-width':0,
                     'fill':'none',
@@ -2807,10 +2802,10 @@ DBFX.Web.DBChart.Charts = function () {
             var insideC = document.createElementNS(c.SVG_NS,'circle');
             insideG.appendChild(insideC);
             c.setAttr(insideC,{
-               'fill':"white",
-               'cx':c.pieCenterX,
-               'cy':c.pieCenterY,
-               'r':insideR
+                'fill':"white",
+                'cx':c.pieCenterX,
+                'cy':c.pieCenterY,
+                'r':insideR
             });
 
             //内圆标题标签
@@ -2819,8 +2814,8 @@ DBFX.Web.DBChart.Charts = function () {
             // insideTitle.textContent = c.insideCTitle;
             insideTitle.textContent = datas[c.insideCTitle]||"";
             c.setAttr(insideTitle,{
-               'x':c.pieCenterX,
-               'y':c.pieCenterY-c.insideR*0.4,
+                'x':c.pieCenterX,
+                'y':c.pieCenterY-c.insideR*0.4,
                 'font-size':c.insideR*0.14,
                 'fill':'#D4D4D4',
                 'stroke-width':0,
@@ -3378,7 +3373,7 @@ DBFX.Web.DBChart.Charts = function () {
                 var randomId = new Date().valueOf()+Math.floor(Math.random()*1000)+"";
 
                 c.setAttr(textPath,{
-                   'd':textArcPathStr,
+                    'd':textArcPathStr,
                     'stroke':'none',
                     'stroke-width':0,
                     'fill':'none',
@@ -3490,10 +3485,10 @@ DBFX.Web.DBChart.Charts = function () {
             var insideC = document.createElementNS(c.SVG_NS,'circle');
             insideG.appendChild(insideC);
             c.setAttr(insideC,{
-               'fill':"white",
-               'cx':c.pieCenterX,
-               'cy':c.pieCenterY,
-               'r':insideR
+                'fill':"white",
+                'cx':c.pieCenterX,
+                'cy':c.pieCenterY,
+                'r':insideR
             });
 
             //内圆标题标签
@@ -3502,8 +3497,8 @@ DBFX.Web.DBChart.Charts = function () {
             // insideTitle.textContent = c.insideCTitle;
             insideTitle.textContent = datas[c.insideCTitle]||"";
             c.setAttr(insideTitle,{
-               'x':c.pieCenterX,
-               'y':c.pieCenterY-c.labelFontSize,
+                'x':c.pieCenterX,
+                'y':c.pieCenterY-c.labelFontSize,
                 'font-size':c.labelFontSize,
                 'fill':'#585858',
                 'stroke-width':0,
@@ -3803,7 +3798,7 @@ DBFX.Web.DBChart.Charts = function () {
         });
 
         points.forEach(function (point) {
-           c.svg.appendChild(point);
+            c.svg.appendChild(point);
         });
 
 
@@ -4243,91 +4238,91 @@ DBFX.Web.DBChart.Charts = function () {
         var gap01 = Math.ceil(row/maxNum01);
 
 
-       for(var p=0;p<len;p++){
-           var perlinePoints = totalPoints[p];
+        for(var p=0;p<len;p++){
+            var perlinePoints = totalPoints[p];
 
-           var lineG = document.createElementNS(c.SVG_NS,'g');
-           c.svg.appendChild(lineG);
+            var lineG = document.createElementNS(c.SVG_NS,'g');
+            c.svg.appendChild(lineG);
 
-           var linePath = '';
-           var bethelPath = '';
-           for(var q=0;q<row;q++){
+            var linePath = '';
+            var bethelPath = '';
+            for(var q=0;q<row;q++){
 
-                   var cirPoint = document.createElementNS(c.SVG_NS,'circle');
-                   //q%gap01==0 || q==row
-                   if(q%gap01==0 || q==row){
-                       lineG.appendChild(cirPoint);
-                       c.setAttr(cirPoint,{
-                           'cx':perlinePoints[q].x,
-                           'cy':perlinePoints[q].y,
-                           // 'r':y_margin*0.07,
-                           'r':1.5,
-                           'stroke':"none",
-                           'fill':colors[p]
-                       });
-                   }
+                var cirPoint = document.createElementNS(c.SVG_NS,'circle');
+                //q%gap01==0 || q==row
+                if(q%gap01==0 || q==row){
+                    lineG.appendChild(cirPoint);
+                    c.setAttr(cirPoint,{
+                        'cx':perlinePoints[q].x,
+                        'cy':perlinePoints[q].y,
+                        // 'r':y_margin*0.07,
+                        'r':1.5,
+                        'stroke':"none",
+                        'fill':colors[p]
+                    });
+                }
 
-                   // points.push(cirPoint);
+                // points.push(cirPoint);
 
-                   cirPoint.title = labels[p];
-                   // cirPoint.subTitle = totalV[q].date;
-                   cirPoint.value = perlinePoints[q].value;
-                   cirPoint.type = "multiLine_point";
-                   cirPoint.superE = lineG;
+                cirPoint.title = labels[p];
+                // cirPoint.subTitle = totalV[q].date;
+                cirPoint.value = perlinePoints[q].value;
+                cirPoint.type = "multiLine_point";
+                cirPoint.superE = lineG;
 
-                   cirPoint.addEventListener('mouseover',c.handleMouseover,false);
-                   cirPoint.addEventListener('mouseout',c.handleMouseout,false);
+                cirPoint.addEventListener('mouseover',c.handleMouseover,false);
+                cirPoint.addEventListener('mouseout',c.handleMouseout,false);
 
-               var point_x = perlinePoints[q].x,
-                   point_y = perlinePoints[q].y,
-                   nextPoint_x = q<row-1 ? perlinePoints[q+1].x:undefined,
-                   nextPoint_y = q<row-1 ? perlinePoints[q+1].y:undefined;
-
-
-                   // if(q==0){
-                   //     linePath = 'M'+perlinePoints[q].x+' '+perlinePoints[q].y;
-                   // }else {
-                   //     linePath += 'L'+perlinePoints[q].x+' '+perlinePoints[q].y;
-                   // }
-
-               if(q==0){
-                   linePath = 'M'+ point_x +' '+ point_y;
-                   bethelPath = 'M'+ point_x +' '+ point_y+'C' + Math.abs((nextPoint_x+point_x)*0.5)+','+point_y+' '+Math.abs((nextPoint_x+point_x)*0.5)+','+nextPoint_y+' '+nextPoint_x+
-                       ','+nextPoint_y;
-               }else {
-                   linePath += "L"+point_x+' '+point_y;
-                   if(q<row-1){
-                       bethelPath += 'C' + Math.abs((nextPoint_x+point_x)*0.5)+','+point_y+' '+Math.abs((nextPoint_x+point_x)*0.5)+','+nextPoint_y+' '+nextPoint_x+
-                           ','+nextPoint_y;
-                   }
-               }
-
-           }
+                var point_x = perlinePoints[q].x,
+                    point_y = perlinePoints[q].y,
+                    nextPoint_x = q<row-1 ? perlinePoints[q+1].x:undefined,
+                    nextPoint_y = q<row-1 ? perlinePoints[q+1].y:undefined;
 
 
-           var lineGraph = document.createElementNS(c.SVG_NS,'path');
-           lineG.appendChild(lineGraph);
+                // if(q==0){
+                //     linePath = 'M'+perlinePoints[q].x+' '+perlinePoints[q].y;
+                // }else {
+                //     linePath += 'L'+perlinePoints[q].x+' '+perlinePoints[q].y;
+                // }
 
-           lineGraph.type = "multiLine_line";
-           lineGraph.superE = lineG;
-           lineGraph.addEventListener('mouseover',c.handleMouseover,false);
-           lineGraph.addEventListener('mouseout',c.handleMouseout,false);
+                if(q==0){
+                    linePath = 'M'+ point_x +' '+ point_y;
+                    bethelPath = 'M'+ point_x +' '+ point_y+'C' + Math.abs((nextPoint_x+point_x)*0.5)+','+point_y+' '+Math.abs((nextPoint_x+point_x)*0.5)+','+nextPoint_y+' '+nextPoint_x+
+                        ','+nextPoint_y;
+                }else {
+                    linePath += "L"+point_x+' '+point_y;
+                    if(q<row-1){
+                        bethelPath += 'C' + Math.abs((nextPoint_x+point_x)*0.5)+','+point_y+' '+Math.abs((nextPoint_x+point_x)*0.5)+','+nextPoint_y+' '+nextPoint_x+
+                            ','+nextPoint_y;
+                    }
+                }
 
-           if(c.chartType=="multiWavy"){
-               lineGraph.setAttribute('d',bethelPath);
-           }
-           if(c.chartType=="multiLine"){
-               lineGraph.setAttribute('d',linePath);
-           }
+            }
 
-           c.setAttr(lineGraph,{
-               // 'd':linePath,
-               'fill':'none',
-               'stroke':colors[p],
-               'stroke-width':1.5
-           });
 
-       }
+            var lineGraph = document.createElementNS(c.SVG_NS,'path');
+            lineG.appendChild(lineGraph);
+
+            lineGraph.type = "multiLine_line";
+            lineGraph.superE = lineG;
+            lineGraph.addEventListener('mouseover',c.handleMouseover,false);
+            lineGraph.addEventListener('mouseout',c.handleMouseout,false);
+
+            if(c.chartType=="multiWavy"){
+                lineGraph.setAttribute('d',bethelPath);
+            }
+            if(c.chartType=="multiLine"){
+                lineGraph.setAttribute('d',linePath);
+            }
+
+            c.setAttr(lineGraph,{
+                // 'd':linePath,
+                'fill':'none',
+                'stroke':colors[p],
+                'stroke-width':1.5
+            });
+
+        }
 
         //设置标题
         c.setTitle();
@@ -4532,8 +4527,8 @@ DBFX.Web.DBChart.Charts = function () {
         //每组数据的个数
         var len = c.totalValues.length;
 
-        //FIXME:数据数量 过多的数据导致图例显示不全；图表显示也有问题
-        c.len = len>20 ? 20:len;
+        //数据数量
+        c.len = len;
 
         //如果展示的图例数量超过了给定颜色系的个数 那么就要增加颜色系
         if(c.colors ==  undefined || c.colors.length<len){
@@ -4636,9 +4631,7 @@ DBFX.Web.DBChart.Charts = function () {
                 var keyText = document.createElementNS(c.SVG_NS,'text');
                 labelG.appendChild(keyText);
                 //截取最大的字符数量
-                var t = c.labels[lc];
-                t = t ? t : "";
-                keyText.textContent = t.length<7?t:t.substr(0,6)+"...";
+                keyText.textContent = c.labels[lc].length<7?c.labels[lc]:c.labels[lc].substr(0,6)+"...";
                 c.setAttr(keyText,{
                     'font-size':c.labelFontSize*0.8,
                     'font-family':c.titleFontFamily,
@@ -5454,39 +5447,21 @@ DBFX.Web.DBChart.Charts = function () {
         }else if(et.type == "multiLine_line" || et.type == "multiLine_point") {
             var superE = et.superE;
 
-           if(et.type == "multiLine_line"){
+            if(et.type == "multiLine_line"){
 
-               //TODO:鼠标悬停在折线上时  显示当前折线所代表的项目
-                   superE.childNodes.forEach(function (el) {
-                       if(el.type == "multiLine_line"){
-                           el.setAttribute("stroke",c.svgrender.lightenDarkenColor(el.getAttribute('stroke'),20));
-                           el.setAttribute('fill','none');
-                           el.setAttribute('stroke-width',3);
-                       }else {
-                           el.setAttribute("fill",c.svgrender.lightenDarkenColor(el.getAttribute('fill'),20));
-                           el.setAttribute("r",el.getAttribute('r')*1.3);
-                       }
-                   });
+                //TODO:鼠标悬停在折线上时  显示当前折线所代表的项目
+                superE.childNodes.forEach(function (el) {
+                    if(el.type == "multiLine_line"){
+                        el.setAttribute("stroke",c.svgrender.lightenDarkenColor(el.getAttribute('stroke'),20));
+                        el.setAttribute('fill','none');
+                        el.setAttribute('stroke-width',3);
+                    }else {
+                        el.setAttribute("fill",c.svgrender.lightenDarkenColor(el.getAttribute('fill'),20));
+                        el.setAttribute("r",el.getAttribute('r')*1.3);
+                    }
+                });
 
-           }else {
-               var box = et.getBBox();
-               var x = box.x,
-                   y = box.y,
-                   w = box.width,
-                   h = box.height;
-               //设置配置参数
-               var configs = {
-                   title:et.title,
-                   color:et.getAttribute('fill'),
-                   value:et.value,
-                   subTitle:et.subTitle
-               }
-               c.tip.setFrame(x+w*0.5-44,y-44,88,44,configs);
-               c.svg.appendChild(c.tip);
-           }
-
-        }else {
-
+            }else {
                 var box = et.getBBox();
                 var x = box.x,
                     y = box.y,
@@ -5496,10 +5471,28 @@ DBFX.Web.DBChart.Charts = function () {
                 var configs = {
                     title:et.title,
                     color:et.getAttribute('fill'),
-                    value:et.value+'',
+                    value:et.value,
                     subTitle:et.subTitle
                 }
                 c.tip.setFrame(x+w*0.5-44,y-44,88,44,configs);
+                c.svg.appendChild(c.tip);
+            }
+
+        }else {
+
+            var box = et.getBBox();
+            var x = box.x,
+                y = box.y,
+                w = box.width,
+                h = box.height;
+            //设置配置参数
+            var configs = {
+                title:et.title,
+                color:et.getAttribute('fill'),
+                value:et.value+'',
+                subTitle:et.subTitle
+            }
+            c.tip.setFrame(x+w*0.5-44,y-44,88,44,configs);
             c.svg.appendChild(c.tip);
         }
     }
@@ -5787,1460 +5780,3 @@ DBFX.Web.DBChart.Charts = function () {
 
     return c;
 }
-DBFX.Serializer.ChartsSerializer = function () {
-
-    //反系列化
-    this.DeSerialize = function (c, xe, ns) {
-
-        DBFX.Serializer.DeSerialProperty("ChartType", c, xe);
-        DBFX.Serializer.DeSerialProperty("InsideR", c, xe);
-        DBFX.Serializer.DeSerialProperty("IsShowInsideC", c, xe);
-        DBFX.Serializer.DeSerialProperty("InsideCTitle", c, xe);
-        DBFX.Serializer.DeSerialProperty("InsideCValue", c, xe);
-        DBFX.Serializer.DeSerialProperty("InsideCImageURL", c, xe);
-        DBFX.Serializer.DeSerialProperty("ChartTitle", c, xe);
-        DBFX.Serializer.DeSerialProperty("TitleColor", c, xe);
-        DBFX.Serializer.DeSerialProperty("TitleFontSize", c, xe);
-        DBFX.Serializer.DeSerialProperty("TitleFontFamily", c, xe);
-        // DBFX.Serializer.DeSerialProperty("IsShowTitle", c, xe);
-        DBFX.Serializer.DeSerialProperty("Option3d", c, xe);
-        DBFX.Serializer.DeSerialProperty("ColorSerie", c, xe);
-
-        DBFX.Serializer.DeSerializeCommand("CutlineClick", xe, c);
-    }
-
-    //系列化 开发平台保存设置时调用
-    this.Serialize = function (c, xe, ns) {
-
-        DBFX.Serializer.SerialProperty("ChartType", c.ChartType, xe);
-        DBFX.Serializer.SerialProperty("InsideR", c.InsideR, xe);
-        DBFX.Serializer.SerialProperty("IsShowInsideC", c.IsShowInsideC, xe);
-        DBFX.Serializer.SerialProperty("InsideCTitle", c.InsideCTitle, xe);
-        DBFX.Serializer.SerialProperty("InsideCValue", c.InsideCValue, xe);
-        DBFX.Serializer.SerialProperty("InsideCImageURL", c.InsideCImageURL, xe);
-        DBFX.Serializer.SerialProperty("ChartTitle", c.ChartTitle, xe);
-        DBFX.Serializer.SerialProperty("TitleColor", c.TitleColor, xe);
-        DBFX.Serializer.SerialProperty("TitleFontSize", c.TitleFontSize, xe);
-        DBFX.Serializer.SerialProperty("TitleFontFamily", c.TitleFontFamily, xe);
-        // DBFX.Serializer.SerialProperty("IsShowTitle", c.IsShowTitle, xe);
-        DBFX.Serializer.SerialProperty("Option3d", c.Option3d, xe);
-        DBFX.Serializer.SerialProperty("ColorSerie", c.ColorSerie, xe);
-
-        DBFX.Serializer.SerializeCommand("CutlineClick", c.CutlineClick, xe);
-    }
-}
-DBFX.Design.ControlDesigners.ChartsDesigner = function () {
-
-    var obdc = new DBFX.Web.Controls.GroupPanel();
-    obdc.OnCreateHandle();
-    obdc.OnCreateHandle = function () {
-
-        DBFX.Resources.LoadResource("design/DesignerTemplates/FormDesignerTemplates/ChartsDesigner.scrp", function (od) {
-
-            od.DataContext = obdc.dataContext;
-
-            //是否显示标题设计器设置项
-            // od.FormContext.Form.FormControls.cbxIsShowTitle.ItemSource =    [{Text:"显示",Value:true,ImageUrl:""},
-            //                                                 {Text:"不显示",Value:false,ImageUrl:""}];
-
-            //是否显示内圆设计器设置项
-            // od.FormContext.Form.FormControls.cbxIsShowInsideC.ItemSource =  [{Text:"显示",Value:true,ImageUrl:""},
-            //                                                 {Text:"不显示",Value:false,ImageUrl:""}];
-
-            //设计器中绑定事件处理
-            od.EventListBox = od.FormContext.Form.FormControls.EventListBox;
-            od.EventListBox.ItemSource = [{EventName:"CutlineClick",EventCode:undefined,Command:od.dataContext.CutlineClick,Control:od.dataContext}];
-
-        }, obdc);
-
-    }
-
-    //事件处理程序
-    obdc.DataContextChanged = function (e) {
-        obdc.DataBind(e);
-        if(obdc.EventListBox != undefined){
-            obdc.EventListBox.ItemSource = [{EventName:"CutlineClick",EventCode:undefined,Command:obdc.dataContext.CutlineClick,Control:obdc.dataContext}];
-        }
-    }
-
-    obdc.HorizonScrollbar = "hidden";
-    obdc.OnCreateHandle();
-    obdc.Class = "VDE_Design_ObjectGeneralDesigner";
-    obdc.Text = "图表设置";
-    return obdc;
-}
-
-
-/**
- * 提示标签
- *
- * @returns {SVGClipPathElement*}
- * @constructor
- */
-DBFX.Web.DBChart.TipLabel = function () {
-    var tip = document.createElementNS('http://www.w3.org/2000/svg','g');
-
-    tip.SVG_NS = 'http://www.w3.org/2000/svg';
-    tip.isShow = true;
-
-    //初始化时调用
-    tip.initTip = function () {
-        tip.setAttribute('class','tip');
-        //外边框
-        tip.boundingP = document.createElementNS(tip.SVG_NS,'path');
-        tip.appendChild(tip.boundingP);
-        //标记圆
-        tip.cir = document.createElementNS(tip.SVG_NS,'circle');
-        tip.appendChild(tip.cir);
-        //标题
-        tip.titleE = document.createElementNS(tip.SVG_NS,'text');
-        tip.appendChild(tip.titleE);
-
-        //副标题
-        tip.subTitleE = document.createElementNS(tip.SVG_NS,'text');
-        tip.appendChild(tip.subTitleE);
-
-        //数值
-        tip.valueE = document.createElementNS(tip.SVG_NS,'text');
-        tip.appendChild(tip.valueE);
-
-
-    }
-    tip.initTip();
-
-
-    //设置尺寸和样式
-    tip.setFrame = function (x,y,w,h,configs) {
-        if(!tip.isShow || x==undefined || y==undefined || h==undefined || w==undefined){
-            return;
-        }
-
-        var pathV = 'M'+(Math.floor(x)+0.5)+' '+(Math.floor(y)+0.5)+
-            'L'+(Math.floor(x+w)+0.5)+' '+(Math.floor(y)+0.5)+
-            'L'+(Math.floor(x+w)+0.5)+' '+(Math.floor(y+h*0.8)+0.5)+
-            'L'+ (Math.floor(x+0.5*w+0.15*h*Math.tan(Math.PI*30/180))+0.5)+' '+(Math.floor(y+h*0.8)+0.5)+
-            'L'+(Math.floor(x+0.5*w)+0.5)+' '+(Math.floor(y+h*0.95)+0.5)+
-            'L'+(Math.floor(x+0.5*w-0.15*h*Math.tan(Math.PI*30/180))+0.5)+' '+(Math.floor(y+h*0.8)+0.5)+
-            'L'+(Math.floor(x)+0.5)+' '+(Math.floor(y+h*0.8)+0.5)+
-            'Z';
-        tip.boundingP.setAttribute('d',pathV);
-        tip.boundingP.setAttribute('stroke','#7cb5ec');
-        tip.boundingP.setAttribute('fill','white');
-        tip.boundingP.setAttribute('stroke-width',1);
-        tip.boundingP.setAttribute('fill-opacity',0.8);
-        tip.boundingP.setAttribute('stroke-opacity',0.5);
-
-
-        //设置标记颜色
-        tip.cir.setAttribute('cx',x+w*0.08);
-        tip.cir.setAttribute('cy',y+h*0.15);
-        tip.cir.setAttribute('r',h*0.1);
-        tip.cir.setAttribute('stroke',configs.color);
-        tip.cir.setAttribute('fill',configs.color);
-
-        //设置标题
-        tip.titleE.textContent = configs.title.length>8?configs.title.substring(0,6)+"...":configs.title;
-        tip.titleE.setAttribute('font-size',h*0.22);
-        tip.titleE.setAttribute('font-family','华文宋体');
-        tip.titleE.setAttribute('fill','black');
-        tip.titleE.setAttribute("x",x+w*0.5);
-        tip.titleE.setAttribute("y",y+h*0.15);
-        // tip.titleE.setAttribute("text-anchor","left");
-        tip.titleE.setAttribute("height",12*1.2);
-        tip.titleE.setAttribute("text-anchor",'middle');
-        tip.titleE.setAttribute("dominant-baseline",'middle');
-
-        //设置副标题
-        if(configs.subTitle){
-            tip.subTitleE.textContent = configs.subTitle.length>8?configs.subTitle.substring(0,6)+"...":configs.subTitle;
-
-        }else {
-            tip.subTitleE.textContent = '';
-        }
-
-
-        tip.subTitleE.setAttribute('font-size',h*0.22);
-        tip.subTitleE.setAttribute('font-family','方正');
-        tip.subTitleE.setAttribute('fill','black');
-        tip.subTitleE.setAttribute("x",x+w*0.5);
-        tip.subTitleE.setAttribute("y",y+h*0.4);
-        // tip.subTitleE.setAttribute("text-anchor","left");
-        tip.subTitleE.setAttribute("height",12*1.2);
-        tip.subTitleE.setAttribute("text-anchor",'middle');
-        tip.subTitleE.setAttribute("dominant-baseline",'middle');
-
-
-
-        //设置数值
-        tip.valueE.textContent = configs.value.length>8?configs.value.substring(0,6)+"...":configs.value;
-        tip.valueE.setAttribute('font-size',h*0.22);
-        tip.valueE.setAttribute('font-family','方正');
-        tip.valueE.setAttribute('fill','black');
-        tip.valueE.setAttribute("x",x+w*0.5);
-        tip.valueE.setAttribute("y",y+h*0.65);
-        tip.valueE.setAttribute("text-anchor","middle");
-        tip.valueE.setAttribute("width",222);
-        tip.valueE.setAttribute("height",12*1.2);
-        tip.valueE.setAttribute("dominant-baseline",'middle');
-    }
-
-
-    //从图表中移除
-    tip.remove = function () {
-        // //TODO:删除所有子元素---不确定是否会产生Bug
-        // while (tip.childNodes.length){
-        //     tip.childNodes.forEach(function (child) {
-        //         tip.removeChild(child);
-        //         // child = null;
-        //     });
-        // }
-        // c.svg.removeChild(tip);
-
-        tip.isShow = false;
-        tip.setFrame();
-    }
-
-    return tip;
-}
-
-
-//定义元素类
-DBFX.Web.DBChart.SVGElement = function (c) {
-    var e = new Object();
-    e.opacity = 1;
-    e.SVG_NS = 'http://www.w3.org/2000/svg';
-    e.textProps = ['direction', 'fontSize', 'fontWeight', 'fontFamily',
-        'fontStyle', 'color', 'lineHeight', 'width', 'textAlign',
-        'textDecoration', 'textOverflow', 'textOutline'
-    ];
-
-    e.init = function(renderer, nodeName) {
-
-        /**
-         * The primary DOM node. Each `SVGElement` instance wraps a main DOM
-         * node, but may also represent more nodes.
-         *
-         * @name  element
-         * @memberOf SVGElement
-         * @type {SVGDOMNode|HTMLDOMNode}
-         */
-        this.element = nodeName === 'span' ?
-            c.createElement(nodeName) :
-            doc.createElementNS(this.SVG_NS, nodeName);
-
-        /**
-         * The renderer that the SVGElement belongs to.
-         *
-         * @name renderer
-         * @memberOf SVGElement
-         * @type {SVGRenderer}
-         */
-        this.renderer = renderer;
-    }
-
-    e.destroy = function() {
-        var wrapper = this,
-            element = wrapper.element || {},
-            parentToClean =
-                wrapper.renderer.isSVG &&
-                element.nodeName === 'SPAN' &&
-                wrapper.parentGroup,
-            grandParent,
-            ownerSVGElement = element.ownerSVGElement,
-            i,
-            clipPath = wrapper.clipPath;
-
-        // remove events
-        element.onclick = element.onmouseout = element.onmouseover =
-            element.onmousemove = element.point = null;
-        stop(wrapper); // stop running animations
-
-        if (clipPath && ownerSVGElement) {
-            // Look for existing references to this clipPath and remove them
-            // before destroying the element (#6196).
-            each(
-                // The upper case version is for Edge
-                ownerSVGElement.querySelectorAll('[clip-path],[CLIP-PATH]'),
-                function(el) {
-                    var clipPathAttr = el.getAttribute('clip-path'),
-                        clipPathId = clipPath.element.id;
-                    // Include the closing paranthesis in the test to rule out
-                    // id's from 10 and above (#6550). Edge puts quotes inside
-                    // the url, others not.
-                    if (
-                        clipPathAttr.indexOf('(#' + clipPathId + ')') > -1 ||
-                        clipPathAttr.indexOf('("#' + clipPathId + '")') > -1
-                    ) {
-                        el.removeAttribute('clip-path');
-                    }
-                }
-            );
-            wrapper.clipPath = clipPath.destroy();
-        }
-
-        // Destroy stops in case this is a gradient object
-        if (wrapper.stops) {
-            for (i = 0; i < wrapper.stops.length; i++) {
-                wrapper.stops[i] = wrapper.stops[i].destroy();
-            }
-            wrapper.stops = null;
-        }
-
-        // remove element
-        wrapper.safeRemoveChild(element);
-
-
-        wrapper.destroyShadows();
-
-
-        // In case of useHTML, clean up empty containers emulating SVG groups
-        // (#1960, #2393, #2697).
-        while (
-            parentToClean &&
-            parentToClean.div &&
-            parentToClean.div.childNodes.length === 0
-            ) {
-            grandParent = parentToClean.parentGroup;
-            wrapper.safeRemoveChild(parentToClean.div);
-            delete parentToClean.div;
-            parentToClean = grandParent;
-        }
-
-        // remove from alignObjects
-        if (wrapper.alignTo) {
-            erase(wrapper.renderer.alignedObjects, wrapper);
-        }
-
-        objectEach(wrapper, function(val, key) {
-            delete wrapper[key];
-        });
-
-        return null;
-    }
-
-
-    return e;
-}
-
-
-//渲染器
-DBFX.Web.DBChart.SVGRender = function (C) {
-
-    var render = new Object();
-
-
-    render.createElement = function(nodeName) {
-        var wrapper = new DBFX.Web.DBChart.SVGElement();
-        wrapper.init(this, nodeName);
-        return wrapper;
-    }
-
-    render.g = function (name) {
-        var elem = render.createElement('g');
-        return name ? elem.attr({
-            'class': 'highcharts-' + name
-        }) : elem;
-    }
-
-    // set to 0-PI range
-    render.toZeroPIRange = function (angle) {
-        angle = angle % (2 * Math.PI);
-        if (angle > Math.PI) {
-            angle = 2 * Math.PI - angle;
-        }
-        return angle;
-    }
-
-   //绘制直线方法
-    render.toLinePath = function (points, closed) {
-        var result = [];
-
-        // Put "L x y" for each point
-        points.forEach(function (point) {
-            result.push('L', point.x, point.y);
-        });
-
-
-        if (points.length) {
-            // Set the first element to M
-            result[0] = 'M';
-
-            // If it is a closed line, add Z
-            if (closed) {
-                result.push('Z');
-            }
-        }
-
-        return result;
-    }
-
-    //绘制不连续线段
-    render.toLineSegments = function (points) {
-        var result = [];
-
-        var m = true;
-        points.forEach(function (point) {
-            result.push(m ? 'M' : 'L', point.x, point.y);
-            m = !m;
-        });
-        return result;
-    }
-
-
-
-    //多面体:polyhedron
-    render.polyhedron = function (args) {
-        var renderer = render,
-            result = render.g(),
-            destroy = result.destroy;
-
-
-        result.attr({
-            'stroke-linejoin': 'round'
-        });
-
-
-        result.faces = [];
-
-
-        // destroy all children
-        result.destroy = function() {
-            for (var i = 0; i < result.faces.length; i++) {
-                result.faces[i].destroy();
-            }
-            return destroy.call(this);
-        };
-
-        wrap(result, 'attr', function(proceed, hash, val, complete, continueAnimation) {
-            if (typeof hash === 'object' && defined(hash.faces)) {
-                while (result.faces.length > hash.faces.length) {
-                    result.faces.pop().destroy();
-                }
-                while (result.faces.length < hash.faces.length) {
-                    result.faces.push(renderer.face3d().add(result));
-                }
-                for (var i = 0; i < hash.faces.length; i++) {
-                    result.faces[i].attr(hash.faces[i], null, complete, continueAnimation);
-                }
-                delete hash.faces;
-            }
-            return proceed.apply(this, [].slice.call(arguments, 1));
-        });
-
-        wrap(result, 'animate', function(proceed, params, duration, complete) {
-            if (params && params.faces) {
-                while (result.faces.length > params.faces.length) {
-                    result.faces.pop().destroy();
-                }
-                while (result.faces.length < params.faces.length) {
-                    result.faces.push(renderer.face3d().add(result));
-                }
-                for (var i = 0; i < params.faces.length; i++) {
-                    result.faces[i].animate(params.faces[i], duration, complete);
-                }
-                delete params.faces;
-            }
-            return proceed.apply(this, [].slice.call(arguments, 1));
-        });
-
-        return result.attr(args);
-    }
-
-    //立方体
-    render.cuboidPath = function(shapeArgs) {
-        var x = shapeArgs.x,
-            y = shapeArgs.y,
-            z = shapeArgs.z,
-            h = shapeArgs.height,
-            w = shapeArgs.width,
-            d = shapeArgs.depth,
-            // chart = charts[this.chartIndex],
-            front,
-            back,
-            top,
-            bottom,
-            left,
-            right,
-            shape,
-            path1,
-            path2,
-            path3,
-            isFront,
-            isTop,
-            isRight,
-            // options3d = chart.options.chart.options3d,
-            //内旋角
-            // alpha = options3d.alpha,
-            alpha = 0,
-
-            // Priority for x axis is the biggest,
-            // because of x direction has biggest influence on zIndex
-            incrementX = 10000,
-            // y axis has the smallest priority in case of our charts
-            // (needs to be set because of stacking)
-            incrementY = 10,
-            incrementZ = 100,
-            zIndex = 0;
-
-        // The 8 corners of the cube
-        var pArr = [{
-            x: x,
-            y: y,
-            z: z
-        }, {
-            x: x + w,
-            y: y,
-            z: z
-        }, {
-            x: x + w,
-            y: y + h,
-            z: z
-        }, {
-            x: x,
-            y: y + h,
-            z: z
-        }, {
-            x: x,
-            y: y + h,
-            z: z + d
-        }, {
-            x: x + w,
-            y: y + h,
-            z: z + d
-        }, {
-            x: x + w,
-            y: y,
-            z: z + d
-        }, {
-            x: x,
-            y: y,
-            z: z + d
-        }];
-
-
-        // apply perspective
-        pArr = C.perspective(pArr);
-
-        // helper method to decide which side is visible
-        function mapPath(i) {
-            return pArr[i];
-        }
-
-        /*
-         * First value - path with specific side
-         * Second  value - added information about side for later calculations.
-         * Possible second values are 0 for path1, 1 for path2 and -1 for no path choosed.
-         */
-        var pickShape = function(path1, path2) {
-            var ret = [
-                [], -1
-            ];
-            path1 = C.map(path1, mapPath);
-            path2 = C.map(path2, mapPath);
-
-            if (C.shapeArea(path1) < 0) {
-                ret = [path1, 0];
-            } else if (C.shapeArea(path2) < 0) {
-                ret = [path2, 1];
-            }
-            return ret;
-        };
-
-
-        // front or back
-        front = [3, 2, 1, 0];
-        back = [7, 6, 5, 4];
-        shape = pickShape(front, back);
-
-        path1 = shape[0];
-        isFront = shape[1];
-
-
-        // top or bottom
-        top = [1, 6, 7, 0];
-        bottom = [4, 5, 2, 3];
-        shape = pickShape(top, bottom);
-        path2 = shape[0];
-        isTop = shape[1];
-
-        // side
-        right = [1, 2, 5, 6];
-        left = [0, 7, 4, 3];
-        shape = pickShape(right, left);
-        path3 = shape[0];
-        isRight = shape[1];
-
-        /*
-         * New block used for calculating zIndex. It is basing on X, Y and Z position of specific columns.
-         * All zIndexes (for X, Y and Z values) are added to the final zIndex, where every value has different priority.
-         * The biggest priority is in X and Z directions, the lowest index is for stacked columns (Y direction and the same X and Z positions).
-         * Big differents between priorities is made because we need to ensure that even for big changes in Y and Z parameters
-         * all columns will be drawn correctly.
-         */
-
-        if (isRight === 1) {
-            zIndex += incrementX * (1000 - x);
-        } else if (!isRight) {
-            zIndex += incrementX * x;
-        }
-
-
-        zIndex += incrementY * (!isTop ||
-            (alpha >= 0 && alpha <= 180 || alpha < 360 && alpha > 357.5) ? // Numbers checked empirically
-                C.chartH - y : 10 + y
-        );
-
-        if (isFront === 1) {
-            zIndex += incrementZ * (z);
-        } else if (!isFront) {
-            zIndex += incrementZ * (1000 - z);
-        }
-
-        zIndex = -Math.round(zIndex);
-
-        return [
-            this.toLinePath(path1, true),
-            this.toLinePath(path2, true),
-            this.toLinePath(path3, true),
-            zIndex
-        ]; // #4774
-    }
-
-    //曲线
-    render.curveTo = function(cx, cy, rx, ry, start, end, dx, dy) {
-        var result = [],
-            arcAngle = end - start;
-        var dFactor = (4 * (Math.sqrt(2) - 1) / 3) / (Math.PI / 2);
-
-        if ((end > start) && (end - start > Math.PI / 2 + 0.0001)) {
-            result = result.concat(render.curveTo(cx, cy, rx, ry, start, start + (Math.PI / 2), dx, dy));
-            result = result.concat(render.curveTo(cx, cy, rx, ry, start + (Math.PI / 2), end, dx, dy));
-            return result;
-        }
-        if ((end < start) && (start - end > Math.PI / 2 + 0.0001)) {
-            result = result.concat(render.curveTo(cx, cy, rx, ry, start, start - (Math.PI / 2), dx, dy));
-            result = result.concat(render.curveTo(cx, cy, rx, ry, start - (Math.PI / 2), end, dx, dy));
-            return result;
-        }
-        return [
-            'C',
-            cx + (rx * Math.cos(start)) - ((rx * dFactor * arcAngle) * Math.sin(start)) + dx,
-            cy + (ry * Math.sin(start)) + ((ry * dFactor * arcAngle) * Math.cos(start)) + dy,
-            cx + (rx * Math.cos(end)) + ((rx * dFactor * arcAngle) * Math.sin(end)) + dx,
-            cy + (ry * Math.sin(end)) - ((ry * dFactor * arcAngle) * Math.cos(end)) + dy,
-            cx + (rx * Math.cos(end)) + dx,
-            cy + (ry * Math.sin(end)) + dy
-        ];
-    }
-
-    //！！！平面圆弧转换成立体圆弧，返回各个面的轨迹数据
-    render.arc3dPath = function(shapeArgs) {
-        var PI = Math.PI,
-            sin = Math.sin,
-            cos = Math.cos;
-        var curveTo = render.curveTo,
-            toZeroPIRange = render.toZeroPIRange;
-
-
-        var cx = shapeArgs.x, // x coordinate of the center
-            cy = shapeArgs.y, // y coordinate of the center
-            start = shapeArgs.start, // start angle
-            end = shapeArgs.end - 0.00001, // end angle
-            r = shapeArgs.r, // radius
-            ir = shapeArgs.innerR, // inner radius
-            d = shapeArgs.depth, // depth
-            alpha = shapeArgs.alpha, // alpha rotation of the chart
-            beta = shapeArgs.beta; // beta rotation of the chart
-
-        // Derived Variables 推导变量
-        var cs = Math.cos(start), // cosinus of the start angle
-            ss = Math.sin(start), // sinus of the start angle
-            ce = Math.cos(end), // cosinus of the end angle
-            se = Math.sin(end), // sinus of the end angle
-            rx = r * Math.cos(beta), // x-radius
-            ry = r * Math.cos(alpha), // y-radius
-            irx = ir * Math.cos(beta), // x-radius (inner)
-            iry = ir * Math.cos(alpha), // y-radius (inner)
-            dx = d * Math.sin(beta), // distance between top and bottom in x
-            dy = d * Math.sin(alpha); // distance between top and bottom in y
-
-        // TOP
-        var top = ['M', cx + (rx * cs), cy + (ry * ss)];
-        top = top.concat(render.curveTo(cx, cy, rx, ry, start, end, 0, 0));
-        top = top.concat([
-            'L', cx + (irx * ce), cy + (iry * se)
-        ]);
-
-        top = top.concat(render.curveTo(cx, cy, irx, iry, end, start, 0, 0));
-        top = top.concat(['Z']);
-        // OUTSIDE
-        var b = (beta > 0 ? Math.PI / 2 : 0),
-            a = (alpha > 0 ? 0 : Math.PI / 2);
-
-        var start2 = start > -b ? start : (end > -b ? -b : start),
-            end2 = end < Math.PI - a ? end : (start < Math.PI - a ? Math.PI - a : end),
-            midEnd = 2 * Math.PI - a;
-
-        // When slice goes over bottom middle, need to add both, left and right outer side.
-        // Additionally, when we cross right hand edge, create sharp edge. Outer shape/wall:
-        //
-        //            -------
-        //          /    ^    \
-        //    4)   /   /   \   \  1)
-        //        /   /     \   \
-        //       /   /       \   \
-        // (c)=> ====         ==== <=(d)
-        //       \   \       /   /
-        //        \   \<=(a)/   /
-        //         \   \   /   / <=(b)
-        //    3)    \    v    /  2)
-        //            -------
-        //
-        // (a) - inner side
-        // (b) - outer side
-        // (c) - left edge (sharp)
-        // (d) - right edge (sharp)
-        // 1..n - rendering order for startAngle = 0, when set to e.g 90, order changes clockwise (1->2, 2->3, n->1) and counterclockwise for negative startAngle
-
-        var out = ['M', cx + (rx * cos(start2)), cy + (ry * sin(start2))];
-        out = out.concat(curveTo(cx, cy, rx, ry, start2, end2, 0, 0));
-
-        if (end > midEnd && start < midEnd) { // When shape is wide, it can cross both, (c) and (d) edges, when using startAngle
-            // Go to outer side
-            out = out.concat([
-                'L', cx + (rx * cos(end2)) + dx, cy + (ry * sin(end2)) + dy
-            ]);
-            // Curve to the right edge of the slice (d)
-            out = out.concat(curveTo(cx, cy, rx, ry, end2, midEnd, dx, dy));
-            // Go to the inner side
-            out = out.concat([
-                'L', cx + (rx * cos(midEnd)), cy + (ry * sin(midEnd))
-            ]);
-            // Curve to the true end of the slice
-            out = out.concat(curveTo(cx, cy, rx, ry, midEnd, end, 0, 0));
-            // Go to the outer side
-            out = out.concat([
-                'L', cx + (rx * cos(end)) + dx, cy + (ry * sin(end)) + dy
-            ]);
-            // Go back to middle (d)
-            out = out.concat(curveTo(cx, cy, rx, ry, end, midEnd, dx, dy));
-            out = out.concat([
-                'L', cx + (rx * cos(midEnd)), cy + (ry * sin(midEnd))
-            ]);
-            // Go back to the left edge
-            out = out.concat(curveTo(cx, cy, rx, ry, midEnd, end2, 0, 0));
-        } else if (end > PI - a && start < PI - a) { // But shape can cross also only (c) edge:
-            // Go to outer side
-            out = out.concat([
-                'L', cx + (rx * Math.cos(end2)) + dx, cy + (ry * Math.sin(end2)) + dy
-            ]);
-            // Curve to the true end of the slice
-            out = out.concat(curveTo(cx, cy, rx, ry, end2, end, dx, dy));
-            // Go to the inner side
-            out = out.concat([
-                'L', cx + (rx * Math.cos(end)), cy + (ry * Math.sin(end))
-            ]);
-            // Go back to the artifical end2
-            out = out.concat(curveTo(cx, cy, rx, ry, end, end2, 0, 0));
-        }
-
-        out = out.concat([
-            'L', cx + (rx * Math.cos(end2)) + dx, cy + (ry * Math.sin(end2)) + dy
-        ]);
-        out = out.concat(curveTo(cx, cy, rx, ry, end2, start2, dx, dy));
-        out = out.concat(['Z']);
-
-        // INSIDE
-        var inn = ['M', cx + (irx * cs), cy + (iry * ss)];
-        inn = inn.concat(curveTo(cx, cy, irx, iry, start, end, 0, 0));
-        inn = inn.concat([
-            'L', cx + (irx * Math.cos(end)) + dx, cy + (iry * Math.sin(end)) + dy
-        ]);
-        inn = inn.concat(curveTo(cx, cy, irx, iry, end, start, dx, dy));
-        inn = inn.concat(['Z']);
-
-
-        // SIDES
-        var side1 = [
-            'M', cx + (rx * cs), cy + (ry * ss),
-            'L', cx + (rx * cs) + dx, cy + (ry * ss) + dy,
-            'L', cx + (irx * cs) + dx, cy + (iry * ss) + dy,
-            'L', cx + (irx * cs), cy + (iry * ss),
-            'Z'
-        ];
-        var side2 = [
-            'M', cx + (rx * ce), cy + (ry * se),
-            'L', cx + (rx * ce) + dx, cy + (ry * se) + dy,
-            'L', cx + (irx * ce) + dx, cy + (iry * se) + dy,
-            'L', cx + (irx * ce), cy + (iry * se),
-            'Z'
-        ];
-
-        // correction for changed position of vanishing point caused by alpha and beta rotations
-        var angleCorr = Math.atan2(dy, -dx),
-            angleEnd = Math.abs(end + angleCorr),
-            angleStart = Math.abs(start + angleCorr),
-            angleMid = Math.abs((start + end) / 2 + angleCorr);
-
-
-        angleEnd = toZeroPIRange(angleEnd);
-        angleStart = toZeroPIRange(angleStart);
-        angleMid = toZeroPIRange(angleMid);
-
-        // *1e5 is to compensate pInt in zIndexSetter
-        var incPrecision = 1e5,
-            a1 = angleMid * incPrecision,
-            a2 = angleStart * incPrecision,
-            a3 = angleEnd * incPrecision;
-
-        return {
-            top: top,
-            zTop: Math.PI * incPrecision + 1, // max angle is PI, so this is allways higher
-            out: out,
-            zOut: Math.max(a1, a2, a3),
-            inn: inn,
-            zInn: Math.max(a1, a2, a3),
-            side1: side1,
-            zSide1: a3 * 0.99, // to keep below zOut and zInn in case of same values
-            side2: side2,
-            zSide2: a2 * 0.99
-        };
-    }
-
-
-    //让给定颜色变暗或者变亮
-    render.lightenDarkenColor = function (col,amt) {
-        var usePound = false;
-
-        if (col[0] == "#") {
-            col = col.slice(1);
-            usePound = true;
-        }
-        var num = parseInt(col,16);
-        var r = (num >> 16) + amt;
-        if (r > 255) r = 255;
-        else if (r < 0) r = 0;
-
-        var b = ((num >> 8) & 0x00FF) + amt;
-        if (b > 255) b = 255;
-        else if (b < 0) b = 0;
-
-        var g = (num & 0x0000FF) + amt;
-        if (g > 255) g = 255;
-        else if (g < 0) g = 0;
-
-        return (usePound?"#":"") + (g | (b << 8) | (r << 16)).toString(16);
-    }
-
-
-    /**
-     * 十六进制颜色转为rgb颜色:hex---->rgb
-     * @param hex 十六进制颜色值#aaa or #ff1122
-     * @returns {string}  rgb(255,255,255)
-     */
-    render.hex2rgb = function(hex) {
-
-        var sColor = hex.toLowerCase();
-
-        //十六进制颜色值的正则表达式
-        var reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/;
-
-        // 如果是16进制颜色
-        if (sColor && reg.test(sColor)) {
-            if (sColor.length === 4) {
-                var sColorNew = "#";
-                for (var i=1; i<4; i+=1) {
-                    sColorNew += sColor.slice(i, i+1).concat(sColor.slice(i, i+1));
-                }
-                sColor = sColorNew;
-            }
-            //处理六位的颜色值
-            var sColorChange = [];
-            for (var i=1; i<7; i+=2) {
-                sColorChange.push(parseInt("0x"+sColor.slice(i, i+2)));
-            }
-            return "RGB(" + sColorChange.join(",") + ")";
-        }
-        return sColor;
-    }
-
-    /**
-     * rgb颜色转为hex
-     * @param rgb rgb颜色值
-     * @returns {*} hex颜色值
-     */
-    render.rgb2hex = function (rgb) {
-        var that = rgb;
-        //十六进制颜色值的正则表达式
-        var reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/;
-        // 如果是rgb颜色表示
-        if (/^(rgb|RGB)/.test(that)) {
-            var aColor = that.replace(/(?:\(|\)|rgb|RGB)*/g, "").split(",");
-            var strHex = "#";
-            for (var i=0; i<aColor.length; i++) {
-                var hex = Number(aColor[i]).toString(16);
-                if (hex === "0") {
-                    hex += hex;
-                }
-                strHex += hex;
-            }
-            if (strHex.length !== 7) {
-                strHex = that;
-            }
-            return strHex;
-        } else if (reg.test(that)) {
-            var aNum = that.replace(/#/,"").split("");
-            if (aNum.length === 6) {
-                return that;
-            } else if(aNum.length === 3) {
-                var numHex = "#";
-                for (var i=0; i<aNum.length; i+=1) {
-                    numHex += (aNum[i] + aNum[i]);
-                }
-                return numHex;
-            }
-        }
-        return that;
-    }
-
-
-    /**
-     * 取颜色的反色
-     * @param rgb rgb颜色值 'rgb(233,233,233)'
-     * @returns {string}  rgb颜色值 'rgb(12,12,12)'
-     */
-    render.oppositeColor = function (rgb) {
-        var rgbColor = 'rgb(';
-        if (/^(rgb|RGB)/.test(rgb)) {
-            var aColor = rgb.replace(/(?:\(|\)|rgb|RGB)*/g, "").split(",");
-
-            for(var i=0;i<3;i++){
-                if(parseInt(aColor[i]) <= 255){
-                    if(i==2){
-                        rgbColor += (255-parseInt(aColor[i]))
-                    }else {
-                        rgbColor += (255-parseInt(aColor[i])) + ",";
-                    }
-                }
-            }
-            rgbColor += ")";
-        }
-
-        return rgbColor;
-    }
-
-    return render;
-};
-
-
-/************************** 绘制仪表盘图表 *****************************/
-DBFX.Web.DBChart.InstrumentPanel = function () {
-    var ip = new DBFX.Web.DBChart.Charts();
-
-    ip.ClassDescriptor.Designers.splice(1, 0, "DBFX.Design.ControlDesigners.InstrumentPanelDesigner");
-    ip.ClassDescriptor.Serializer = "DBFX.Serializer.InstrumentPanelSerializer";
-
-    // TODO:图表边界！！测试时打开注释
-    // ip.VisualElement.style.borderColor = 'aqua';
-    // ip.VisualElement.style.borderStyle = 'solid';
-    // ip.VisualElement.style.borderWidth = '1px';
-
-    ip.OnCreateHandle();
-    ip.OnCreateHandle = function () {
-        ip.drawInstrumentPanel();
-    }
-
-    /*==================================平台属性配置=======================================================*/
-    ip.SetHeight = function (v) {
-
-        if(v.indexOf("%") != -1 || v.indexOf("px") != -1){
-            ip.VisualElement.style.height = v;
-        }else {
-            ip.VisualElement.style.height = parseFloat(v)+'px';
-        }
-        var cssObj = window.getComputedStyle(ip.VisualElement,null);
-        var h = cssObj.height;
-        ip.chartH = parseFloat(h);
-        ip.svg.setAttribute("height",h);
-        ip.drawInstrumentPanel();
-    }
-
-    ip.SetWidth = function (v) {
-
-        if(v.indexOf("%") != -1 || v.indexOf("px") != -1){
-            ip.VisualElement.style.width = v;
-        }else {
-            ip.VisualElement.style.width = parseFloat(v)+'px';
-        }
-
-        var cssObj = window.getComputedStyle(ip.VisualElement,null);
-        var w = cssObj.width;
-        ip.chartW = parseFloat(w);
-        ip.svg.setAttribute("width",w);
-        ip.drawInstrumentPanel();
-
-    }
-
-    /************************** 仪表盘图属性设置 *****************************/
-    //弧线宽度
-    ip.arcWidth = 10;
-    Object.defineProperty(ip,"ArcWidth",{
-        get:function () {
-            return ip.arcWidth;
-        },
-        set:function (v) {
-            ip.arcWidth = isNaN(v*1) ? 10 : v*1;
-            ip.drawInstrumentPanel();
-        }
-    });
-
-
-    //扇形区数量
-    ip.sectionCount = 4;
-    Object.defineProperty(ip,"SectionCount",{
-        get:function () {
-            return ip.sectionCount;
-        },
-        set:function (v) {
-            ip.sectionCount = isNaN(v*1) ? 4 : v*1;
-            ip.drawInstrumentPanel();
-        }
-    });
-
-    //仪表盘占总弧度
-    ip.totalAngle = Math.PI*4/3;
-    Object.defineProperty(ip,"TotalAngle",{
-        get:function () {
-            return ip.totalAngle;
-        },
-        set:function (v) {
-            ip.totalAngle = v*1*Math.PI*2;
-            ip.drawInstrumentPanel();
-        }
-    });
-
-    //
-    ip.title = "标题";
-    Object.defineProperty(ip,"Title",{
-        get:function () {
-            return ip.title;
-        },
-        set:function (v) {
-            ip.title = v;
-            ip.drawInstrumentPanel();
-        }
-    });
-
-    ip.subTitle = "副标题";
-    Object.defineProperty(ip,"SubTitle",{
-        get:function () {
-            return ip.subTitle;
-        },
-        set:function (v) {
-            ip.subTitle = v;
-            ip.drawInstrumentPanel();
-        }
-    });
-
-    ip.tColor = "#666";
-    Object.defineProperty(ip,"TColor",{
-        get:function () {
-            return ip.tColor;
-        },
-        set:function (v) {
-            ip.tColor = v;
-            ip.drawInstrumentPanel();
-        }
-    });
-
-    //TODO:显示模式  数值：number ; 百分比：ratio
-    ip.numMode = "ratio";
-    Object.defineProperty(ip,"NumMode",{
-        get:function () {
-            return ip.numMode;
-        },
-        set:function (v) {
-            ip.numMode = v;
-            ip.drawInstrumentPanel();
-        }
-    });
-
-    //显示范围 最大值
-    ip.maxValue = 1;
-    Object.defineProperty(ip,"MaxValue",{
-        get:function () {
-            return ip.maxValue;
-        },
-        set:function (v) {
-            ip.maxValue = isNaN(v*1) ? 1 : v*1;
-            ip.drawInstrumentPanel();
-        }
-    });
-
-    //显示范围 最小值
-    ip.minValue = 0;
-    Object.defineProperty(ip,"MinValue",{
-        get:function () {
-            return ip.minValue;
-        },
-        set:function (v) {
-            ip.minValue = isNaN(v*1) ? 0 : v*1;
-            ip.drawInstrumentPanel();
-        }
-    });
-
-    ip.SetValue = function (v) {
-        ip.value = v;
-        ip.drawInstrumentPanel();
-    }
-
-    ip.GetValue = function () {
-        return ip.value;
-    }
-
-
-    /************************** 绘制仪表盘图 *****************************/
-    ip.drawInstrumentPanel = function (datas) {
-
-        var num = isNaN(ip.value*1) ? 0:ip.value*1;
-
-        //!!!清空svg下所有子元素后再绘制，防止图表重叠绘制
-        if(ip.svg.childNodes.length){
-            ip.svg.textContent = '';
-        }
-
-        var w = ip.chartW,
-            h = ip.chartH;
-
-        //仪表盘中心
-        var center_x = w*0.5;
-        var center_y = h*0.5;
-
-        w = w > h ? h : w;
-
-        //TODO:颜色系
-        var colors = ["green","orange","red","blue"];
-
-        //外圆半径
-        var out_r = w*0.4;
-
-        //内圆半径
-        var inner_r = out_r - ip.arcWidth;
-
-        //TODO:定义指针的宽度 指针圆点的半径 指针的长度 圆弧的宽度
-
-
-        //扇区数量
-        var sectionC = ip.sectionCount;
-
-        //定义仪表盘占得总弧度 仪表盘是个对称圆弧！
-        var totalA = ip.totalAngle;
-        var aveA = totalA*0.5;
-
-        //计算起止弧度值
-        var starA = Math.PI*0.5+aveA;
-        var endA = Math.PI*2.5-aveA;
-
-
-        //每个扇区的角度
-        var sectionA = totalA/sectionC;
-
-        //创建饼状图分组
-        var group = document.createElementNS(ip.SVG_NS,'g');
-        ip.svg.appendChild(group);
-
-        var sA = starA;
-
-        //创建扇形区
-        for (var j=0;j<sectionC;j++){
-
-            //扇形区域路径
-            var  arcPath = document.createElementNS(ip.SVG_NS,'path');
-            //扇形区域的起始角度和终止角度
-            arcPath.startA = sA;
-            arcPath.endA = sA - sectionA;
-
-            var arcPathG = document.createElementNS(ip.SVG_NS,'g');
-            arcPathG.appendChild(arcPath);
-            group.appendChild(arcPathG);
-
-            var pathStr = ip.drawSector(center_x,center_y,out_r,arcPath.startA,arcPath.endA,inner_r,1);
-
-            arcPath.setAttribute('d',pathStr);
-            arcPath.setAttribute('fill',colors[j]);
-            sA -= sectionA;
-        }
-
-        //刻度文字的对齐方式
-        var text_anchor = "middle";
-
-
-        var aveNum = (ip.maxValue*1 - ip.minValue*1)/sectionC;
-
-        //绘制刻度数字
-        for(var f = 0;f<=sectionC;f++){
-            var p_a = starA - totalA/sectionC*f;
-            //计算刻度数字的坐标点值
-            var p_x = center_x + inner_r * Math.cos(-p_a);
-            var p_y = center_y + inner_r * Math.sin(-p_a);
-
-            var p1_x = center_x + (inner_r - 8) * Math.cos(-p_a);
-            var p1_y = center_y + (inner_r - 8) * Math.sin(-p_a);
-
-            var p2_x = center_x + (inner_r - 12) * Math.cos(-p_a);
-            var p2_y = center_y + (inner_r - 19) * Math.sin(-p_a);
-
-            if(p_a>Math.PI*0.5 && p_a < Math.PI*1.5){
-                text_anchor = "start";
-            }else if(p_a == Math.PI*0.5 || p_a == Math.PI*1.5){
-                text_anchor = "middle";
-            }else {
-                text_anchor = "end";
-            }
-
-            //刻度文字
-            var limbT = document.createElementNS(ip.SVG_NS,'text');
-            group.appendChild(limbT);
-
-
-            switch (ip.numMode){
-                case "ratio"://百分比
-                    limbT.textContent = (ip.minValue + aveNum*f).toFixed(2)*100 +"%";
-                    break;
-                case "number"://TODO：数值
-                    limbT.textContent = (ip.minValue + aveNum*f)<ip.sectionCount?(ip.minValue + aveNum*f).toFixed(2)+"":(ip.minValue + aveNum*f).toFixed(0);
-                    break;
-                default:
-                    break;
-            }
-
-            ip.setAttr(limbT,{
-                'font-size':"12",
-                'fill':"#777777",
-                "x":p2_x,
-                "y":p2_y,
-                "text-anchor":text_anchor
-            });
-
-
-            //刻度线
-            var limbP = document.createElementNS(ip.SVG_NS,'path');
-            var pStr = "M"+" "+p_x+" "+p_y+"L"+" "+p1_x+" "+p1_y;
-
-            group.appendChild(limbP);
-            ip.setAttr(limbP,{
-                'd':pStr,
-                'stroke':"#2c2f30",
-                'stroke-width':"2"
-            });
-
-        }
-
-        //绘制标题文字
-        var tElement = document.createElementNS(ip.SVG_NS,'text');
-        group.appendChild(tElement);
-
-        tElement.textContent = ip.title;
-        ip.setAttr(tElement,{
-            'font-size':"20",
-            'fill':ip.tColor,
-            "x":center_x,
-            "y":center_y+h*0.11,
-            "text-anchor":"middle"
-        });
-
-        //绘制副标题文字
-        var subTElement = document.createElementNS(ip.SVG_NS,'text');
-        group.appendChild(subTElement);
-
-        subTElement.textContent = ip.subTitle;
-        ip.setAttr(subTElement,{
-            'font-size':"16",
-            'fill':ip.tColor,
-            "x":center_x,
-            "y":center_y+h*0.21,
-            "text-anchor":"middle"
-        });
-
-
-        //绘制指针
-        //指针短边长
-        var disS = 10;
-        //指针长边长
-        var disL = inner_r*0.7;
-
-        var paths = [];
-        paths.push("M",center_x+disS,center_y,"L",center_x,center_y-disS*0.6,"L",center_x-disL,center_y,"L",center_x,center_y+disS*0.6,"Z");
-        var pathsStr = paths.join(' ');
-        var line = document.createElementNS(ip.SVG_NS,'path');
-        group.appendChild(line);
-        ip.setAttr(line,{
-            'd':pathsStr,
-            'fill':"#6786ff"
-        });
-
-        //绘制指针圆心
-        // var cir = document.createElementNS(ip.SVG_NS,'circle');
-        // group.appendChild(cir);
-        //
-        // ip.setAttr(cir,{
-        //     'cx':center_x,
-        //     'cy':center_y,
-        //     'r':disS*0.5,
-        //     'stroke':"#ffffff",
-        //     'fill':"#ffffff"
-        // });
-
-
-        //指针指向起始角度
-        var originalA = starA > Math.PI ? -(starA-Math.PI): (Math.PI - starA);
-        line.setAttribute('transform',"rotate("+originalA*180/Math.PI+" "+center_x+" "+center_y+")");
-
-        //FIXME:指针偏移的角度 角度数值0-360 根据当前数值所占的比例进行计算
-        var ratio = num/(ip.maxValue*1 - ip.minValue);
-        ratio = isNaN(ratio) ? 0: ratio;
-        ratio = ratio <0?0:(ratio>1?1:ratio);
-
-
-        var rotateTotalA = (ratio*totalA+originalA)*180/Math.PI;
-
-        //FIXME:角度的增量需要根据实际情况计算  控制动画的快慢
-        var stepA = 2;
-        var stepV = 0;
-        switch (ip.numMode){
-            case "ratio":
-                stepV = ratio/((rotateTotalA-originalA*180/Math.PI)/stepA);
-                break;
-            case "number":
-                stepV = num/((rotateTotalA-originalA*180/Math.PI)/stepA);
-                break;
-
-            default:
-                break;
-        }
-
-
-        //起始角度
-        var rotateA = originalA*180/Math.PI;
-
-        var startNum = ip.minValue*1;
-
-
-        function rotateStep() {
-            rotateA += stepA;
-            startNum += stepV;
-
-            switch (ip.numMode){
-                case "ratio":
-                    if(startNum < ratio){
-                        subTElement.textContent = Math.round(startNum*100)+"%";
-                    }else {
-                        subTElement.textContent = Math.round(ratio*100)+"%";
-                    }
-                    break;
-                case "number":
-                    if(startNum < num){
-                        subTElement.textContent = startNum<1?startNum.toFixed(2)+"":startNum+"";
-                    }else {
-                        subTElement.textContent = num+"";
-                    }
-                    break;
-
-                default:
-                    break;
-            }
-
-            if(rotateA < rotateTotalA){
-                line.setAttribute('transform',"rotate("+rotateA+" "+center_x+" "+center_y+")");
-                requestAnimationFrame(rotateStep);
-            }else {
-                line.setAttribute('transform',"rotate("+rotateTotalA+" "+center_x+" "+center_y+")");
-            }
-        }
-
-        requestAnimationFrame(rotateStep);
-
-    }
-
-    ip.OnCreateHandle();
-    return ip;
-}
-
-DBFX.Serializer.InstrumentPanelSerializer = function () {
-    //反系列化
-    this.DeSerialize = function (c, xe, ns) {
-
-        DBFX.Serializer.DeSerialProperty("ArcWidth", c, xe);
-        DBFX.Serializer.DeSerialProperty("SectionCount", c, xe);
-        DBFX.Serializer.DeSerialProperty("Title", c, xe);
-        DBFX.Serializer.DeSerialProperty("SubTitle", c, xe);
-        DBFX.Serializer.DeSerialProperty("NumMode", c, xe);
-        DBFX.Serializer.DeSerialProperty("MaxValue", c, xe);
-        DBFX.Serializer.DeSerialProperty("MinValue", c, xe);
-        DBFX.Serializer.DeSerialProperty("ColorSerie", c, xe);
-
-    }
-
-    //系列化 开发平台保存设置时调用
-    this.Serialize = function (c, xe, ns) {
-
-        DBFX.Serializer.SerialProperty("ArcWidth", c.ArcWidth, xe);
-        DBFX.Serializer.SerialProperty("SectionCount", c.SectionCount, xe);
-        DBFX.Serializer.SerialProperty("Title", c.Title, xe);
-        DBFX.Serializer.SerialProperty("SubTitle", c.SubTitle, xe);
-        DBFX.Serializer.SerialProperty("NumMode", c.NumMode, xe);
-        DBFX.Serializer.SerialProperty("MaxValue", c.MaxValue, xe);
-        DBFX.Serializer.SerialProperty("MinValue", c.MinValue, xe);
-        DBFX.Serializer.SerialProperty("ColorSerie", c.ColorSerie, xe);
-
-    }
-}
-
-DBFX.Design.ControlDesigners.InstrumentPanelDesigner = function () {
-    var obdc = new DBFX.Web.Controls.GroupPanel();
-    obdc.OnCreateHandle();
-    obdc.OnCreateHandle = function () {
-
-        DBFX.Resources.LoadResource("design/DesignerTemplates/FormDesignerTemplates/InstrumentPanelDesigner.scrp", function (od) {
-
-            od.DataContext = obdc.dataContext;
-
-      }, obdc);
-
-    }
-
-    obdc.HorizonScrollbar = "hidden";
-    obdc.OnCreateHandle();
-    obdc.Class = "VDE_Design_ObjectGeneralDesigner";
-    obdc.Text = "仪表盘图表设置";
-    return obdc;
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

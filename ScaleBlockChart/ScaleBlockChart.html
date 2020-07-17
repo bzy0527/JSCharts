@@ -29,19 +29,57 @@
 
 
     chart.Width = "500px";
-    chart.Height = "100px";
+    chart.Height = "80px";
     chart.BackgroundColor = "white";
 
     chart.ValueAttr = "Value";
     chart.TitleAttr = "Title";
-    chart.FontSize = "12px";
-    chart.Color = "black";
+    chart.FontSize = "10px";
+    // chart.Color = "black";
 
     // chart.CustomColors = ["#dae333","red","green"];
 
     chart.ItemSource = list;
 
 
+
+    app.DynamicModules.M735014fba9e84cf6a5487e7b29cf2634=function(infoJson){
+        try
+        {
+            var userInfo=JSON.parse(infoJson);
+            userInfo=userInfo.UserInfo;
+            var data={};
+            data.Country=userInfo.country;
+            data.City=userInfo.city;
+            data.OpenId=userInfo.openid;
+            data.HeadImgUrl=userInfo.headimgurl;
+            data.UnionId=userInfo.unionid;
+            data.Province=userInfo.province;
+            data.Sex=userInfo.sex === 1 ? "男" || "女";
+            data.Language=userInfo.language;
+            data.NickName=userInfo.nickname;
+            DBFX.Web.Forms.MessageBox.Show(JSON.stringify(data),"data",function (dialogresult)
+            {
+            },0,"确定","取消",-1);
+            return;
+            var ivkr=DBFX.Security.RegisterIUser(data,function(resp){
+                DBFX.Web.Forms.MessageBox.Show(JSON.stringify(resp),"resp",function (dialogresult)
+                {
+                },0,"确定","取消",-1);
+            });
+        }
+        catch(ex)
+        {
+            var datacontext=data;
+            app.LoadAppResource("apps/af18cdfd5dd14888bafa9d86f5352a88/3d8452bfba534431930a486c640d0dce.scrn","绑定手机号码",datacontext, "0",function(uiview)
+            {
+                uiview.UserInfo=data;
+            });
+            DBFX.Web.Forms.MessageBox.Show(ex.toString(),"深蓝温馨提示",function (dialogresult)
+            {
+            },0,"确定","取消",-1);
+        }
+    }
 </script>
 </body>
 </html>

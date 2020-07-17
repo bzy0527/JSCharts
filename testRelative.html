@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>testRelative</title>
+    <style>
+        .box{
+            width: 600px;
+            height: 700px;
+        }
+
+        .box01{
+            width: 100%;
+            height: 40px;
+            background-color: #b3d4fc;
+        }
+        .box02{
+            width: 100%;
+            height: 40px;
+            background-color: #eb73a5;
+        }
+        .box03{
+            width: 100%;
+            height: 40px;
+            background-color: #318ee1;
+            position: relative;
+            top: 20px;
+            margin-top: 30px;
+        }
+        .box04{
+            width: 100%;
+            height: 40px;
+            background-color: #778899;
+        }
+        .box05{
+            width: 100%;
+            height: 40px;
+            background-color: #ffe4c4;
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+
+    <div class="box01"></div>
+    <div class="box02"></div>
+    <div class="box03"></div>
+    <div class="box04"></div>
+    <div class="box05"></div>
+</div>
+
+<script>
+
+
+    var obj = {"name":"Jack","age":"19"};
+    var obj1 = obj;
+    obj1.name = "rose";
+    console.log(obj);
+    console.log(obj1);
+
+
+    var arr = [1,2,3,4,5];
+    var arr1 = [1,2,3,4,5];
+    console.log(arr == arr1);
+
+    arr1 = arr;
+    arr1[2] = 0;
+    console.log(arr);
+
+
+    
+</script>
+</body>
+</html>
